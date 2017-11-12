@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.a2106088.amaru">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/amaru"
@@ -20,8 +22,17 @@
         <activity android:name=".InicioActivity" />
         <activity android:name=".PerfilActivity" />
         <activity android:name=".CrearGrupoActivity" />
+        <activity android:name=".InicioActivityInstructor" />
         <activity android:name=".Grupo" />
-        <activity android:name=".Comentario"></activity>
+        <activity android:name=".Comentario" />
+        <activity
+            android:name=".PrincipalPageAmaru"
+            android:label="@string/title_activity_prueba"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PrincipalPageInstructor"
+            android:label="@string/title_activity_principal_page_instructor"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

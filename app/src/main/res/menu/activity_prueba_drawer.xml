@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/calendar"
+            android:title="My Class" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/categories"
+            android:title="All Groups" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/profile"
+            android:title="My Profile" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/tickets"
+            android:title="Comprar" />
+    </group>
+
+    <item android:title="More With Amaru">
+        <menu>
+            <item
+                android:id="@+id/categories"
+                android:icon="@drawable/categoriesicon"
+                android:title="Categories" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>

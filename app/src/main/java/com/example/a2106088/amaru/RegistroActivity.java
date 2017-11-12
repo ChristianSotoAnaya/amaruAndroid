@@ -8,8 +8,10 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener{
@@ -23,6 +25,8 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     EditText edtCorreo;
     Button btnRegistro;
     SharedPreferences infoUsuarios;
+    Spinner spinner ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,7 +42,9 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
         btnRegistro=(Button) findViewById(R.id.Registrarse);
         btnRegistro.setOnClickListener(this);
-
+        spinner=(Spinner) findViewById(R.id.spinner);
+        String[] letra = {"Instructor","Amaru"};
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
         infoUsuarios=this.getSharedPreferences("asd", Context.MODE_PRIVATE);
     }
 
@@ -52,12 +58,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         String apellido = edtApellido.getText().toString();
         String edad = edtEdad.getText().toString();
         String correo = edtCorreo.getText().toString();
-
+        String tipo=spinner.getSelectedItem().toString();
 
 
         if (!clave.equals(RClave)){
             Toast.makeText(this,"No coinciden las claves",Toast.LENGTH_LONG).show();
         }else{
+
             SharedPreferences.Editor editor = infoUsuarios.edit();
             editor.putString("usuario",usuario);
             editor.putString("clave",clave);
@@ -65,6 +72,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             editor.putString("apellido",apellido);
             editor.putString("edad",edad);
             editor.putString("correo",correo);
+            editor.putString("tipo",tipo);
             editor.commit();
             finish();
             Intent siguiente = new Intent();
