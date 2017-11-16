@@ -16,13 +16,13 @@ import android.widget.Toast;
 
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText edtUsuario;
-    EditText edtClave;
-    EditText edtClaveRepetida;
-    EditText edtNombre;
-    EditText edtApellido;
-    EditText edtEdad;
-    EditText edtCorreo;
+    EditText edtUsername;
+    EditText edtPassword;
+    EditText edtConfirmPassword;
+    EditText edtName;
+    EditText edtLastName;
+    EditText edtPhone;
+    EditText edtEmail;
     Button btnRegistro;
     SharedPreferences infoUsuarios;
     Spinner spinner ;
@@ -32,13 +32,13 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
-        edtUsuario=(EditText) findViewById(R.id.edtUsuario);
-        edtClave=(EditText) findViewById(R.id.edtClave);
-        edtClaveRepetida=(EditText) findViewById(R.id.edtClave);
-        edtNombre=(EditText) findViewById(R.id.edtNombre);
-        edtApellido=(EditText) findViewById(R.id.edtApellido);
-        edtEdad=(EditText) findViewById(R.id.edtEdad);
-        edtCorreo=(EditText) findViewById(R.id.edtCorreo);
+        edtUsername=(EditText) findViewById(R.id.edtUsername);
+        edtPassword=(EditText) findViewById(R.id.edtPassword);
+        edtConfirmPassword=(EditText) findViewById(R.id.edtConfirmPassword);
+        edtName=(EditText) findViewById(R.id.edtName);
+        edtLastName=(EditText) findViewById(R.id.edtLastName);
+        edtPhone=(EditText) findViewById(R.id.edtPhone);
+        edtEmail=(EditText) findViewById(R.id.edtEmail);
 
         btnRegistro=(Button) findViewById(R.id.Registrarse);
         btnRegistro.setOnClickListener(this);
@@ -51,32 +51,36 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        String usuario = edtUsuario.getText().toString();
-        String clave = edtClave.getText().toString();
-        String RClave = edtClaveRepetida.getText().toString();
-        String nombre = edtNombre.getText().toString();
-        String apellido = edtApellido.getText().toString();
-        String edad = edtEdad.getText().toString();
-        String correo = edtCorreo.getText().toString();
-        String tipo=spinner.getSelectedItem().toString();
+        if (view.getId()==btnRegistro.getId()) {
 
 
-        if (!clave.equals(RClave)){
-            Toast.makeText(this,"No coinciden las claves",Toast.LENGTH_LONG).show();
-        }else{
+            String user = edtUsername.getText().toString();
+            String password = edtPassword.getText().toString();
+            String confirmPassword = edtConfirmPassword.getText().toString();
+            String name = edtName.getText().toString();
+            String lastName = edtLastName.getText().toString();
+            String phone = edtPhone.getText().toString();
+            String email = edtEmail.getText().toString();
+            String tipo = spinner.getSelectedItem().toString();
 
-            SharedPreferences.Editor editor = infoUsuarios.edit();
-            editor.putString("usuario",usuario);
-            editor.putString("clave",clave);
-            editor.putString("nombre",nombre);
-            editor.putString("apellido",apellido);
-            editor.putString("edad",edad);
-            editor.putString("correo",correo);
-            editor.putString("tipo",tipo);
-            editor.commit();
-            finish();
-            Intent siguiente = new Intent();
-            setResult(Activity.RESULT_OK,siguiente);
+
+            if (!password.equals(confirmPassword)) {
+                Toast.makeText(this, "No coinciden las claves", Toast.LENGTH_LONG).show();
+            } else {
+
+                SharedPreferences.Editor editor = infoUsuarios.edit();
+                editor.putString("usuario", user);
+                editor.putString("clave", password);
+                editor.putString("nombre", name);
+                editor.putString("apellido", lastName);
+                editor.putString("phone", phone);
+                editor.putString("correo", email);
+                editor.putString("tipo", tipo);
+                editor.commit();
+                finish();
+                Intent siguiente = new Intent();
+                setResult(Activity.RESULT_OK, siguiente);
+            }
         }
     }
 }
