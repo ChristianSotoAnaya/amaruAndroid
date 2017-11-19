@@ -32,6 +32,10 @@
         <activity
             android:name=".PrincipalPageInstructor"
             android:label="@string/title_activity_principal_page_instructor"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PerfilInstructor"
+            android:label="@string/title_activity_perfil_instructor"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

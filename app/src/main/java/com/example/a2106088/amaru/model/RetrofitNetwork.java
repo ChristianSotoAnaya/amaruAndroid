@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 
+import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.services.NetworkService;
 
 import java.io.IOException;
@@ -30,7 +31,8 @@ public class RetrofitNetwork implements Network
     SharedPreferences infousuario;
 
 
-    private static final String BASE_URL = "https://192.168.0.3:8080/";
+
+    private static final String BASE_URL = "https://amarucos.herokuapp.com/";
 
     private NetworkService networkService;
 
@@ -55,8 +57,15 @@ public class RetrofitNetwork implements Network
                 try
                 {
                     Response<Token> execute = call.execute();
-                    requestCallback.onSuccess( execute.body() );
-                    Log.d("clave", execute.body().getAccessToken());
+                    if (execute.code()==500){
+                        NetworkException e= new NetworkException("usuario o constraseña inválidos");
+                        requestCallback.onFailed(e);
+
+                    }
+                    else{
+                        requestCallback.onSuccess( execute.body() );
+                    }
+
                 }
                 catch ( IOException e )
                 {
@@ -67,19 +76,18 @@ public class RetrofitNetwork implements Network
 
     }
 
-    /*
     @Override
-    public void createTodo(final RequestCallback<Void> requestCallback, final Todo todo) {
+    public void editdescription(final RequestCallback<User> requestCallback,final User user) {
         backgroundExecutor.execute( new Runnable()
         {
             @Override
             public void run()
             {
-                Call<Void> call = networkService.createTodo(todo);
+                Call<User> call = networkService.editDescription(user);
 
                 try
                 {
-                    Response<Void> execute = call.execute();
+                    Response<User> execute = call.execute();
                     requestCallback.onSuccess( execute.body() );
                 }
                 catch ( IOException e )
@@ -91,18 +99,18 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
-    public void allTodo(final RequestCallback<List<Todo>> requestCallback) {
+    public void editemail(final RequestCallback<User> requestCallback,final User user) {
         backgroundExecutor.execute( new Runnable()
         {
             @Override
             public void run()
             {
-                Call<List<Todo>> call = networkService.allTodo();
+                Call<User> call = networkService.editEmail(user);
+
                 try
                 {
-                    Response<List<Todo>> execute = call.execute();
+                    Response<User> execute = call.execute();
                     requestCallback.onSuccess( execute.body() );
-                    Log.d("tamano", String.valueOf( execute.body().size()));
                 }
                 catch ( IOException e )
                 {
@@ -111,7 +119,74 @@ public class RetrofitNetwork implements Network
             }
         } );
     }
-*/
+
+    @Override
+    public void editphone(final RequestCallback<User> requestCallback,final User user) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.editPhone(user);
+
+                try
+                {
+                    Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
+    public void editimage(final RequestCallback<User> requestCallback, final User user) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.editImage(user);
+
+                try
+                {
+                    Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
+    public void getuser(final RequestCallback<User> requestCallback, final String username) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.getuser(username);
+                try
+                {
+                    Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+
+
     public void addSecureTokenInterceptor( final String token )
     {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();

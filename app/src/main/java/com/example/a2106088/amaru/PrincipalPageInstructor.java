@@ -19,6 +19,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.a2106088.amaru.entity.Clase;
+import com.example.a2106088.amaru.entity.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PrincipalPageInstructor extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -27,6 +33,8 @@ public class PrincipalPageInstructor extends AppCompatActivity
     String usuario;
     Button[] btnWord = new Button[10];
     LinearLayout LayoutPendientes;
+    User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,21 +61,29 @@ public class PrincipalPageInstructor extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        user= (User) memoria.getSerializable("usuario");
+
+
         test();
 
     }
 
     private void test() {
         LayoutPendientes = (LinearLayout) findViewById(R.id.LayoutPendientes);
-        for (int i = 0; i < btnWord.length; i++) {
+        List<Clase> clases= user.getClases();
+        for (int i=0;i<clases.size();i++){
             btnWord[i] = new Button(this);
             btnWord[i].setHeight(50);
             btnWord[i].setWidth(50);
             btnWord[i].setTag(i);
-            btnWord[i].setText("Clase"+String.valueOf(i));
+            btnWord[i].setText(clases.get(i).getNombregrupo()+" - "+clases.get(i).getFecha()+" - "+clases.get(i).getHour());
             btnWord[i].setOnClickListener(btnClicked);
             LayoutPendientes.addView(btnWord[i]);
         }
+
 
     }
 
@@ -133,9 +149,9 @@ public class PrincipalPageInstructor extends AppCompatActivity
         } else if (id == R.id.groupsi) {
 
         } else if (id == R.id.profilei) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilActivity.class);
+            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putSerializable("ins",user);
             intento.putExtras(datosExtra);
             startActivity(intento);
 

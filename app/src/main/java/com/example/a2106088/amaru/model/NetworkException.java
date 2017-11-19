@@ -13,4 +13,8 @@ public class NetworkException extends Exception {
         super(e);
     }
 
+    public NetworkException(String msg){
+        super(msg);
+    }
+
 }

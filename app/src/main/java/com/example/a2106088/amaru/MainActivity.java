@@ -3,14 +3,22 @@ package com.example.a2106088.amaru;
         import android.content.Context;
         import android.content.Intent;
         import android.content.SharedPreferences;
+        import android.os.Handler;
+        import android.os.Looper;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
+        import android.util.Log;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.Toast;
 
+        import com.example.a2106088.amaru.entity.User;
+        import com.example.a2106088.amaru.model.LoginWrapper;
+        import com.example.a2106088.amaru.model.NetworkException;
+        import com.example.a2106088.amaru.model.RequestCallback;
         import com.example.a2106088.amaru.model.RetrofitNetwork;
+        import com.example.a2106088.amaru.model.Token;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnRegistrarse;
     SharedPreferences inforUsuario;
     RetrofitNetwork rfn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,16 +63,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         if (view.getId() == btnIngresar.getId()) {
-            String usuario = edtUsuario.getText().toString();
+            final String usuario = edtUsuario.getText().toString();
             String clave = edtClave.getText().toString();
-            String usuarioGuardado = inforUsuario.getString("usuario","jose");
-            String claveGuardada = inforUsuario.getString("clave","123");
-            String tipoAlmacenado= inforUsuario.getString("tipo","Instructor");
+            //String usuarioGuardado = inforUsuario.getString("usuario","jose");
+            //String claveGuardada = inforUsuario.getString("clave","123");
+            //String tipoAlmacenado= inforUsuario.getString("tipo","Instructor");
 //  Print          Toast.makeText(this,"Click de Ingreso",Toast.LENGTH_LONG).show();
 
 
 
-            if (edtUsuario.getText().toString().equals(usuarioGuardado) && edtClave.getText().toString().equals(claveGuardada)) {
+            /*if (edtUsuario.getText().toString().equals(usuarioGuardado) && edtClave.getText().toString().equals(claveGuardada)) {
                 if (tipoAlmacenado.equals("Instructor")){
                     Bundle memoria = new Bundle();
                     memoria.putString("usuario",usuario);
@@ -83,7 +92,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 Toast.makeText(this,"Usuario o clave incorrectos",Toast.LENGTH_LONG).show();
             }
-/*
+
+           */
+
             rfn.login(new LoginWrapper(usuario,clave), new RequestCallback<Token>() {
                 @Override
                 public void onSuccess(Token response) {
@@ -91,22 +102,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //datosguardados = infousuario.edit();
                     //datosguardados.putString("token",response.getAccessToken());
                     //datosguardados.commit();
-                    Log.d("clave", response.getAccessToken());
-                    Bundle memoria = new Bundle();
-                    memoria.putString("usuario",edtUsuario.getText().toString());
-                    Intent ingreso = new Intent(MainActivity.this, InicioActivity.class);
-                    ingreso.putExtras(memoria);
-                    startActivity(ingreso);
+
+                    rfn.getuser(new RequestCallback<User>() {
+                        @Override
+                        public void onSuccess(User response) {
+                            if(response.getType().equals("INSTRUCTOR")){
+                                Bundle memoria = new Bundle();
+                                memoria.putSerializable("usuario",response);
+                                Intent ingreso = new Intent(MainActivity.this, PrincipalPageInstructor.class);
+                                ingreso.putExtras(memoria);
+                                startActivity(ingreso);
+                            }
+                            else{
+                                Bundle memoria = new Bundle();
+                                memoria.putSerializable("usuario",response);
+                                Intent ingreso = new Intent(MainActivity.this, PrincipalPageAmaru.class);
+                                ingreso.putExtras(memoria);
+                                startActivity(ingreso);
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(NetworkException e) {
+
+                        }
+                    },usuario);
+
+
+
 
                 }
 
                 @Override
                 public void onFailed(NetworkException e) {
 
-                }
+                    Handler h = new Handler(Looper.getMainLooper());
+                    h.post(new Runnable() {
+                        public void run() {
+                            Toast.makeText(getApplicationContext(), "Usuario O Contraseña Incorrectos", Toast.LENGTH_SHORT).show();
+                        }
+                    });                }
             });
 
-        */
+
 
         } else{
             Intent ingreso = new Intent(MainActivity.this, RegistroActivity.class);
