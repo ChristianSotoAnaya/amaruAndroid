@@ -36,6 +36,10 @@
         <activity
             android:name=".PerfilInstructor"
             android:label="@string/title_activity_perfil_instructor"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VerPerfilInstructor"
+            android:label="@string/title_activity_ver_perfil_instructor"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
