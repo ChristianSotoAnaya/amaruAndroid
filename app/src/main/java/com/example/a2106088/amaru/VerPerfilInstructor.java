@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.Layout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,9 +22,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.io.IOException;
@@ -39,6 +47,12 @@ public class VerPerfilInstructor extends AppCompatActivity
     TextView instructorDescription;
     TextView instructoruserna;
     User u;
+    User logedUser;
+    LinearLayout rateLayout;
+    RatingBar ratingBar;
+    TextView rateNumber;
+    TextView currentRating;
+    Button btnRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +82,18 @@ public class VerPerfilInstructor extends AppCompatActivity
         instrcutorPhone= (TextView) findViewById(R.id.instrcutorPhone1);
         instructorDescription= (TextView) findViewById(R.id.instructorDescription1);
         instructoruserna = (TextView) findViewById(R.id.nombredelinss1);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+        rateNumber= (TextView) findViewById(R.id.rateNumber);
+        currentRating= (TextView) findViewById(R.id.currentRating);
+        btnRate = (Button) findViewById(R.id.btnRate);
+        rateLayout = (LinearLayout) findViewById(R.id.rateLayout);
+
 
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("ins");
+        logedUser= (User) memoria.getSerializable("usuario");
         instructoruserna.setText("Username: "+ u.getUsername());
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -103,6 +124,19 @@ public class VerPerfilInstructor extends AppCompatActivity
         instrcutorEmail.setText(u.getEmail());
         instrcutorPhone.setText(u.getPhone());
         instructorDescription.setText(u.getDescription());
+        currentRating.setText(String.valueOf(u.getRate()));
+
+        if (logedUser.getType().equals("INSTRUCTOR")){
+            /*
+            btnRate.setEnabled(false);
+            ratingBar.setEnabled(false);
+            TextView txtRate = (TextView) findViewById(R.id.textView24);
+            txtRate.setEnabled(false);
+            rateNumber.setEnabled(false);
+            */
+            rateLayout.setEnabled(false);
+        }
+
     }
     public void ponerimagen(Bitmap b){
         instructorimage.setImageBitmap(b);
@@ -176,4 +210,37 @@ public class VerPerfilInstructor extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void RateInstructor(View view) {
+        User temp= new User();
+        temp.setUsername(u.getUsername());
+        temp.setRate(Double.parseDouble(String.valueOf(ratingBar.getRating())));
+        rfn.editRate(new RequestCallback<User>() {
+            @Override
+            public void onSuccess(User response) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Editado Exitosamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(NetworkException e) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Ocurrió Algo problema, vuelvelo a intentar", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        },temp);
+
+    }
+
+    public void setRateView(View view) {
+        rateNumber.setText((int) ratingBar.getRating());
+    }
+
 }

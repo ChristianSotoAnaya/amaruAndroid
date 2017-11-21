@@ -20,6 +20,8 @@ public interface Network
 
     void editimage(final RequestCallback<User> requestCallback, User user);
 
+    void editRate(final RequestCallback<User> requestCallback, User user);
+
 
    /* void createTodo(final RequestCallback<Void> requestCallback, Todo todo);
 

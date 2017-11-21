@@ -42,21 +42,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rfn= new RetrofitNetwork();
         //inforUsuario
         inforUsuario=this.getSharedPreferences("asd", Context.MODE_PRIVATE);
-        if (!inforUsuario.contains("usuario")){
-            edtUsuario.setEnabled(false);
+        /*if (!inforUsuario.contains("usuario")){
+            edtUsuario.setEnabled(false);               ----- Relacion 1
             edtClave.setEnabled(false);
             btnIngresar.setEnabled(false);
-        }
+        }*/
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (inforUsuario.contains("usuario")){
-            edtUsuario.setEnabled(true);
+        /*if (inforUsuario.contains("usuario")){
+            edtUsuario.setEnabled(true);                ----- Relacion 1
             edtClave.setEnabled(true);
             btnIngresar.setEnabled(true);
-        }
+        }*/
     }
 
     @Override
