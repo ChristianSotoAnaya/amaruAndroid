@@ -166,7 +166,7 @@ public class PerfilInstructor extends AppCompatActivity
 
         if (id == R.id.createi1) {
             String usuario="";
-            Intent intento=new Intent(PerfilInstructor.this,CrearGrupoActivity.class);
+            Intent intento=new Intent(PerfilInstructor.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("username",usuario);
             intento.putExtras(datosExtra);

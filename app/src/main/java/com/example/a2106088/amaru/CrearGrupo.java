@@ -1,11 +1,9 @@
 package com.example.a2106088.amaru;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.PermissionChecker;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,31 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.User;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PrincipalPageInstructor extends AppCompatActivity
+public class CrearGrupo extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    SharedPreferences infousuario;
-    TextView username;
-    String usuario;
-    Button[] btnWord = new Button[10];
-    LinearLayout LayoutPendientes;
-    User user;
-
-
+    User u;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal_page_instructor);
+        setContentView(R.layout.activity_crear_grupo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,7 +35,9 @@ public class PrincipalPageInstructor extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        u= (User) memoria.getSerializable("ins");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -60,44 +46,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        Intent anterior = getIntent();
-        Bundle memoria = anterior.getExtras();
-        user= (User) memoria.getSerializable("usuario");
-
-
-        test();
-
     }
-
-    private void test() {
-        LayoutPendientes = (LinearLayout) findViewById(R.id.LayoutPendientes);
-        List<Clase> clases= user.getClases();
-        for (int i=0;i<clases.size();i++){
-            btnWord[i] = new Button(this);
-            btnWord[i].setHeight(50);
-            btnWord[i].setWidth(50);
-            btnWord[i].setTag(i);
-            btnWord[i].setText(clases.get(i).getNombregrupo()+" - "+clases.get(i).getFecha()+" - "+clases.get(i).getHour());
-            btnWord[i].setOnClickListener(btnClicked);
-            LayoutPendientes.addView(btnWord[i]);
-        }
-
-
-    }
-
-    View.OnClickListener btnClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Object tag = v.getTag();
-            Intent intento=new Intent(PrincipalPageInstructor.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -112,7 +61,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.principal_page_instructor, menu);
+        getMenuInflater().inflate(R.menu.crear_grupo, menu);
         return true;
     }
 
@@ -137,21 +86,22 @@ public class PrincipalPageInstructor extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
+        if (id == R.id.createi3) {
+            String usuario ="";
+            Intent intento=new Intent(CrearGrupo.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("username",usuario);
             intento.putExtras(datosExtra);
             startActivity(intento);
-        } else if (id == R.id.clasesi) {
+        } else if (id == R.id.clasesi3) {
 
 
-        } else if (id == R.id.groupsi) {
+        } else if (id == R.id.groupsi3) {
 
-        } else if (id == R.id.profilei) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);
+        } else if (id == R.id.profilei3) {
+            Intent intento=new Intent(CrearGrupo.this,PerfilInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
+            datosExtra.putSerializable("ins",u);
             intento.putExtras(datosExtra);
             startActivity(intento);
 

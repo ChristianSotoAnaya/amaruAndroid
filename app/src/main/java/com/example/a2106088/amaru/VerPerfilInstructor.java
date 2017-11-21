@@ -183,7 +183,7 @@ public class VerPerfilInstructor extends AppCompatActivity
 
         if (id == R.id.createi2) {
             String usuario="";
-            Intent intento=new Intent(VerPerfilInstructor.this,CrearGrupoActivity.class);
+            Intent intento=new Intent(VerPerfilInstructor.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("username",usuario);
             intento.putExtras(datosExtra);
