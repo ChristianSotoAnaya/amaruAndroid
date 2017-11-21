@@ -65,7 +65,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         user= (User) memoria.getSerializable("usuario");
-
+        usuario = user.getUsername();
 
         test();
 
@@ -140,7 +140,8 @@ public class PrincipalPageInstructor extends AppCompatActivity
         if (id == R.id.createi) {
             Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+
+            datosExtra.putSerializable("user",user);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
