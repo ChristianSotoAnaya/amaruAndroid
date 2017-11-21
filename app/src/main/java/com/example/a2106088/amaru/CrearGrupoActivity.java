@@ -15,7 +15,7 @@ public class CrearGrupoActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crear_grupo);
+        setContentView(R.layout.activity_crear_grupo_activity);
         crearGrupo = (Button) findViewById(R.id.btnCrearGrupo);
         cancelar = (Button) findViewById(R.id.btnCancelarCrearGrupo);
         crearGrupo.setOnClickListener(this);

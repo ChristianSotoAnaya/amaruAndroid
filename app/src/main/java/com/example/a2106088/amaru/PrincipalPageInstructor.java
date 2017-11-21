@@ -138,7 +138,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.createi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupoActivity.class);
+            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("username",usuario);
             intento.putExtras(datosExtra);
