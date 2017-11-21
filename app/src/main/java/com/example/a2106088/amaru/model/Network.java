@@ -29,6 +29,8 @@ public interface Network
 
     void getuser( RequestCallback<User> requestCallback, String username);
 
+    void createUser(final RequestCallback<User> requestCallback, User user);
+
 }
 
 

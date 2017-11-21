@@ -165,6 +165,27 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
+    public void getuser(final RequestCallback<User> requestCallback, final String username) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.getuser(username);
+                try
+                {
+                    Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
     public void editRate(final RequestCallback<User> requestCallback, final User user) {
         backgroundExecutor.execute( new Runnable()
         {
@@ -186,17 +207,20 @@ public class RetrofitNetwork implements Network
         } );
     }
 
+
     @Override
-    public void getuser(final RequestCallback<User> requestCallback, final String username) {
+    public void createUser(final RequestCallback<User> requestCallback, final User user) {
         backgroundExecutor.execute( new Runnable()
         {
             @Override
             public void run()
             {
-                Call<User> call = networkService.getuser(username);
+                Call<User> call = networkService.createUser(user);
+
                 try
                 {
                     Response<User> execute = call.execute();
+
                     requestCallback.onSuccess( execute.body() );
                 }
                 catch ( IOException e )
@@ -206,6 +230,10 @@ public class RetrofitNetwork implements Network
             }
         } );
     }
+
+
+
+
 
 
 

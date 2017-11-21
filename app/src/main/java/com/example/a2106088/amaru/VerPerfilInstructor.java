@@ -53,6 +53,7 @@ public class VerPerfilInstructor extends AppCompatActivity
     TextView rateNumber;
     TextView currentRating;
     Button btnRate;
+    TextView totalVotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class VerPerfilInstructor extends AppCompatActivity
         currentRating= (TextView) findViewById(R.id.currentRating);
         btnRate = (Button) findViewById(R.id.btnRate);
         rateLayout = (LinearLayout) findViewById(R.id.rateLayout);
+        totalVotes = (TextView) findViewById(R.id.totalVotes);
 
 
 
@@ -125,6 +127,7 @@ public class VerPerfilInstructor extends AppCompatActivity
         instrcutorPhone.setText(u.getPhone());
         instructorDescription.setText(u.getDescription());
         currentRating.setText(String.valueOf(u.getRate()));
+        totalVotes.setText(u.getTotalVotes());
 
         if (logedUser.getType().equals("INSTRUCTOR")){
             /*
@@ -136,6 +139,7 @@ public class VerPerfilInstructor extends AppCompatActivity
             */
             rateLayout.setEnabled(false);
         }
+        rfn= new RetrofitNetwork();
 
     }
     public void ponerimagen(Bitmap b){
