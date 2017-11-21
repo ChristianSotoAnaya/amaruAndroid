@@ -13,20 +13,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
+import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.User;
+
+import java.util.ArrayList;
 
 public class CrearGrupo extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    EditText edtNombreCrearGrupo;
+    EditText edtDescripcionCrearGrupo;
+    EditText edtlugar;
+    EditText edtfecha;
+    EditText edthora;
+    Spinner spinner ;
+    TableLayout table;
+    int idClase = 0;
+    int idGrupo = 0;
+    ArrayList<Clase> clases = new ArrayList<Clase>();
     User u;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_grupo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        edtNombreCrearGrupo=(EditText) findViewById(R.id.edtNombreCrearGrupo);
+        edtDescripcionCrearGrupo=(EditText) findViewById(R.id.edtDescripcionCrearGrupo);
+        edtlugar = (EditText) findViewById(R.id.edtlugar);
+        edtfecha = (EditText) findViewById(R.id.edtfecha);
+        edthora = (EditText) findViewById(R.id.edthora);
+        table = (TableLayout) findViewById(R.id.table);
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        u= (User) memoria.getSerializable("user");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,9 +62,7 @@ public class CrearGrupo extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
-        Intent anterior = getIntent();
-        Bundle memoria = anterior.getExtras();
-        u= (User) memoria.getSerializable("ins");
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -87,15 +112,13 @@ public class CrearGrupo extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.createi3) {
-            String usuario ="";
-            Intent intento=new Intent(CrearGrupo.this,CrearGrupo.class);
+
+        } else if (id == R.id.clasesi3) {
+            Intent intento=new Intent(CrearGrupo.this,PrincipalPageInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putSerializable("usuario",u);
             intento.putExtras(datosExtra);
             startActivity(intento);
-        } else if (id == R.id.clasesi3) {
-
-
         } else if (id == R.id.groupsi3) {
 
         } else if (id == R.id.profilei3) {
@@ -114,5 +137,41 @@ public class CrearGrupo extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void nuevaClase(View view){
+        /*TableRow tableRow = new TableRow(this);
+        table.addView(tableRow);
+        EditText edtlugartxt = new EditText(this);
+        edtlugartxt.setText(edtlugar.getText().toString());
+        tableRow.addView(edtlugartxt);*/
+        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),edtlugar.getText().toString(),idClase,edtNombreCrearGrupo.getText().toString(),0, u.getUsername());
+        System.out.println(u.getUsername());
+        idClase+=1;
+        clases.add(clase);
+        TableRow tr_head = new TableRow(this);
+       // part1
+        tr_head.setLayoutParams(new DrawerLayout.LayoutParams(
+                DrawerLayout.LayoutParams.MATCH_PARENT,
+                DrawerLayout.LayoutParams.WRAP_CONTENT));
+        TextView label_lugar = new TextView(this);
+        label_lugar.setText(edtlugar.getText().toString());
+        // part2
+        label_lugar.setPadding(5, 5, 5, 5);
+        tr_head.addView(label_lugar);// add the column to the table row here
+
+        TextView label_fecha = new TextView(this);    // part3
+        label_fecha.setText(edtfecha.getText().toString());
+        label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_fecha); // add the column to the table row here
+
+        TextView label_hora = new TextView(this);    // part3
+        label_hora.setText(edthora.getText().toString());
+        label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_hora); // add the column to the table row here
+
+        table.addView(tr_head,new TableLayout.LayoutParams(
+                DrawerLayout.LayoutParams.MATCH_PARENT,
+                DrawerLayout.LayoutParams.WRAP_CONTENT));
     }
 }

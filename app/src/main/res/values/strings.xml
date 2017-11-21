@@ -8,6 +8,7 @@
     <string-array name="categoria">
         <item>Deporte</item>
         <item>Arte Marcial</item>
+        <item>Danza</item>
         <item>Otro</item>
     </string-array>
     <string name="title_activity_prueba">prueba</string>
