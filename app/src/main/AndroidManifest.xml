@@ -40,6 +40,10 @@
         <activity
             android:name=".VerPerfilInstructor"
             android:label="@string/title_activity_ver_perfil_instructor"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ActivityListaGrupos"
+            android:label="@string/title_activity_lista_grupos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

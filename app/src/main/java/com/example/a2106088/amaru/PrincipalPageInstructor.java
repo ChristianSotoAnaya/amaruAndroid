@@ -147,6 +147,11 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.groupsi) {
+            Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putSerializable("ins",user);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
         } else if (id == R.id.profilei) {
             Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);

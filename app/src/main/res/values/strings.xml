@@ -19,4 +19,5 @@
     <string name="title_activity_principal_page_instructor">PrincipalPageInstructor</string>
     <string name="title_activity_perfil_instructor">PerfilInstructor</string>
     <string name="title_activity_ver_perfil_instructor">VerPerfilInstructor</string>
+    <string name="title_activity_lista_grupos">ActivityListaGrupos</string>
 </resources>
