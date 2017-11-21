@@ -1,11 +1,9 @@
 package com.example.a2106088.amaru;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.PermissionChecker;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,34 +13,47 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class PrincipalPageInstructor extends AppCompatActivity
+public class CrearGrupo extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    SharedPreferences infousuario;
-    TextView username;
-    String usuario;
-    Button[] btnWord = new Button[10];
-    LinearLayout LayoutPendientes;
-    User user;
-
+    EditText edtNombreCrearGrupo;
+    EditText edtDescripcionCrearGrupo;
+    EditText edtlugar;
+    EditText edtfecha;
+    EditText edthora;
+    Spinner spinner ;
+    TableLayout table;
+    int idClase = 0;
+    int idGrupo = 0;
+    ArrayList<Clase> clases = new ArrayList<Clase>();
+    User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_principal_page_instructor);
+        setContentView(R.layout.activity_crear_grupo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        edtNombreCrearGrupo=(EditText) findViewById(R.id.edtNombreCrearGrupo);
+        edtDescripcionCrearGrupo=(EditText) findViewById(R.id.edtDescripcionCrearGrupo);
+        edtlugar = (EditText) findViewById(R.id.edtlugar);
+        edtfecha = (EditText) findViewById(R.id.edtfecha);
+        edthora = (EditText) findViewById(R.id.edthora);
+        table = (TableLayout) findViewById(R.id.table);
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        u= (User) memoria.getSerializable("user");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,44 +71,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-        Intent anterior = getIntent();
-        Bundle memoria = anterior.getExtras();
-        user= (User) memoria.getSerializable("usuario");
-        usuario = user.getUsername();
-
-        test();
-
     }
-
-    private void test() {
-        LayoutPendientes = (LinearLayout) findViewById(R.id.LayoutPendientes);
-        List<Clase> clases= user.getClases();
-        for (int i=0;i<clases.size();i++){
-            btnWord[i] = new Button(this);
-            btnWord[i].setHeight(50);
-            btnWord[i].setWidth(50);
-            btnWord[i].setTag(i);
-            btnWord[i].setText(clases.get(i).getNombregrupo()+" - "+clases.get(i).getFecha()+" - "+clases.get(i).getHour());
-            btnWord[i].setOnClickListener(btnClicked);
-            LayoutPendientes.addView(btnWord[i]);
-        }
-
-
-    }
-
-    View.OnClickListener btnClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Object tag = v.getTag();
-            Intent intento=new Intent(PrincipalPageInstructor.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -112,7 +86,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.principal_page_instructor, menu);
+        getMenuInflater().inflate(R.menu.crear_grupo, menu);
         return true;
     }
 
@@ -137,27 +111,20 @@ public class PrincipalPageInstructor extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
-            Bundle datosExtra = new Bundle();
+        if (id == R.id.createi3) {
 
-            datosExtra.putSerializable("user",user);
+        } else if (id == R.id.clasesi3) {
+            Intent intento=new Intent(CrearGrupo.this,PrincipalPageInstructor.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putSerializable("usuario",u);
             intento.putExtras(datosExtra);
             startActivity(intento);
-        } else if (id == R.id.clasesi) {
+        } else if (id == R.id.groupsi3) {
 
-
-        } else if (id == R.id.groupsi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
+        } else if (id == R.id.profilei3) {
+            Intent intento=new Intent(CrearGrupo.this,PerfilInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-
-        } else if (id == R.id.profilei) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
+            datosExtra.putSerializable("ins",u);
             intento.putExtras(datosExtra);
             startActivity(intento);
 
@@ -170,5 +137,41 @@ public class PrincipalPageInstructor extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void nuevaClase(View view){
+        /*TableRow tableRow = new TableRow(this);
+        table.addView(tableRow);
+        EditText edtlugartxt = new EditText(this);
+        edtlugartxt.setText(edtlugar.getText().toString());
+        tableRow.addView(edtlugartxt);*/
+        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),edtlugar.getText().toString(),idClase,edtNombreCrearGrupo.getText().toString(),0, u.getUsername());
+        System.out.println(u.getUsername());
+        idClase+=1;
+        clases.add(clase);
+        TableRow tr_head = new TableRow(this);
+       // part1
+        tr_head.setLayoutParams(new DrawerLayout.LayoutParams(
+                DrawerLayout.LayoutParams.MATCH_PARENT,
+                DrawerLayout.LayoutParams.WRAP_CONTENT));
+        TextView label_lugar = new TextView(this);
+        label_lugar.setText(edtlugar.getText().toString());
+        // part2
+        label_lugar.setPadding(5, 5, 5, 5);
+        tr_head.addView(label_lugar);// add the column to the table row here
+
+        TextView label_fecha = new TextView(this);    // part3
+        label_fecha.setText(edtfecha.getText().toString());
+        label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_fecha); // add the column to the table row here
+
+        TextView label_hora = new TextView(this);    // part3
+        label_hora.setText(edthora.getText().toString());
+        label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
+        tr_head.addView(label_hora); // add the column to the table row here
+
+        table.addView(tr_head,new TableLayout.LayoutParams(
+                DrawerLayout.LayoutParams.MATCH_PARENT,
+                DrawerLayout.LayoutParams.WRAP_CONTENT));
     }
 }

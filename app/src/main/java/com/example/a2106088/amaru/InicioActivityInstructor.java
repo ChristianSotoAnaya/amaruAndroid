@@ -46,7 +46,7 @@ public class InicioActivityInstructor extends AppCompatActivity implements View.
             startActivityForResult(perfil,1);
 
         }else if(v.getId()==btnCrearGrupo.getId()){
-            Intent perfil = new Intent(InicioActivityInstructor.this, CrearGrupoActivity.class);
+            Intent perfil = new Intent(InicioActivityInstructor.this, CrearGrupo.class);
             startActivityForResult(perfil,2);
 
         }else if (v.getId()==btnKarateInicio.getId()){

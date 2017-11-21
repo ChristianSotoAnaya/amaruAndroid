@@ -8,6 +8,7 @@
     <string-array name="categoria">
         <item>Deporte</item>
         <item>Arte Marcial</item>
+        <item>Danza</item>
         <item>Otro</item>
     </string-array>
     <string name="title_activity_prueba">prueba</string>
@@ -20,4 +21,5 @@
     <string name="title_activity_perfil_instructor">PerfilInstructor</string>
     <string name="title_activity_ver_perfil_instructor">VerPerfilInstructor</string>
     <string name="title_activity_lista_grupos">ActivityListaGrupos</string>
+    <string name="title_activity_crear_grupo">CrearGrupo</string>
 </resources>

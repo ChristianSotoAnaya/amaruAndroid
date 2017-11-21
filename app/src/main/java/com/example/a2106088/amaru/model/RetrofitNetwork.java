@@ -185,6 +185,56 @@ public class RetrofitNetwork implements Network
         } );
     }
 
+    @Override
+    public void editRate(final RequestCallback<User> requestCallback, final User user) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.editRate(user);
+
+                try
+                {
+                    Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+
+    @Override
+    public void createUser(final RequestCallback<User> requestCallback, final User user) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<User> call = networkService.createUser(user);
+
+                try
+                {
+                    Response<User> execute = call.execute();
+
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+
+
+
+
 
 
     public void addSecureTokenInterceptor( final String token )

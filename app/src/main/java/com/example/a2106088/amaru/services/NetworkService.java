@@ -39,4 +39,10 @@ public interface NetworkService
     @POST( "user/editEmail" )
     Call<User> editEmail(@Body User user);
 
+    @POST( "user/rate" )
+    Call<User> editRate(@Body User user);
+
+    @POST( "user/users" )
+    Call<User> createUser(@Body User user);
+
 }

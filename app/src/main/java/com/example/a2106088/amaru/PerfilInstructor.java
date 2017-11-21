@@ -90,6 +90,7 @@ public class PerfilInstructor extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("ins");
+
         instructoruserna.setText("Username: "+ u.getUsername());
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -166,9 +167,10 @@ public class PerfilInstructor extends AppCompatActivity
 
         if (id == R.id.createi1) {
             String usuario="";
-            Intent intento=new Intent(PerfilInstructor.this,CrearGrupoActivity.class);
+            usuario = u.getUsername();
+            Intent intento=new Intent(PerfilInstructor.this,CrearGrupo.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putSerializable("user",u);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi1) {

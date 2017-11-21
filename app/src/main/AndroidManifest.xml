@@ -44,6 +44,9 @@
         <activity
             android:name=".ActivityListaGrupos"
             android:label="@string/title_activity_lista_grupos"
+        <activity
+            android:name=".CrearGrupo"
+            android:label="@string/title_activity_crear_grupo"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

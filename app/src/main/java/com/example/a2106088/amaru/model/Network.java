@@ -20,12 +20,16 @@ public interface Network
 
     void editimage(final RequestCallback<User> requestCallback, User user);
 
+    void editRate(final RequestCallback<User> requestCallback, User user);
+
 
    /* void createTodo(final RequestCallback<Void> requestCallback, Todo todo);
 
     void allTodo(RequestCallback<List<Todo>> requestCallback);*/
 
     void getuser( RequestCallback<User> requestCallback, String username);
+
+    void createUser(final RequestCallback<User> requestCallback, User user);
 
 }
 
