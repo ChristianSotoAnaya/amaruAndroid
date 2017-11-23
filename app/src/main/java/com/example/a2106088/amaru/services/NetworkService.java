@@ -2,6 +2,7 @@ package com.example.a2106088.amaru.services;
 
 
 
+import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.LoginWrapper;
 import com.example.a2106088.amaru.model.Token;
@@ -26,6 +27,10 @@ public interface NetworkService
 
     @GET( "user/{username}" )
     Call<User> getuser(@Path("username") String username);
+
+
+    @GET( "group/all" )
+    Call<List<Group>> getallgroups();
 
     @POST( "user/editImage" )
     Call<User> editImage(@Body User user);

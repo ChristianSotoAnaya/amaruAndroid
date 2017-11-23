@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.a2106088.amaru.R;
+import com.squareup.picasso.Picasso;
 
 public class CustomListAdapter extends ArrayAdapter<String> {
 
@@ -37,14 +38,15 @@ public class CustomListAdapter extends ArrayAdapter<String> {
         View rowView=inflater.inflate(R.layout.mylist, null,true);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
-        WebView imageView = (WebView) rowView.findViewById(R.id.icon);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         TextView extratxt = (TextView) rowView.findViewById(R.id.textView1);
 
         txtTitle.setText(itemname[position]);
-        imageView.setBackgroundColor(0);
-        imageView.loadDataWithBaseURL("","<img src='"+imgid[position]+"'/>","text/html", "UTF-8", "");
-        extratxt.setText("Description "+descr[position]);
-        return rowView;
+        Picasso.with(context).load(imgid[position]).into(imageView);
 
+        //imageView.setBackgroundColor(0);
+        //imageView.loadDataWithBaseURL("","<img src='"+imgid[position]+"'/>","text/html", "UTF-8", "");
+        extratxt.setText(descr[position]);
+        return rowView;
     };
 }

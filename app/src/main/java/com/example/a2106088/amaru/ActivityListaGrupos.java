@@ -3,12 +3,14 @@ package com.example.a2106088.amaru;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,50 +28,28 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.CustomListAdapter;
+import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 public class ActivityListaGrupos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
 
+    List<Group> grupos;
     ListView lista;
-    String[] itemname ={
-            "Safari",
-            "Camera",
-            "Global",
-            "FireFox",
-            "UC Browser",
-            "Android Folder",
-            "VLC Player",
-            "Cold War"
-    };
+    String[] itemname ;
 
-    String[] descr ={
-            "d1",
-            "d2",
-            "d3",
-            "d4",
-            "d5",
-            " Folder",
-            "VLC Player",
-            "Cold War"
-    };
+    String[] descr;
 
 
-    String[] imgid={
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-            "http://getupandgetout.co.uk/wp-content/uploads/2017/08/out-256x256.jpg",
-    };
+    String[] imgid;
 
 
 
@@ -77,8 +57,8 @@ public class ActivityListaGrupos extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_grupos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
+       setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,9 +75,23 @@ public class ActivityListaGrupos extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        grupos= (List<Group>) memoria.getSerializable("grupos");
+        itemname = new String[grupos.size()];
+
+        descr= new String[grupos.size()]; ;
+
+
+        imgid = new String[grupos.size()]; ;
+        for (int i=0;i<grupos.size();i++){
+            itemname[i]=grupos.get(i).getNombre();
+            descr[i]="Instructor: "+grupos.get(i).getInstructor();
+            imgid[i]=grupos.get(i).getImage();
+        }
 
         CustomListAdapter adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
-        lista=(ListView)findViewById(R.id.listaaa);
+        lista=(ListView) findViewById(R.id.listaaa2);
         lista.setAdapter(adapter);
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -105,16 +99,12 @@ public class ActivityListaGrupos extends AppCompatActivity
            public void onItemClick(AdapterView<?> parent, View view,
            int position, long id) {
             // TODO Auto-generated method stub
+                Log.d("imprimee","imprimeadsadas");
              String Slecteditem= itemname[+position];
              Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
-                                });
+            });
 
-                            }
-
-
-
-
-
+            }
 
 
     @Override

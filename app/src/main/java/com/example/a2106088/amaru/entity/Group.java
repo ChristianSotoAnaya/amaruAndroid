@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * Created by 2107262 on 9/6/17.
  */
-public class Group {
+public class Group implements Serializable {
 
     private long id;
 
@@ -16,7 +17,7 @@ public class Group {
 
     private String instructor;
 
-    private List<Comment> comments;
+    transient private List<Comment> comments;
 
     private String description;
 
@@ -28,7 +29,7 @@ public class Group {
 
     private String image;
 
-    private List<Clase> clases;
+    transient  private List<Clase> clases;
 
     public Group(long id,String nombre,String instructor,List<Comment> comments,String description,String category, Double rate,int totalVotes,String image,List<Clase> clases) {
         this.id=id;

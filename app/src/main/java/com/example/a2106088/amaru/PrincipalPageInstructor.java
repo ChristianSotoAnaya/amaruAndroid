@@ -20,7 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a2106088.amaru.entity.Clase;
+import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +38,8 @@ public class PrincipalPageInstructor extends AppCompatActivity
     Button[] btnWord = new Button[10];
     LinearLayout LayoutPendientes;
     User user;
-
+    RetrofitNetwork rfn;
+    List<Group> grupos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,11 +153,26 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.groupsi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            rfn= new RetrofitNetwork();
+
+            rfn.getallgroups(new RequestCallback<List<Group>>() {
+                @Override
+                public void onSuccess(List<Group> response) {
+                    grupos=response;
+                    Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
+                    Bundle datosExtra = new Bundle();
+                    ArrayList<Group> temp= new ArrayList(grupos);
+                    datosExtra.putSerializable("grupos",temp);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            });
+
 
         } else if (id == R.id.profilei) {
             Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);

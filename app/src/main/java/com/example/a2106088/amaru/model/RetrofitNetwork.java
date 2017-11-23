@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 
+import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.services.NetworkService;
 
@@ -231,10 +232,27 @@ public class RetrofitNetwork implements Network
         } );
     }
 
+    @Override
+    public void getallgroups(final RequestCallback<List<Group>> requestCallback) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<List<Group>> call = networkService.getallgroups();
 
-
-
-
+                try
+                {
+                    Response<List<Group>> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
 
 
     public void addSecureTokenInterceptor( final String token )

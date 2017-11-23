@@ -27,6 +27,7 @@ import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -92,32 +93,7 @@ public class PerfilInstructor extends AppCompatActivity
         u= (User) memoria.getSerializable("ins");
 
         instructoruserna.setText("Username: "+ u.getUsername());
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    try {
-                        URL url = null;
-                        url = new URL(u.getImage());
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        ponerimagen(bmp);
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
-
-
+        Picasso.with(this).load(u.getImage()).into(instructorimage);
         instrcutorEmail.setText(u.getEmail());
         instrcutorPhone.setText(u.getPhone());
         instructorDescription.setText(u.getDescription());
@@ -155,9 +131,7 @@ public class PerfilInstructor extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void ponerimagen(Bitmap b){
-        instructorimage.setImageBitmap(b);
-    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.model;
 
+import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public interface Network
     void getuser( RequestCallback<User> requestCallback, String username);
 
     void createUser(final RequestCallback<User> requestCallback, User user);
+
+    void getallgroups(final RequestCallback<List<Group>> requestCallback);
 
 }
 

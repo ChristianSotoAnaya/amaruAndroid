@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Grupo extends AppCompatActivity implements View.OnClickListener{
+public class Grupo extends AppCompatActivity implements View.OnClickListener {
 
     Button btnUnirseGrupo;
     Button btnVolverGrupo;
