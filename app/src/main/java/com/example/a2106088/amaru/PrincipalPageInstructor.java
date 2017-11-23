@@ -133,10 +133,10 @@ public class PrincipalPageInstructor extends AppCompatActivity
                             public void onSuccess(Group response2) {
                                 Clase temp= response2.getClase(clases.get(+position).getIdgrupo());
                                 usuarios= new ArrayList<User>();
-                                for (Clase cl: todos.getClases()){
+                                for (Clase cl: response2.getClases()){
                                     if(temp.equals1(cl)){
                                         Log.d("nuevo",cl.getUsuario());
-
+                                        User uo= buscar(todos,cl.getUsuario());
                                     }
                                 }
                                 Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
@@ -170,6 +170,16 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
     }
 
+    public User buscar(List<User> todos,String username ){
+        User temp=null;
+        for (User y: todos){
+            if (y.getUsername().equals(username)){
+                temp=y;
+                break;
+            }
+        }
+        return temp;
+    }
 /*
 
     View.OnClickListener btnClicked = new View.OnClickListener() {

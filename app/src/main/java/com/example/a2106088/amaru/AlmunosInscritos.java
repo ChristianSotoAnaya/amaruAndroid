@@ -68,18 +68,6 @@ public class AlmunosInscritos extends AppCompatActivity
         users= (ArrayList<User>) memoria.getSerializable("usuarios");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         itemname = new String[users.size()];
 
         descr= new String[users.size()]; ;
@@ -87,6 +75,7 @@ public class AlmunosInscritos extends AppCompatActivity
 
         imgid = new String[users.size()]; ;
         for (int i=0;i<users.size();i++){
+
             itemname[i]=users.get(i).getNombre()+" "+ users.get(i).getLastname();
             descr[i]=users.get(i).getUsername();
             imgid[i]=users.get(i).getImage();
