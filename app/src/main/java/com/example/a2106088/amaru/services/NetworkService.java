@@ -50,4 +50,7 @@ public interface NetworkService
     @POST( "user/users" )
     Call<User> createUser(@Body User user);
 
+    @GET( "group/{groupname}" )
+    Call<Group> getGroupbyId(@Path("groupname") int groupname);
+
 }

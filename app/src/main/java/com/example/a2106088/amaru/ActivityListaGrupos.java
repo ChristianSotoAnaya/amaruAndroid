@@ -30,11 +30,14 @@ import android.widget.Toast;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityListaGrupos extends AppCompatActivity
@@ -45,11 +48,14 @@ public class ActivityListaGrupos extends AppCompatActivity
     List<Group> grupos;
     ListView lista;
     String[] itemname ;
+    int[] itemid ;
 
     String[] descr;
 
 
     String[] imgid;
+
+    RetrofitNetwork rfn;
 
 
 
@@ -79,6 +85,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         Bundle memoria = anterior.getExtras();
         grupos= (List<Group>) memoria.getSerializable("grupos");
         itemname = new String[grupos.size()];
+        itemid  = new int[grupos.size()];
 
         descr= new String[grupos.size()]; ;
 
@@ -86,6 +93,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         imgid = new String[grupos.size()]; ;
         for (int i=0;i<grupos.size();i++){
             itemname[i]=grupos.get(i).getNombre();
+            itemid[i]= (int) grupos.get(i).getId();
             descr[i]="Instructor: "+grupos.get(i).getInstructor();
             imgid[i]=grupos.get(i).getImage();
         }
@@ -96,12 +104,32 @@ public class ActivityListaGrupos extends AppCompatActivity
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-           public void onItemClick(AdapterView<?> parent, View view,
-           int position, long id) {
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             // TODO Auto-generated method stub
                 Log.d("imprimee","imprimeadsadas");
              String Slecteditem= itemname[+position];
-             Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
+                int idClass= itemid[+position];
+             Toast.makeText(getApplicationContext(), Slecteditem+" "+idClass, Toast.LENGTH_SHORT).show();
+                rfn= new RetrofitNetwork();
+
+                rfn.getGroupbyId(new RequestCallback<Group>() {
+                    @Override
+                    public void onSuccess(Group response) {
+                        Intent intento=new Intent(ActivityListaGrupos.this,ActivitySelectedGroup.class);
+                        Bundle datosExtra = new Bundle();
+                        datosExtra.putSerializable("grupo",response);
+                        intento.putExtras(datosExtra);
+                        startActivity(intento);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },idClass);
+
+
+            }
             });
 
             }

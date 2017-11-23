@@ -34,6 +34,9 @@ public interface Network
 
     void getallgroups(final RequestCallback<List<Group>> requestCallback);
 
+    void getGroupbyId(final RequestCallback<Group> requestCallback, int groupname);
+
+
 }
 
 

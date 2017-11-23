@@ -254,6 +254,31 @@ public class RetrofitNetwork implements Network
         } );
     }
 
+    @Override
+    public void getGroupbyId(final RequestCallback<Group> requestCallback, final int groupname) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Group> call = networkService.getGroupbyId(groupname);
+
+                try
+                {
+                    Response<Group> execute = call.execute();
+                    Group g = execute.body();
+                    Log.d("GRUPOO",g.getNombre());
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+
+    }
+
 
     public void addSecureTokenInterceptor( final String token )
     {
