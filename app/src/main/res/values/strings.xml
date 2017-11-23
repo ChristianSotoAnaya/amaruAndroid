@@ -23,4 +23,6 @@
     <string name="title_activity_lista_grupos">ActivityListaGrupos</string>
     <string name="title_activity_crear_grupo">CrearGrupo</string>
     <string name="title_activity_selected_group">ActivitySelectedGroup</string>
+    <string name="title_activity_categorias">Categorias</string>
+    <string name="title_activity_almunos_inscritos">AlmunosInscritos</string>
 </resources>

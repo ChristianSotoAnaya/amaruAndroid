@@ -48,6 +48,8 @@ public class PrincipalPageInstructor extends AppCompatActivity
     RetrofitNetwork rfn;
     List<Group> grupos;
     List<Clase> clases;
+    ArrayList<User> usuarios;
+    List<User> todos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,17 +115,54 @@ public class PrincipalPageInstructor extends AppCompatActivity
         CustomListAdapter adapter=new CustomListAdapter(PrincipalPageInstructor.this, itemname, imgid,descr);
         lista=(ListView) findViewById(R.id.listaaa3);
         lista.setAdapter(adapter);
+        rfn=new RetrofitNetwork();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                                    final int position, long id) {
                 // TODO Auto-generated method stub
-                Intent intento=new Intent(PrincipalPageInstructor.this,Grupo.class);
-                Bundle datosExtra = new Bundle();
-                datosExtra.putString("username",usuario);
-                intento.putExtras(datosExtra);
-                startActivity(intento);
+
+                rfn.getUsers(new RequestCallback<List<User>>() {
+                    @Override
+                    public void onSuccess(List<User> response) {
+                        todos=response;
+
+                        rfn.getGroupbyId(new RequestCallback<Group>() {
+                            @Override
+                            public void onSuccess(Group response2) {
+                                Clase temp= response2.getClase(clases.get(+position).getIdgrupo());
+                                usuarios= new ArrayList<User>();
+                                for (Clase cl: todos.getClases()){
+                                    if(temp.equals1(cl)){
+                                        Log.d("nuevo",cl.getUsuario());
+
+                                    }
+                                }
+                                Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
+                                Bundle datosExtra = new Bundle();
+                                datosExtra.putSerializable("usuarios",usuarios);
+                                intento.putExtras(datosExtra);
+                                startActivity(intento);
+
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },(int) clases.get(+position).getIdgrupo());
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                });
+
+
+
+
 
                 //String Slecteditem= itemname[+position];
                 //Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
@@ -184,26 +223,26 @@ public class PrincipalPageInstructor extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.createi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
+            Intent intento = new Intent(PrincipalPageInstructor.this, CrearGrupo.class);
             Bundle datosExtra = new Bundle();
 
-            datosExtra.putSerializable("user",user);
+            datosExtra.putSerializable("user", user);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
 
 
         } else if (id == R.id.groupsi) {
-            rfn= new RetrofitNetwork();
+            rfn = new RetrofitNetwork();
 
             rfn.getallgroups(new RequestCallback<List<Group>>() {
                 @Override
                 public void onSuccess(List<Group> response) {
-                    grupos=response;
-                    Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
+                    grupos = response;
+                    Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
-                    ArrayList<Group> temp= new ArrayList(grupos);
-                    datosExtra.putSerializable("grupos",temp);
+                    ArrayList<Group> temp = new ArrayList(grupos);
+                    datosExtra.putSerializable("grupos", temp);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
                 }
@@ -216,16 +255,40 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.profilei) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);
+            Intent intento = new Intent(PrincipalPageInstructor.this, PerfilInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
+            datosExtra.putSerializable("ins", user);
             intento.putExtras(datosExtra);
             startActivity(intento);
 
         } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(PrincipalPageInstructor.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putSerializable("ins", user);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_send) {
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+            rfn = new RetrofitNetwork();
 
+            rfn.getallgroups(new RequestCallback<List<Group>>() {
+                @Override
+                public void onSuccess(List<Group> response) {
+                    grupos = response;
+                    Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor", user.getUsername());
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

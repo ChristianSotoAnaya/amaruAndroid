@@ -32,6 +32,9 @@ public interface NetworkService
     @GET( "group/all" )
     Call<List<Group>> getallgroups();
 
+    @GET( "group/{groupname}" )
+    Call<Group> getGroupbyId(@Path("groupname") int groupname);
+
     @POST( "user/editImage" )
     Call<User> editImage(@Body User user);
 
@@ -50,7 +53,10 @@ public interface NetworkService
     @POST( "user/users" )
     Call<User> createUser(@Body User user);
 
-    @GET( "group/{groupname}" )
-    Call<Group> getGroupbyId(@Path("groupname") int groupname);
 
+    @GET( "user/users" )
+    Call<List<User>> getUsers();
+
+    @GET( "group/groups/{name}" )
+    Call<List<Group>> getCategory(@Path("name") String category);
 }
