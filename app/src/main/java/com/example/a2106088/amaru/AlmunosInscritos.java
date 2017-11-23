@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import com.example.a2106088.amaru.entity.CustomListAdapter;
+import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.RequestCallback;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
+
+import java.util.ArrayList;
 
 public class AlmunosInscritos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    ArrayList<User> users;
+    ListView lista;
+    String[] itemname ;
+
+    String[] descr;
+
+
+    String[] imgid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +61,55 @@ public class AlmunosInscritos extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        users= (ArrayList<User>) memoria.getSerializable("usuarios");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        itemname = new String[users.size()];
+
+        descr= new String[users.size()]; ;
+
+
+        imgid = new String[users.size()]; ;
+        for (int i=0;i<users.size();i++){
+            itemname[i]=users.get(i).getNombre()+" "+ users.get(i).getLastname();
+            descr[i]=users.get(i).getUsername();
+            imgid[i]=users.get(i).getImage();
+        }
+
+
+        CustomListAdapter adapter=new CustomListAdapter(AlmunosInscritos.this, itemname, imgid,descr);
+        lista=(ListView) findViewById(R.id.listaaa4);
+        lista.setAdapter(adapter);
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                Intent intento=new Intent(AlmunosInscritos.this,Grupo.class);
+                Bundle datosExtra = new Bundle();
+                datosExtra.putString("username","prueba");
+                intento.putExtras(datosExtra);
+                startActivity(intento);}
+        });
+
+
     }
 
     @Override

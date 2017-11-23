@@ -25,6 +25,13 @@ public class Clase  implements java.io.Serializable{
     public  Clase(){}
 
 
+    public boolean equals1( Clase b){
+        boolean res=false;
+        if (this.idGrupo==b.getIdgrupo() && this.fecha.equals(b.getFecha()) && this.hour.equals(b.getHour())){
+            res=true;
+        }
+        return res;
+    }
     public String getFecha() {
         return this.fecha;
     }

@@ -30,27 +30,30 @@ import android.widget.Toast;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityListaGrupos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    CustomListAdapter adapter;
 
     List<Group> grupos;
     ListView lista;
     String[] itemname ;
 
     String[] descr;
-
+    String user;
 
     String[] imgid;
-
+    RetrofitNetwork rfn;
 
 
     @Override
@@ -75,36 +78,73 @@ public class ActivityListaGrupos extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+
+
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        grupos= (List<Group>) memoria.getSerializable("grupos");
-        itemname = new String[grupos.size()];
+        user= (String) memoria.getSerializable("instructor");
+        rfn = new RetrofitNetwork();
 
-        descr= new String[grupos.size()]; ;
+        rfn.getallgroups(new RequestCallback<List<Group>>() {
+            @Override
+            public void onSuccess(List<Group> response) {
+                grupos = response;
+                ArrayList<Group> temp= new ArrayList<Group>();
+                for (Group g : grupos) {
+                    if (g.getInstructor().equals(user)) {
+                        temp.add(g);
+                    }
+                }
 
 
-        imgid = new String[grupos.size()]; ;
-        for (int i=0;i<grupos.size();i++){
-            itemname[i]=grupos.get(i).getNombre();
-            descr[i]="Instructor: "+grupos.get(i).getInstructor();
-            imgid[i]=grupos.get(i).getImage();
-        }
+                itemname = new String[grupos.size()];
 
-        CustomListAdapter adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
-        lista=(ListView) findViewById(R.id.listaaa2);
-        lista.setAdapter(adapter);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                descr= new String[grupos.size()]; ;
+
+
+                imgid = new String[grupos.size()]; ;
+                for (int i=0;i<grupos.size();i++){
+                    itemname[i]=grupos.get(i).getNombre();
+                    descr[i]="Instructor: "+grupos.get(i).getInstructor();
+                    imgid[i]=grupos.get(i).getImage();
+                }
+
+                adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
+                lista=(ListView) findViewById(R.id.listaaa2);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        lista.setAdapter(adapter);
+                        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+                                // TODO Auto-generated method stub
+                                Intent intento=new Intent(ActivityListaGrupos.this,Grupo.class);
+                                Bundle datosExtra = new Bundle();
+                                datosExtra.putString("username","prueba");
+                                intento.putExtras(datosExtra);
+                                startActivity(intento);}
+                        });
+                    }
+                });
+
+
+
+
+            }
 
             @Override
-           public void onItemClick(AdapterView<?> parent, View view,
-           int position, long id) {
-            // TODO Auto-generated method stub
-                Intent intento=new Intent(ActivityListaGrupos.this,Grupo.class);
-                Bundle datosExtra = new Bundle();
-                datosExtra.putString("username","prueba");
-                intento.putExtras(datosExtra);
-                startActivity(intento);}
-            });
+            public void onFailed(NetworkException e) {
+
+            }
+        });
+
+
+
+
 
             }
 
