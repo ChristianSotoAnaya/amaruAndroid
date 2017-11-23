@@ -233,6 +233,28 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
+    public void getGroupbyId(final RequestCallback<Group> requestCallback, final int groupname) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Group> call = networkService.getGroupbyId(groupname);
+
+                try
+                {
+                    Response<Group> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
     public void getallgroups(final RequestCallback<List<Group>> requestCallback) {
         backgroundExecutor.execute( new Runnable()
         {
@@ -240,6 +262,28 @@ public class RetrofitNetwork implements Network
             public void run()
             {
                 Call<List<Group>> call = networkService.getallgroups();
+
+                try
+                {
+                    Response<List<Group>> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
+    public void getcategory(final RequestCallback<List<Group>> requestCallback, final String category) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<List<Group>> call = networkService.getCategory(category);
 
                 try
                 {

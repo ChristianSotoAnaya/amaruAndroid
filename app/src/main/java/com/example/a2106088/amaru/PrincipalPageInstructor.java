@@ -184,26 +184,26 @@ public class PrincipalPageInstructor extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.createi) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,CrearGrupo.class);
+            Intent intento = new Intent(PrincipalPageInstructor.this, CrearGrupo.class);
             Bundle datosExtra = new Bundle();
 
-            datosExtra.putSerializable("user",user);
+            datosExtra.putSerializable("user", user);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
 
 
         } else if (id == R.id.groupsi) {
-            rfn= new RetrofitNetwork();
+            rfn = new RetrofitNetwork();
 
             rfn.getallgroups(new RequestCallback<List<Group>>() {
                 @Override
                 public void onSuccess(List<Group> response) {
-                    grupos=response;
-                    Intent intento=new Intent(PrincipalPageInstructor.this,ActivityListaGrupos.class);
+                    grupos = response;
+                    Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
-                    ArrayList<Group> temp= new ArrayList(grupos);
-                    datosExtra.putSerializable("grupos",temp);
+                    ArrayList<Group> temp = new ArrayList(grupos);
+                    datosExtra.putSerializable("grupos", temp);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
                 }
@@ -216,16 +216,46 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.profilei) {
-            Intent intento=new Intent(PrincipalPageInstructor.this,PerfilInstructor.class);
+            Intent intento = new Intent(PrincipalPageInstructor.this, PerfilInstructor.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",user);
+            datosExtra.putSerializable("ins", user);
             intento.putExtras(datosExtra);
             startActivity(intento);
 
         } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(PrincipalPageInstructor.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putSerializable("ins", user);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_send) {
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+            rfn = new RetrofitNetwork();
 
+            rfn.getallgroups(new RequestCallback<List<Group>>() {
+                @Override
+                public void onSuccess(List<Group> response) {
+                    grupos = response;
+                    Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
+                    Bundle datosExtra = new Bundle();
+                    ArrayList<Group> temp= new ArrayList<Group>();
+                    for (Group g : grupos) {
+                        if (g.getInstructor().equals(user.getUsername())) {
+                            temp.add(g);
+                        }
+                    }
+                    datosExtra.putSerializable("grupos", temp);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            });
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -8,6 +8,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/amaru"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -44,10 +45,18 @@
         <activity
             android:name=".ActivityListaGrupos"
             android:label="@string/title_activity_lista_grupos"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CrearGrupo"
             android:label="@string/title_activity_crear_grupo"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Categorias"
+            android:label="@string/title_activity_categorias"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AlmunosInscritos"
+            android:label="@string/title_activity_almunos_inscritos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -32,8 +32,13 @@ public interface Network
 
     void createUser(final RequestCallback<User> requestCallback, User user);
 
+    void getGroupbyId(final RequestCallback<Group> requestCallback, int groupname);
+
     void getallgroups(final RequestCallback<List<Group>> requestCallback);
 
+
+
+    void getcategory(final RequestCallback<List<Group>> requestCallback,String category);
 }
 
 

@@ -1,16 +1,9 @@
 package com.example.a2106088.amaru;
 
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,45 +13,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
-import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
-import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityListaGrupos extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Categorias extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-
-
+    ImageButton imageButtonaero;
+    ImageButton imageButtondance;
+    ImageButton imageButtonflexi;
+    ImageButton imageButtonmartial;
+    ImageButton imageButtonsports;
+    ImageButton imageButtonother;
+    RetrofitNetwork rfn;
     List<Group> grupos;
-    ListView lista;
-    String[] itemname ;
-
-    String[] descr;
-
-
-    String[] imgid;
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_grupos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
-       setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_categorias);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -75,39 +58,24 @@ public class ActivityListaGrupos extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        Intent anterior = getIntent();
-        Bundle memoria = anterior.getExtras();
-        grupos= (List<Group>) memoria.getSerializable("grupos");
-        itemname = new String[grupos.size()];
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        descr= new String[grupos.size()]; ;
+        imageButtonaero = (ImageButton) findViewById(R.id.imageButtonaero);
+        imageButtondance= (ImageButton) findViewById(R.id.imageButtondance);
+        imageButtonflexi =(ImageButton) findViewById(R.id.imageButtonflexi);
+        imageButtonmartial =(ImageButton) findViewById(R.id.imageButtonmartial);
+        imageButtonsports =(ImageButton) findViewById(R.id.imageButtonsports);
+        imageButtonother =(ImageButton) findViewById(R.id.imageButtonother);
+        imageButtonaero.setOnClickListener(this);
+        imageButtondance.setOnClickListener(this);
+        imageButtonflexi.setOnClickListener(this);
+        imageButtonmartial.setOnClickListener(this);
+        imageButtonsports.setOnClickListener(this);
+        imageButtonother.setOnClickListener(this);
 
 
-        imgid = new String[grupos.size()]; ;
-        for (int i=0;i<grupos.size();i++){
-            itemname[i]=grupos.get(i).getNombre();
-            descr[i]="Instructor: "+grupos.get(i).getInstructor();
-            imgid[i]=grupos.get(i).getImage();
-        }
-
-        CustomListAdapter adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
-        lista=(ListView) findViewById(R.id.listaaa2);
-        lista.setAdapter(adapter);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-           public void onItemClick(AdapterView<?> parent, View view,
-           int position, long id) {
-            // TODO Auto-generated method stub
-                Intent intento=new Intent(ActivityListaGrupos.this,Grupo.class);
-                Bundle datosExtra = new Bundle();
-                datosExtra.putString("username","prueba");
-                intento.putExtras(datosExtra);
-                startActivity(intento);}
-            });
-
-            }
-
+    }
 
     @Override
     public void onBackPressed() {
@@ -122,7 +90,7 @@ public class ActivityListaGrupos extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_lista_grupos, menu);
+        getMenuInflater().inflate(R.menu.categorias, menu);
         return true;
     }
 
@@ -166,10 +134,45 @@ public class ActivityListaGrupos extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onClick(View view) {
+        String selected="";
+        if (view.getId() == imageButtonaero.getId()) {
+            selected="Aerobics";
+        }
+        else if (view.getId() == imageButtondance.getId()) {
+            selected="Dance";
+        }
+        else if (view.getId() == imageButtonflexi.getId()) {
+            selected="Flexibility";
+        }
+        else if (view.getId() == imageButtonmartial.getId()) {
+            selected="Martial arts";
+        }
+        else if (view.getId() == imageButtonsports.getId()) {
+            selected="Sports";
+        }
+        else if (view.getId() == imageButtonother.getId()) {
+            selected="Others";
+        }
+        rfn= new RetrofitNetwork();
 
+        rfn.getcategory(new RequestCallback<List<Group>>() {
+            @Override
+            public void onSuccess(List<Group> response) {
+                grupos=response;
+                Intent intento=new Intent(Categorias.this,ActivityListaGrupos.class);
+                Bundle datosExtra = new Bundle();
+                ArrayList<Group> temp= new ArrayList(grupos);
+                datosExtra.putSerializable("grupos",temp);
+                intento.putExtras(datosExtra);
+                startActivity(intento);
+            }
 
+            @Override
+            public void onFailed(NetworkException e) {
 
-
-
-
+            }
+        },selected);
+    }
 }
