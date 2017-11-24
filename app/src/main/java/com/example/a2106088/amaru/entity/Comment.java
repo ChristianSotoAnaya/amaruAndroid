@@ -1,11 +1,13 @@
 package com.example.a2106088.amaru.entity;
 
 
+import java.io.Serializable;
+
 /**
  * Created by 2106088 on 9/6/17.
  */
 
-public class Comment {
+public class Comment  implements java.io.Serializable{
 
     private String contenido;
     private long Groupid;

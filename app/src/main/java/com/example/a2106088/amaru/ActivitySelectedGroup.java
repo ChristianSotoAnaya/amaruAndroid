@@ -25,8 +25,8 @@ public class ActivitySelectedGroup extends AppCompatActivity
     TextView groupName;
     TextView groupInstructor;
     TextView groupDescription;
-    TextView totalVotes;
-    TextView rate;
+    TextView txtgroupTotalVotes;
+    TextView txtGroupCurrentRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,14 +60,14 @@ public class ActivitySelectedGroup extends AppCompatActivity
         groupName = (TextView) findViewById(R.id.txtGroupName);
         groupInstructor = (TextView) findViewById(R.id.txtGroupInstructor);
         groupDescription = (TextView) findViewById(R.id.txtGroupDescription);
-        totalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
-        rate = (TextView) findViewById(R.id.txtGroupCurrentRating);
+        txtgroupTotalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
+        txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
 
         groupName.setText(grupo.getNombre());
         groupInstructor.setText(grupo.getInstructor());
         groupDescription.setText(grupo.getDescription());
-        totalVotes.setText(grupo.getTotalVotes());
-        rate.setText(String.valueOf(grupo.getRate()));
+        txtgroupTotalVotes.setText(grupo.getTotalVotes());
+        txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
     }
 
     @Override

@@ -85,7 +85,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        itemid  = new int[grupos.size()];
+
         user= (String) memoria.getSerializable("instructor");
         rfn = new RetrofitNetwork();
 
@@ -102,7 +102,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
 
                 itemname = new String[grupos.size()];
-
+                itemid  = new int[grupos.size()];
                 descr= new String[grupos.size()]; ;
 
 
@@ -111,6 +111,7 @@ public class ActivityListaGrupos extends AppCompatActivity
                     itemname[i]=grupos.get(i).getNombre();
                     descr[i]="Instructor: "+grupos.get(i).getInstructor();
                     imgid[i]=grupos.get(i).getImage();
+                    itemid[i]=(int) grupos.get(i).getId();
                 }
 
                 adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
@@ -126,11 +127,20 @@ public class ActivityListaGrupos extends AppCompatActivity
                             public void onItemClick(AdapterView<?> parent, View view,
                                                     int position, long id) {
                                 // TODO Auto-generated method stub
-                                Intent intento=new Intent(ActivityListaGrupos.this,Grupo.class);
-                                Bundle datosExtra = new Bundle();
-                                datosExtra.putString("username","prueba");
-                                intento.putExtras(datosExtra);
-                                startActivity(intento);}
+                                rfn.getGroupbyId(new RequestCallback<Group>() {
+                                @Override
+                                public void onSuccess(Group response2) {
+                                    Intent intento=new Intent(ActivityListaGrupos.this,ActivitySelectedGroup.class);
+                                    Bundle datosExtra = new Bundle();
+                                    datosExtra.putSerializable("grupo",response2);
+                                    intento.putExtras(datosExtra);
+                                    startActivity(intento);
+
+                             }
+                             @Override
+                              public void onFailed(NetworkException e) {
+                              }
+                         },itemid[+position]);}
                         });
                     }
                 });
@@ -146,7 +156,7 @@ public class ActivityListaGrupos extends AppCompatActivity
             }
         });
 
-        
+
 
             }
 
