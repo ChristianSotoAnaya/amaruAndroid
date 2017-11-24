@@ -13,34 +13,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 
-import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
-import com.example.a2106088.amaru.entity.User;
-import com.example.a2106088.amaru.model.RequestCallback;
-import com.example.a2106088.amaru.model.RetrofitNetwork;
 
-import java.util.ArrayList;
-
-public class AlmunosInscritos extends AppCompatActivity
+public class ActivitySelectedGroup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    ArrayList<User> users;
-    ListView lista;
-    String[] itemname ;
 
-    String[] descr;
-
-
-    String[] imgid;
-
+    Group grupo;
+    TextView groupName;
+    TextView groupInstructor;
+    TextView groupDescription;
+    TextView txtgroupTotalVotes;
+    TextView txtGroupCurrentRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_almunos_inscritos);
+        setContentView(R.layout.activity_selected_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,40 +56,18 @@ public class AlmunosInscritos extends AppCompatActivity
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        users= (ArrayList<User>) memoria.getSerializable("usuarios");
+        grupo = (Group) memoria.getSerializable("grupo");
+        groupName = (TextView) findViewById(R.id.txtGroupName);
+        groupInstructor = (TextView) findViewById(R.id.txtGroupInstructor);
+        groupDescription = (TextView) findViewById(R.id.txtGroupDescription);
+        txtgroupTotalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
+        txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
 
-
-        itemname = new String[users.size()];
-
-        descr= new String[users.size()]; ;
-
-
-        imgid = new String[users.size()]; ;
-        for (int i=0;i<users.size();i++){
-
-            itemname[i]=users.get(i).getNombre()+" "+ users.get(i).getLastname();
-            descr[i]=users.get(i).getUsername();
-            imgid[i]=users.get(i).getImage();
-        }
-
-
-        CustomListAdapter adapter=new CustomListAdapter(AlmunosInscritos.this, itemname, imgid,descr);
-        lista=(ListView) findViewById(R.id.listaaa4);
-        lista.setAdapter(adapter);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                Intent intento=new Intent(AlmunosInscritos.this,Grupo.class);
-                Bundle datosExtra = new Bundle();
-                datosExtra.putString("username","prueba");
-                intento.putExtras(datosExtra);
-                startActivity(intento);}
-        });
-
-
+        groupName.setText(grupo.getNombre());
+        groupInstructor.setText(grupo.getInstructor());
+        groupDescription.setText(grupo.getDescription());
+        txtgroupTotalVotes.setText(grupo.getTotalVotes());
+        txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
     }
 
     @Override
@@ -114,7 +83,7 @@ public class AlmunosInscritos extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.almunos_inscritos, menu);
+        getMenuInflater().inflate(R.menu.activity_selected_group, menu);
         return true;
     }
 
@@ -158,3 +127,4 @@ public class AlmunosInscritos extends AppCompatActivity
         return true;
     }
 }
+

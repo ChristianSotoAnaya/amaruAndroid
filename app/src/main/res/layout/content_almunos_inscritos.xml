@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.a2106088.amaru.AlmunosInscritos"
-    tools:showIn="@layout/app_bar_almunos_inscritos">
+    android:orientation="vertical"
+    android:weightSum="1"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Amaru"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title" />
+
+
+    <TextView
+        android:id="@+id/ToursPendientes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.14"
+        android:gravity="center"
+        android:text="Clases"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"></LinearLayout>
+
+    <ListView
+        android:id="@+id/listaaa4"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+
+
+</LinearLayout>
+

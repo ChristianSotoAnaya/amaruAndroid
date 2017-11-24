@@ -48,6 +48,8 @@ public class PrincipalPageInstructor extends AppCompatActivity
     RetrofitNetwork rfn;
     List<Group> grupos;
     List<Clase> clases;
+    ArrayList<User> usuarios;
+    List<User> todos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,17 +115,54 @@ public class PrincipalPageInstructor extends AppCompatActivity
         CustomListAdapter adapter=new CustomListAdapter(PrincipalPageInstructor.this, itemname, imgid,descr);
         lista=(ListView) findViewById(R.id.listaaa3);
         lista.setAdapter(adapter);
+        rfn=new RetrofitNetwork();
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+                                    final int position, long id) {
                 // TODO Auto-generated method stub
-                Intent intento=new Intent(PrincipalPageInstructor.this,Grupo.class);
-                Bundle datosExtra = new Bundle();
-                datosExtra.putString("username",usuario);
-                intento.putExtras(datosExtra);
-                startActivity(intento);
+
+                rfn.getUsers(new RequestCallback<List<User>>() {
+                    @Override
+                    public void onSuccess(List<User> response) {
+                        todos=response;
+
+                        rfn.getGroupbyId(new RequestCallback<Group>() {
+                            @Override
+                            public void onSuccess(Group response2) {
+                                Clase temp= response2.getClase(clases.get(+position).getIdgrupo());
+                                usuarios= new ArrayList<User>();
+                                for (Clase cl: response2.getClases()){
+                                    if(temp.equals1(cl)){
+                                        Log.d("nuevo",cl.getUsuario());
+                                        User uo= buscar(todos,cl.getUsuario());
+                                    }
+                                }
+                                Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
+                                Bundle datosExtra = new Bundle();
+                                datosExtra.putSerializable("usuarios",usuarios);
+                                intento.putExtras(datosExtra);
+                                startActivity(intento);
+
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },(int) clases.get(+position).getIdgrupo());
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                });
+
+
+
+
 
                 //String Slecteditem= itemname[+position];
                 //Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
@@ -131,6 +170,16 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
     }
 
+    public User buscar(List<User> todos,String username ){
+        User temp=null;
+        for (User y: todos){
+            if (y.getUsername().equals(username)){
+                temp=y;
+                break;
+            }
+        }
+        return temp;
+    }
 /*
 
     View.OnClickListener btnClicked = new View.OnClickListener() {
@@ -240,13 +289,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
                     grupos = response;
                     Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
-                    ArrayList<Group> temp= new ArrayList<Group>();
-                    for (Group g : grupos) {
-                        if (g.getInstructor().equals(user.getUsername())) {
-                            temp.add(g);
-                        }
-                    }
-                    datosExtra.putSerializable("grupos", temp);
+                    datosExtra.putString("instructor", user.getUsername());
                     intento.putExtras(datosExtra);
                     startActivity(intento);
                 }

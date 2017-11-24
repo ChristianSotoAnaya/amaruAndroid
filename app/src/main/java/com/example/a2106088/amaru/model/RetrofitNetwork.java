@@ -187,6 +187,27 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
+    public void getUsers(final RequestCallback<List<User>> requestCallback) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<List<User>> call = networkService.getUsers();
+                try
+                {
+                    Response<List<User>> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
     public void editRate(final RequestCallback<User> requestCallback, final User user) {
         backgroundExecutor.execute( new Runnable()
         {

@@ -30,6 +30,8 @@ public interface Network
 
     void getuser( RequestCallback<User> requestCallback, String username);
 
+    void getUsers(final RequestCallback<List<User>> requestCallback);
+
     void createUser(final RequestCallback<User> requestCallback, User user);
 
     void getGroupbyId(final RequestCallback<Group> requestCallback, int groupname);

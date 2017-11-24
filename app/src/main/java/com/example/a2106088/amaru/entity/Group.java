@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by 2107262 on 9/6/17.
  */
-public class Group implements Serializable {
+public class Group implements java.io.Serializable {
 
     private long id;
 
@@ -17,7 +17,7 @@ public class Group implements Serializable {
 
     private String instructor;
 
-    transient private List<Comment> comments;
+     private List<Comment> comments;
 
     private String description;
 
@@ -29,7 +29,7 @@ public class Group implements Serializable {
 
     private String image;
 
-    transient  private List<Clase> clases;
+    private List<Clase> clases;
 
     public Group(long id,String nombre,String instructor,List<Comment> comments,String description,String category, Double rate,int totalVotes,String image,List<Clase> clases) {
         this.id=id;
@@ -130,6 +130,17 @@ public class Group implements Serializable {
 
     public List<Clase> getClases() {
         return clases;
+    }
+
+    public Clase getClase(long b){
+        Clase c=  null;
+        for (Clase g: clases){
+            if (g.getIdclase()==b){
+                c=g;
+                break;
+            }
+        }
+        return c;
     }
 
     public void setClases(List<Clase> clases) {

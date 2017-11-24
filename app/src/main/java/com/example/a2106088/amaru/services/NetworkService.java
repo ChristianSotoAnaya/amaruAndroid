@@ -53,6 +53,10 @@ public interface NetworkService
     @POST( "user/users" )
     Call<User> createUser(@Body User user);
 
+
+    @GET( "user/users" )
+    Call<List<User>> getUsers();
+
     @GET( "group/groups/{name}" )
     Call<List<Group>> getCategory(@Path("name") String category);
 
