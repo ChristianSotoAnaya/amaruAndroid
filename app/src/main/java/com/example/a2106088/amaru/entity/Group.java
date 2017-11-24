@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by 2107262 on 9/6/17.
  */
-public class Group implements Serializable {
+public class Group implements java.io.Serializable {
 
     private long id;
 
