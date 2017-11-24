@@ -32,11 +32,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PrincipalPageInstructor"
-            android:label="@string/title_activity_principal_page_instructor"
+            android:label="Próximas Clases"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PerfilInstructor"
-            android:label="@string/title_activity_perfil_instructor"
+            android:label="Mi Perfil"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".VerPerfilInstructor"
@@ -44,11 +44,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityListaGrupos"
-            android:label="@string/title_activity_lista_grupos"
+            android:label="Grupos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CrearGrupo"
-            android:label="@string/title_activity_crear_grupo"
+            android:label="Crear Grupo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivitySelectedGroup"
@@ -60,7 +60,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AlmunosInscritos"
-            android:label="@string/title_activity_almunos_inscritos"
+            android:label="Inscritos"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

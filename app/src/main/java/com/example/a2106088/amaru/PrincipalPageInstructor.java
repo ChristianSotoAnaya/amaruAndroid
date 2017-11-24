@@ -245,25 +245,14 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.groupsi) {
-            rfn = new RetrofitNetwork();
 
-            rfn.getallgroups(new RequestCallback<List<Group>>() {
-                @Override
-                public void onSuccess(List<Group> response) {
-                    grupos = response;
+
                     Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
-                    ArrayList<Group> temp = new ArrayList(grupos);
-                    datosExtra.putSerializable("grupos", temp);
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putString("quitar", "");
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-                }
-
-                @Override
-                public void onFailed(NetworkException e) {
-
-                }
-            });
 
 
         } else if (id == R.id.profilei) {
@@ -283,24 +272,16 @@ public class PrincipalPageInstructor extends AppCompatActivity
         }
         //Mis grupos
         else if (id == R.id.nav_send) {
-            rfn = new RetrofitNetwork();
 
-            rfn.getallgroups(new RequestCallback<List<Group>>() {
-                @Override
-                public void onSuccess(List<Group> response) {
-                    grupos = response;
                     Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
                     datosExtra.putString("instructor", user.getUsername());
+                    datosExtra.putString("quitar",user.getUsername());
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-                }
 
-                @Override
-                public void onFailed(NetworkException e) {
 
-                }
-            });
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
