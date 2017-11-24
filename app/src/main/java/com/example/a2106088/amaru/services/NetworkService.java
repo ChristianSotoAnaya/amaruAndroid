@@ -59,4 +59,8 @@ public interface NetworkService
 
     @GET( "group/groups/{name}" )
     Call<List<Group>> getCategory(@Path("name") String category);
+
+    @POST( "group/rate" )
+    Call<Group> editRateGroup(@Body Group group);
+
 }

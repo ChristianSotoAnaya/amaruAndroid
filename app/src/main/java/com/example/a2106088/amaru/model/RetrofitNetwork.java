@@ -320,6 +320,28 @@ public class RetrofitNetwork implements Network
         } );
     }
 
+    @Override
+    public void editRateGroup(final RequestCallback<Group> requestCallback, final Group group) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Group> call = networkService.editRateGroup(group);
+
+                try
+                {
+                    Response<Group> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
 
     public void addSecureTokenInterceptor( final String token )
     {

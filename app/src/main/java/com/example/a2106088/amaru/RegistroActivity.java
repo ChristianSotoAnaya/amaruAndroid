@@ -70,7 +70,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         btnRegistro=(Button) findViewById(R.id.Registrarse);
         btnRegistro.setOnClickListener(this);
         spinner=(Spinner) findViewById(R.id.spinner);
-        String[] letra = {"Instructor","Amaru"};
+        String[] letra = {"INSTRUCTOR","AMARU"};
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
         infoUsuarios=this.getSharedPreferences("asd", Context.MODE_PRIVATE);
         rfn= new RetrofitNetwork();
