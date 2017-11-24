@@ -38,8 +38,6 @@ public interface Network
 
     void getallgroups(final RequestCallback<List<Group>> requestCallback);
 
-
-
     void getcategory(final RequestCallback<List<Group>> requestCallback,String category);
 }
 

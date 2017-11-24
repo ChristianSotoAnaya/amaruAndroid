@@ -298,6 +298,7 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
+
     public void getcategory(final RequestCallback<List<Group>> requestCallback, final String category) {
         backgroundExecutor.execute( new Runnable()
         {
