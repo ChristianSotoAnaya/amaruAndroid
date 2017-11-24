@@ -55,4 +55,7 @@ public interface NetworkService
 
     @GET( "group/groups/{name}" )
     Call<List<Group>> getCategory(@Path("name") String category);
+
+    @POST("group/groups")
+    Call<Group> createGroup(@Body Group group);
 }

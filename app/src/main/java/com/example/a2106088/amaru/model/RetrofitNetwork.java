@@ -277,6 +277,29 @@ public class RetrofitNetwork implements Network
     }
 
     @Override
+    public void createGroup(final RequestCallback<Group> requestCallback, final Group group) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Group> call = networkService.createGroup(group);
+
+                try
+                {
+                    Response<Group> execute = call.execute();
+
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
     public void getcategory(final RequestCallback<List<Group>> requestCallback, final String category) {
         backgroundExecutor.execute( new Runnable()
         {
