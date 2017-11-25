@@ -65,5 +65,5 @@ public interface NetworkService
 
     @POST( "group/rate" )
     Call<Group> editRateGroup(@Body Group group);
-    
+
 }

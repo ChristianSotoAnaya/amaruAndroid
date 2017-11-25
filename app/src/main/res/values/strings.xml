@@ -25,4 +25,5 @@
     <string name="title_activity_selected_group">ActivitySelectedGroup</string>
     <string name="title_activity_categorias">Categorias</string>
     <string name="title_activity_almunos_inscritos">AlmunosInscritos</string>
+    <string name="title_activity_inicio_amaru">inicioAmaru</string>
 </resources>
