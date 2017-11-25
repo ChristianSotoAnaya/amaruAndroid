@@ -43,6 +43,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
     ListView lista;
     String[] itemname ;
     String[] descr;
+    String[] ids;
     String[] imgid;
     User user;
     RetrofitNetwork rfn;
@@ -102,7 +103,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
             LayoutPendientes.addView(btnWord[i]);
         }*/
         itemname = new String[clases.size()];
-
+        ids=new String[clases.size()];
         descr= new String[clases.size()];
         imgid= new String[clases.size()];
 
@@ -110,6 +111,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
             itemname[i]=clases.get(i).getNombregrupo();
             descr[i]="Fecha: "+clases.get(i).getFecha()+ " Hora: "+clases.get(i).getHour()+ "\nLugar: "+clases.get(i).getPlace()+ " Num Inscritos: "+clases.get(i).getNuminscritos();
             imgid[i]="https://cdn4.iconfinder.com/data/icons/date-and-time-3/32/109-01-512.png";
+            ids[i]=String.valueOf(clases.get(i).getIdgrupo());
         }
 
         CustomListAdapter adapter=new CustomListAdapter(PrincipalPageInstructor.this, itemname, imgid,descr);
@@ -122,7 +124,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     final int position, long id) {
                 // TODO Auto-generated method stub
-
+                Log.d("presss",String.valueOf(+position));
                 rfn.getUsers(new RequestCallback<List<User>>() {
                     @Override
                     public void onSuccess(List<User> response) {
@@ -131,12 +133,12 @@ public class PrincipalPageInstructor extends AppCompatActivity
                         rfn.getGroupbyId(new RequestCallback<Group>() {
                             @Override
                             public void onSuccess(Group response2) {
-                                Clase temp= response2.getClase(clases.get(+position).getIdgrupo());
+                                Clase temp= clases.get(+position);
                                 usuarios= new ArrayList<User>();
                                 for (Clase cl: response2.getClases()){
-                                    if(temp.equals1(cl)){
-                                        Log.d("nuevo",cl.getUsuario());
+                                    if(temp.equals1(cl) ){
                                         User uo= buscar(todos,cl.getUsuario());
+                                        usuarios.add(uo);
                                     }
                                 }
                                 Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
@@ -151,7 +153,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
                             public void onFailed(NetworkException e) {
 
                             }
-                        },(int) clases.get(+position).getIdgrupo());
+                        },Integer.valueOf(ids[+position]));
                     }
 
                     @Override
@@ -243,25 +245,14 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.groupsi) {
-            rfn = new RetrofitNetwork();
 
-            rfn.getallgroups(new RequestCallback<List<Group>>() {
-                @Override
-                public void onSuccess(List<Group> response) {
-                    grupos = response;
+
                     Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
-                    ArrayList<Group> temp = new ArrayList(grupos);
-                    datosExtra.putSerializable("grupos", temp);
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putString("quitar", "");
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-                }
-
-                @Override
-                public void onFailed(NetworkException e) {
-
-                }
-            });
 
 
         } else if (id == R.id.profilei) {
@@ -281,24 +272,16 @@ public class PrincipalPageInstructor extends AppCompatActivity
         }
         //Mis grupos
         else if (id == R.id.nav_send) {
-            rfn = new RetrofitNetwork();
 
-            rfn.getallgroups(new RequestCallback<List<Group>>() {
-                @Override
-                public void onSuccess(List<Group> response) {
-                    grupos = response;
                     Intent intento = new Intent(PrincipalPageInstructor.this, ActivityListaGrupos.class);
                     Bundle datosExtra = new Bundle();
                     datosExtra.putString("instructor", user.getUsername());
+                    datosExtra.putString("quitar",user.getUsername());
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-                }
 
-                @Override
-                public void onFailed(NetworkException e) {
 
-                }
-            });
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

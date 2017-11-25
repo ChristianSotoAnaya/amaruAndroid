@@ -2,6 +2,8 @@ package com.example.a2106088.amaru;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -13,9 +15,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 public class ActivitySelectedGroup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +35,11 @@ public class ActivitySelectedGroup extends AppCompatActivity
     TextView groupDescription;
     TextView txtgroupTotalVotes;
     TextView txtGroupCurrentRating;
+    TextView txtRateNumber;
+    RatingBar ratingBar;
+    Button btnRate;
+
+    RetrofitNetwork rfn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +75,57 @@ public class ActivitySelectedGroup extends AppCompatActivity
         groupDescription = (TextView) findViewById(R.id.txtGroupDescription);
         txtgroupTotalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
         txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
+        txtRateNumber = (TextView) findViewById(R.id.txtRateNumber);
+        btnRate = (Button) findViewById(R.id.btnRateGroup);
+        rfn=new RetrofitNetwork();
 
-        groupName.setText(grupo.getNombre());
-        groupInstructor.setText(grupo.getInstructor());
-        groupDescription.setText(grupo.getDescription());
-        txtgroupTotalVotes.setText(grupo.getTotalVotes());
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
+        ratingBar.setNumStars(5);
+        txtRateNumber.setText(String.valueOf((int) ratingBar.getRating()));
+
+        groupName.setText(String.valueOf(grupo.getNombre()));
+        groupInstructor.setText(String.valueOf(grupo.getInstructor()));
+        groupDescription.setText(String.valueOf(grupo.getDescription()));
+        txtgroupTotalVotes.setText(String.valueOf(grupo.getTotalVotes()));
         txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                txtRateNumber.setText(String.valueOf((int) rating));
+            }
+        });
+
+        btnRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Group temp = new Group();
+                temp.setRate(Double.parseDouble(String.valueOf(ratingBar.getRating())));
+                temp.setId(grupo.getId());
+                rfn.editRateGroup(new RequestCallback<Group>() {
+                    @Override
+                    public void onSuccess(Group response) {
+                        /*
+                        txtgroupTotalVotes.setText(String.valueOf(response.getTotalVotes()));
+                        txtGroupCurrentRating.setText(String.valueOf(response.getRate()));
+                        ratingBar.setEnabled(false);
+                        txtRateNumber.setEnabled(false);
+                        */
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Successful rating", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },temp);
+            }
+        });
     }
 
     @Override
@@ -126,5 +184,6 @@ public class ActivitySelectedGroup extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }
 

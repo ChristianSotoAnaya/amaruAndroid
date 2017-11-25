@@ -41,6 +41,9 @@ public interface Network
     void createGroup(final RequestCallback<Group> requestCallback, Group group);
 
     void getcategory(final RequestCallback<List<Group>> requestCallback,String category);
+
+    void editRateGroup(final RequestCallback<Group> requestCallback, Group group);
+
 }
 
 

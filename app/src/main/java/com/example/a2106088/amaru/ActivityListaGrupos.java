@@ -56,6 +56,7 @@ public class ActivityListaGrupos extends AppCompatActivity
     String[] imgid;
 
     RetrofitNetwork rfn;
+    String quitar;
 
 
 
@@ -87,6 +88,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         Bundle memoria = anterior.getExtras();
 
         user= (String) memoria.getSerializable("instructor");
+        quitar =(String) memoria.getSerializable("quitar");
         rfn = new RetrofitNetwork();
 
         rfn.getallgroups(new RequestCallback<List<Group>>() {
@@ -94,24 +96,28 @@ public class ActivityListaGrupos extends AppCompatActivity
             public void onSuccess(List<Group> response) {
                 grupos = response;
                 ArrayList<Group> temp= new ArrayList<Group>();
-                for (Group g : grupos) {
-                    if (g.getInstructor().equals(user)) {
-                        temp.add(g);
-                    }
+                if (quitar.equals("")){
+                    temp=new ArrayList(grupos);
+                }
+                else{
+                    for (Group g : grupos) {
+                        if(g.getInstructor().equals(user)) {
+                                temp.add(g);
+                            }
+                        }
                 }
 
+                itemname = new String[temp.size()];
+                itemid  = new int[temp.size()];
+                descr= new String[temp.size()]; ;
 
-                itemname = new String[grupos.size()];
-                itemid  = new int[grupos.size()];
-                descr= new String[grupos.size()]; ;
 
-
-                imgid = new String[grupos.size()]; ;
-                for (int i=0;i<grupos.size();i++){
-                    itemname[i]=grupos.get(i).getNombre();
-                    descr[i]="Instructor: "+grupos.get(i).getInstructor();
-                    imgid[i]=grupos.get(i).getImage();
-                    itemid[i]=(int) grupos.get(i).getId();
+                imgid = new String[temp.size()]; ;
+                for (int i=0;i<temp.size();i++){
+                    itemname[i]=temp.get(i).getNombre();
+                    descr[i]="Instructor: "+temp.get(i).getInstructor();
+                    imgid[i]=temp.get(i).getImage();
+                    itemid[i]=(int) temp.get(i).getId();
                 }
 
                 adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);

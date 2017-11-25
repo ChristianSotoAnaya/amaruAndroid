@@ -2,21 +2,21 @@ package com.example.a2106088.amaru.entity;
 
 
 public class Clase  implements java.io.Serializable{
-    private long idGrupo;
+    private long idgrupo;
     private String fecha;
     private String hour;
     private String place;
-    private long idClase;
+    private long idclase;
     private String nombregrupo;
     private int numinscritos;
     private String usuario;
 
-    public Clase(long idGrupo,String fecha,String hour,String place,long idClase,String nombregrupo,int numinscritos, String usuario){
-        this.idGrupo=idGrupo;
+    public Clase(long idgrupo,String fecha,String hour,String place,long idclase,String nombregrupo,int numinscritos, String usuario){
+        this.idgrupo=idgrupo;
         this.fecha=fecha;
         this.hour=hour;
         this.place=place;
-        this.idClase=idClase;
+        this.idclase=idclase;
         this.nombregrupo=nombregrupo;
         this.numinscritos=numinscritos;
         this.usuario = usuario;
@@ -27,7 +27,7 @@ public class Clase  implements java.io.Serializable{
 
     public boolean equals1( Clase b){
         boolean res=false;
-        if (this.idGrupo==b.getIdgrupo() && this.fecha.equals(b.getFecha()) && this.hour.equals(b.getHour())){
+        if (this.idgrupo==b.getIdgrupo() && this.fecha.equals(b.getFecha()) && this.hour.equals(b.getHour())){
             res=true;
         }
         return res;
@@ -58,18 +58,18 @@ public class Clase  implements java.io.Serializable{
 
     //@Column(name = "idgrupo", nullable = false)
     public long getIdgrupo() {
-        return idGrupo;
+        return idgrupo;
     }
 
     public void setIdgrupo(long idgrupo) {
-        this.idGrupo = idgrupo;
+        this.idgrupo = idgrupo;
     }
 
 
-    public long getIdclase() { return this.idClase; }
+    public long getIdclase() { return this.idclase; }
 
     public void setIdclase(long idclase) {
-        this.idClase = idclase;
+        this.idclase = idclase;
     }
 
     public String getNombregrupo() {
