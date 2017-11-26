@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.entity.User;
 
 public class PrincipalPageAmaru extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +28,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
     SharedPreferences infousuario;
     TextView username;
+    User user;
     String usuario;
     Button[] btnWord = new Button[10];
     LinearLayout LayoutPendientes;
@@ -36,6 +38,10 @@ public class PrincipalPageAmaru extends AppCompatActivity
         setContentView(R.layout.activity_inicio_amaru);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        user= (User) memoria.getSerializable("usuario");
+        usuario = user.getUsername();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,9 @@
 package com.example.a2106088.amaru;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -12,17 +15,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 public class Comprar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     int tickets = 0;
+    String usuario;
+    RetrofitNetwork rfn;
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comprar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        usuario = memoria.getString("username");
+        rfn= new RetrofitNetwork();
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +138,46 @@ public class Comprar extends AppCompatActivity
     }
 
     public void comprar(View view) {
+        final int tickets = this.tickets;
+        rfn.getuser(new RequestCallback<User>() {
+            @Override
+            public void onSuccess(User response) {
+                user = response;
+                int cupo = user.getCupo();
+                user.setCupo(cupo + tickets);
+                rfn.buy(new RequestCallback<User>() {
+                    @Override
+                    public void onSuccess(User response) {
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Compra exitosa...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Error comprando tickets...", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                },user);
+            }
+
+            @Override
+            public void onFailed(NetworkException e) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Error cargando usuario...", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        },usuario);
     }
 
     public void cancelarCompra(View view) {

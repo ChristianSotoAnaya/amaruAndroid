@@ -44,6 +44,8 @@ public interface Network
 
     void editRateGroup(final RequestCallback<Group> requestCallback, Group group);
 
+    void buy(final RequestCallback<User> requestCallback, User user);
+
 }
 
 
