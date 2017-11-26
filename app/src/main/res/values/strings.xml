@@ -25,4 +25,6 @@
     <string name="title_activity_selected_group">ActivitySelectedGroup</string>
     <string name="title_activity_categorias">Categorias</string>
     <string name="title_activity_almunos_inscritos">AlmunosInscritos</string>
+    <string name="title_activity_user_listas">UserListas</string>
+    <string name="title_activity_user_category">UserCategory</string>
 </resources>

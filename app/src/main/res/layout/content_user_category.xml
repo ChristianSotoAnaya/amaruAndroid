@@ -20,7 +20,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButtonaero"
+            android:id="@+id/imageButtonaerou"
             android:layout_width="176dp"
             android:layout_height="128dp"
             android:layout_weight="1"
@@ -28,7 +28,7 @@
             />
 
         <ImageButton
-            android:id="@+id/imageButtondance"
+            android:id="@+id/imageButtondanceu"
             android:layout_width="176dp"
             android:layout_height="128dp"
             android:layout_weight="1"
@@ -66,14 +66,14 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/imageButtonflexi"
+            android:id="@+id/imageButtonflexiu"
             android:layout_width="176dp"
             android:layout_height="128dp"
             android:layout_weight="1"
             android:background="@drawable/flexi" />
 
         <ImageButton
-            android:id="@+id/imageButtonmartial"
+            android:id="@+id/imageButtonmartialu"
             android:layout_width="176dp"
             android:layout_height="128dp"
             android:layout_weight="1"
@@ -111,14 +111,14 @@
         android:weightSum="1">
 
         <ImageButton
-            android:id="@+id/imageButtonsports"
+            android:id="@+id/imageButtonsportsu"
             android:layout_width="176dp"
             android:layout_height="115dp"
             android:layout_weight="1.32"
             android:background="@drawable/sports" />
 
         <ImageButton
-            android:id="@+id/imageButtonother"
+            android:id="@+id/imageButtonotheru"
             android:layout_width="197dp"
             android:layout_height="117dp"
             android:background="@drawable/others" />

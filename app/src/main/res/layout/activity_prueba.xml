@@ -25,6 +25,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_prueba"
+        android:background="@drawable/nabv"
         app:menu="@menu/activity_prueba_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

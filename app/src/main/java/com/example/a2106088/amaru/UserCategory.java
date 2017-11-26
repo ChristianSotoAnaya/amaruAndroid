@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.ImageButton;
 
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
@@ -23,8 +24,9 @@ import com.example.a2106088.amaru.model.RetrofitNetwork;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Categorias extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+public class UserCategory extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
+
 
     ImageButton imageButtonaero;
     ImageButton imageButtondance;
@@ -35,11 +37,10 @@ public class Categorias extends AppCompatActivity
     RetrofitNetwork rfn;
     List<Group> grupos;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_categorias);
+        setContentView(R.layout.activity_user_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -61,20 +62,18 @@ public class Categorias extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        imageButtonaero = (ImageButton) findViewById(R.id.imageButtonaero);
-        imageButtondance= (ImageButton) findViewById(R.id.imageButtondance);
-        imageButtonflexi =(ImageButton) findViewById(R.id.imageButtonflexi);
-        imageButtonmartial =(ImageButton) findViewById(R.id.imageButtonmartial);
-        imageButtonsports =(ImageButton) findViewById(R.id.imageButtonsports);
-        imageButtonother =(ImageButton) findViewById(R.id.imageButtonother);
+        imageButtonaero = (ImageButton) findViewById(R.id.imageButtonaerou);
+        imageButtondance= (ImageButton) findViewById(R.id.imageButtondanceu);
+        imageButtonflexi =(ImageButton) findViewById(R.id.imageButtonflexiu);
+        imageButtonmartial =(ImageButton) findViewById(R.id.imageButtonmartialu);
+        imageButtonsports =(ImageButton) findViewById(R.id.imageButtonsportsu);
+        imageButtonother =(ImageButton) findViewById(R.id.imageButtonotheru);
         imageButtonaero.setOnClickListener(this);
         imageButtondance.setOnClickListener(this);
         imageButtonflexi.setOnClickListener(this);
         imageButtonmartial.setOnClickListener(this);
         imageButtonsports.setOnClickListener(this);
         imageButtonother.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -90,7 +89,7 @@ public class Categorias extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.categorias, menu);
+        getMenuInflater().inflate(R.menu.user_category, menu);
         return true;
     }
 
@@ -161,7 +160,7 @@ public class Categorias extends AppCompatActivity
             @Override
             public void onSuccess(List<Group> response) {
                 grupos=response;
-                Intent intento=new Intent(Categorias.this,ActivityListaGrupos.class);
+                Intent intento=new Intent(UserCategory.this,UserListas.class);
                 Bundle datosExtra = new Bundle();
                 ArrayList<Group> temp= new ArrayList(grupos);
                 datosExtra.putSerializable("grupos",temp);
