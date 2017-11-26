@@ -10,8 +10,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="82dp"
+        android:layout_height="46dp"
         android:orientation="horizontal"></LinearLayout>
+
+    <SearchView
+        android:id="@+id/buscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/listaaauser"

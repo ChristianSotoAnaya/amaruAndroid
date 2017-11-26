@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -32,6 +35,8 @@ public class UserListas extends AppCompatActivity
     CustomListAdapter adapter;
 
     List<Group> grupos;
+    List<Group> gruposfiltro;
+
     ListView lista;
     String[] itemname ;
     int[] itemid ;
@@ -45,6 +50,8 @@ public class UserListas extends AppCompatActivity
     String quitar;
 
     Bundle memoria;
+
+    SearchView buscar;
 
 
     @Override
@@ -72,6 +79,42 @@ public class UserListas extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        buscar = (SearchView) findViewById(R.id.buscar);
+
+        buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+// do something on text submit
+                Log.d("texty",String.valueOf(buscar.getQuery()));
+                rfn.getGrByName(new RequestCallback<List<Group>>() {
+                    @Override
+                    public void onSuccess(List<Group> response) {
+                        gruposfiltro=response;
+                        Intent intento=new Intent(UserListas.this,UserListas.class);
+                        Bundle datosExtra = new Bundle();
+                        ArrayList<Group> temp= new ArrayList(gruposfiltro);
+                        datosExtra.putSerializable("grupos",temp);
+                        datosExtra.putSerializable("instructor","");
+                        datosExtra.putSerializable("quitar","cate");
+                        intento.putExtras(datosExtra);
+                        startActivity(intento);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },String.valueOf(buscar.getQuery()));
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
 
         Intent anterior = getIntent();

@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.CustomListAdapter;
@@ -44,7 +45,9 @@ public class ActivityListaGrupos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     CustomListAdapter adapter;
+    SearchView buscar;
 
+    List<Group> gruposfiltro;
     List<Group> grupos;
     ListView lista;
     String[] itemname ;
@@ -82,6 +85,44 @@ public class ActivityListaGrupos extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+
+        buscar = (SearchView) findViewById(R.id.buscr);
+
+        buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+// do something on text submit
+                Log.d("texty",String.valueOf(buscar.getQuery()));
+                rfn.getGrByName(new RequestCallback<List<Group>>() {
+                    @Override
+                    public void onSuccess(List<Group> response) {
+                        gruposfiltro=response;
+                        Intent intento=new Intent(ActivityListaGrupos.this,ActivityListaGrupos.class);
+                        Bundle datosExtra = new Bundle();
+                        ArrayList<Group> temp= new ArrayList(gruposfiltro);
+                        datosExtra.putSerializable("grupos",temp);
+                        datosExtra.putSerializable("instructor","");
+                        datosExtra.putSerializable("quitar","cate");
+                        intento.putExtras(datosExtra);
+                        startActivity(intento);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },String.valueOf(buscar.getQuery()));
+
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
 
 
