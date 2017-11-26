@@ -63,8 +63,12 @@
             android:label="Inscritos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".inicioAmaru"
+            android:name=".InicioAmaru"
             android:label="@string/title_activity_inicio_amaru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Comprar"
+            android:label="@string/title_activity_comprar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

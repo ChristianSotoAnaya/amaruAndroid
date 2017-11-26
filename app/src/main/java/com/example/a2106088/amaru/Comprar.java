@@ -13,13 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class inicioAmaru extends AppCompatActivity
+public class Comprar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    int tickets = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio_amaru);
+        setContentView(R.layout.activity_comprar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,7 +56,7 @@ public class inicioAmaru extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.inicio_amaru, menu);
+        getMenuInflater().inflate(R.menu.comprar, menu);
         return true;
     }
 
@@ -97,5 +98,31 @@ public class inicioAmaru extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void compraVeinteTickets(View view) {
+        this.tickets = 20;
+    }
+
+    public void compraDoceTickets(View view) {
+        this.tickets = 12;
+    }
+
+    public void compraOchoTickets(View view) {
+        this.tickets = 8;
+    }
+
+    public void compraCuatroTickets(View view) {
+        this.tickets = 4;
+    }
+
+    public void compraTicketUnico(View view) {
+        this.tickets = 1;
+    }
+
+    public void comprar(View view) {
+    }
+
+    public void cancelarCompra(View view) {
     }
 }

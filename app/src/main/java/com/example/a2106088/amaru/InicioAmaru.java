@@ -1,7 +1,5 @@
 package com.example.a2106088.amaru;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,22 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.a2106088.amaru.R;
-
-public class PrincipalPageAmaru extends AppCompatActivity
+public class InicioAmaru extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    SharedPreferences infousuario;
-    TextView username;
-    String usuario;
-    Button[] btnWord = new Button[10];
-    LinearLayout LayoutPendientes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,14 +35,11 @@ public class PrincipalPageAmaru extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        test();
-
     }
 
     @Override
@@ -72,7 +55,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.prueba, menu);
+        getMenuInflater().inflate(R.menu.inicio_amaru, menu);
         return true;
     }
 
@@ -97,42 +80,17 @@ public class PrincipalPageAmaru extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        // SI ESPICHA EN MY CLASS
         if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
 
-        }
-        // SI ESPICHA EN ALL GROUPS
-        else if (id == R.id.nav_gallery) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+        } else if (id == R.id.nav_slideshow) {
 
+        } else if (id == R.id.nav_manage) {
 
-        }
-        // SI ESPICHA EN MY PROFILE
-        else if (id == R.id.nav_slideshow) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilActivity.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-
-        } // SI ESPICHA EN COMPRAR
-        else if (id == R.id.nav_manage) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,Comprar.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-
-            // SI ESPICHA EN CATEGOR
-        } else if (id == R.id.categories) {
-            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -140,33 +98,4 @@ public class PrincipalPageAmaru extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-    private void test() {
-        LayoutPendientes = (LinearLayout) findViewById(R.id.LayoutPendientes);
-        for (int i = 0; i < btnWord.length; i++) {
-            btnWord[i] = new Button(this);
-            btnWord[i].setHeight(50);
-            btnWord[i].setWidth(50);
-            btnWord[i].setTag(i);
-            btnWord[i].setText("Clase"+String.valueOf(i));
-            btnWord[i].setOnClickListener(btnClicked);
-            LayoutPendientes.addView(btnWord[i]);
-        }
-
-    }
-
-    View.OnClickListener btnClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Object tag = v.getTag();
-            Intent intento=new Intent(PrincipalPageAmaru.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-        }
-    };
-
-
 }
