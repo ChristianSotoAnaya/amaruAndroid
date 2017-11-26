@@ -27,4 +27,5 @@
     <string name="title_activity_almunos_inscritos">AlmunosInscritos</string>
     <string name="title_activity_inicio_amaru">inicioAmaru</string>
     <string name="title_activity_comprar">Comprar</string>
+    <string name="title_activity_perfil_amaru">PerfilAmaru</string>
 </resources>

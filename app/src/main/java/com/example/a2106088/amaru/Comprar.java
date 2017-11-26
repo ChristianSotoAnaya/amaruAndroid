@@ -98,17 +98,37 @@ public class Comprar extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        // SI OPRIME EN MIS CLASES
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        }
+        // SI OPRIME EN TODOS LOS GRUPOS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(Comprar.this,Grupo.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        }
+        // SI OPRIME EN MI PERFIL
+        else if (id == R.id.nav_slideshow) {
+            Intent intento=new Intent(Comprar.this,PerfilAmaru.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+        } // SI OPRIME EN COMPRAR
+        else if (id == R.id.nav_manage) {
+
+            // SI OPRIME EN CATEGORIAS
+        } else if (id == R.id.categories) {
+            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_send) {
+            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
 
         }
 

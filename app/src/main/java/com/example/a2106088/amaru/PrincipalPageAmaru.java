@@ -119,7 +119,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
         }
         // SI ESPICHA EN MY PROFILE
         else if (id == R.id.nav_slideshow) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilActivity.class);
+            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilAmaru.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("username",usuario);
             intento.putExtras(datosExtra);

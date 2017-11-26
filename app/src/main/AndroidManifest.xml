@@ -69,6 +69,10 @@
         <activity
             android:name=".Comprar"
             android:label="@string/title_activity_comprar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PerfilAmaru"
+            android:label="@string/title_activity_perfil_amaru"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
