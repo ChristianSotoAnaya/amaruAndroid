@@ -25,6 +25,9 @@ public interface NetworkService
     @POST( "user/login" )
     Call<Token> login(@Body LoginWrapper user);
 
+    @GET( "group/groupsname/{name}" )
+    Call<List<Group>> getGrByName(@Path("name") String name);
+
     @GET( "user/{username}" )
     Call<User> getuser(@Path("username") String username);
 

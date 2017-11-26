@@ -73,6 +73,14 @@
         <activity
             android:name=".PerfilAmaru"
             android:label="@string/title_activity_perfil_amaru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".UserListas"
+            android:label="@string/title_activity_user_listas"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".UserCategory"
+            android:label="@string/title_activity_user_category"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_categorias"
+        layout="@layout/app_bar_user_category"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -20,7 +20,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@drawable/nabv"
-        app:headerLayout="@layout/nav_header_categorias"
-        app:menu="@menu/activity_categorias_drawer" />
+        app:headerLayout="@layout/nav_header_user_category"
+        app:menu="@menu/activity_user_category_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -19,6 +19,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@drawable/nabv"
         app:headerLayout="@layout/nav_header_crear_grupo"
         app:menu="@menu/activity_crear_grupo_drawer" />
 
