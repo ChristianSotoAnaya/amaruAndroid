@@ -1,6 +1,7 @@
 package com.example.a2106088.amaru;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,9 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.entity.Clase;
+import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
@@ -38,6 +43,8 @@ public class ActivitySelectedGroup extends AppCompatActivity
     TextView txtRateNumber;
     RatingBar ratingBar;
     Button btnRate;
+    TableLayout table;
+    TableLayout tableGrupoComents;
 
     RetrofitNetwork rfn;
 
@@ -77,6 +84,8 @@ public class ActivitySelectedGroup extends AppCompatActivity
         txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
         txtRateNumber = (TextView) findViewById(R.id.txtRateNumber);
         btnRate = (Button) findViewById(R.id.btnRateGroup);
+        table = (TableLayout) findViewById(R.id.tableGrupo);
+        tableGrupoComents = (TableLayout) findViewById(R.id.tableGrupoComents);
         rfn=new RetrofitNetwork();
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
@@ -126,6 +135,77 @@ public class ActivitySelectedGroup extends AppCompatActivity
                 },temp);
             }
         });
+
+
+
+        for (Clase clase :grupo.getClases()) {
+
+
+            TableRow tr_head = new TableRow(this);
+            // part1
+            tr_head.setLayoutParams(new DrawerLayout.LayoutParams(
+                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT));
+            TextView label_lugar = new TextView(this);
+            label_lugar.setText(clase.getPlace());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                label_lugar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+            // part2
+            label_lugar.setPadding(5, 5, 5, 5);
+            tr_head.addView(label_lugar);// add the column to the table row here
+
+            TextView label_fecha = new TextView(this);    // part3
+            label_fecha.setText(clase.getFecha());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                label_fecha.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+            label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_fecha); // add the column to the table row here
+
+            TextView label_hora = new TextView(this);    // part3
+            label_hora.setText(clase.getHour());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                label_hora.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+            label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_hora); // add the column to the table row here
+
+            table.addView(tr_head, new TableLayout.LayoutParams(
+                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT));
+        }
+
+        for (Comment comentario :grupo.getComments()) {
+            TableRow tr_head = new TableRow(this);
+            // part1
+            tr_head.setLayoutParams(new DrawerLayout.LayoutParams(
+                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT));
+            TextView label_lugar = new TextView(this);
+            label_lugar.setText(comentario.getUsuario());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                label_lugar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            }
+            // part2
+            label_lugar.setPadding(5, 5, 5, 5);
+            tr_head.addView(label_lugar);// add the column to the table row here
+
+            TextView label_fecha = new TextView(this);    // part3
+            label_fecha.setText(comentario.getContenido());
+            label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_fecha); // add the column to the table row here
+
+            TextView label_hora = new TextView(this);    // part3
+            label_hora.setText(comentario.getFecha());
+            label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_hora); // add the column to the table row here
+
+            tableGrupoComents.addView(tr_head, new TableLayout.LayoutParams(
+                    DrawerLayout.LayoutParams.MATCH_PARENT,
+                    DrawerLayout.LayoutParams.WRAP_CONTENT));
+        }
+
     }
 
     @Override
@@ -166,15 +246,15 @@ public class ActivitySelectedGroup extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.createi) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.clasesi) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.groupsi) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.profilei) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.categoriesi) {
 
         } else if (id == R.id.nav_send) {
 
