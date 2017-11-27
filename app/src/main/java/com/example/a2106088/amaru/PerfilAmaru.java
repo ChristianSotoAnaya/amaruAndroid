@@ -36,6 +36,7 @@ public class PerfilAmaru extends AppCompatActivity
     EditText amaruPhone;
     EditText amaruDescription;
     TextView amaruuserna;
+    TextView amarucupo;
     Button buttoneditimage;
     Button buttoneditmail;
     Button buttoneditphone;
@@ -72,6 +73,7 @@ public class PerfilAmaru extends AppCompatActivity
         amaruPhone= (EditText) findViewById(R.id.amaruPhone);
         amaruDescription= (EditText) findViewById(R.id.amaruDescription);
         amaruuserna = (TextView) findViewById(R.id.nombreAmaru);
+        amarucupo = (TextView) findViewById(R.id.cupo);
         buttoneditimage = (Button) findViewById(R.id.buttonImage);
         buttoneditmail = (Button) findViewById(R.id.buttonEmail);
         buttoneditphone = (Button) findViewById(R.id.buttonPhone);
@@ -82,29 +84,14 @@ public class PerfilAmaru extends AppCompatActivity
         buttoneditdescription.setOnClickListener(this);
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        usuario=  memoria.getString("username");
-        rfn.getuser(new RequestCallback<User>() {
-
-            @Override
-            public void onSuccess(User response) {
-                u = response;
-            }
-
-            @Override
-            public void onFailed(NetworkException e) {
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Error cargando usuario...", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        },usuario);
+        u = (User) memoria.getSerializable("userAmaru");
+        usuario = u.getUsername();
         amaruuserna.setText("Username: "+usuario);
-        Picasso.with(this).load(u.getImage()).into(amaruimage);
+        Picasso.with(getApplicationContext()).load(u.getImage()).into(amaruimage);
         amaruEmail.setText(u.getEmail());
         amaruPhone.setText(u.getPhone());
         amaruDescription.setText(u.getDescription());
+        amarucupo.setText(String.valueOf(u.getCupo()));
     }
 
     @Override

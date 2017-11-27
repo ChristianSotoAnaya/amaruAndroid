@@ -59,13 +59,14 @@ public class PrincipalPageAmaru extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio_amaru);
+        setContentView(R.layout.activity_prueba);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         user= (User) memoria.getSerializable("usuario");
         usuario = user.getUsername();
+        System.out.println(usuario);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +151,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
         else if (id == R.id.nav_slideshow) {
             Intent intento=new Intent(PrincipalPageAmaru.this,PerfilAmaru.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putSerializable("userAmaru",user);
             intento.putExtras(datosExtra);
             startActivity(intento);
 

@@ -8,13 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="37dp"
-        android:orientation="horizontal"></LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="183dp"
-        android:layout_weight="0.35"
+        android:layout_weight="0.24"
         android:orientation="horizontal">
 
         <ImageView
@@ -39,14 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.25"
+        android:layout_weight="0.20"
         android:textAlignment="center"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="69dp"
+        android:layout_height="62dp"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -70,7 +65,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="73dp"
         android:orientation="horizontal">
 
         <EditText
@@ -94,7 +89,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="62dp"
-        android:layout_weight="0.21"
+        android:layout_weight="0.02"
         android:orientation="horizontal">
 
         <EditText
@@ -112,6 +107,26 @@
             android:gravity="center"
             android:text="EDIT" />
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView37"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tickets actuales:" />
+
+        <TextView
+            android:id="@+id/cupo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
     </LinearLayout>
 
 </LinearLayout>
