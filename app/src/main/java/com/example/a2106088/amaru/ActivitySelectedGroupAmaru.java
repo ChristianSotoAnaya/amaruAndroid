@@ -27,13 +27,16 @@ import android.widget.Toast;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 import com.squareup.picasso.Picasso;
 
-public class ActivitySelectedGroup extends AppCompatActivity
+import java.util.ArrayList;
+
+public class ActivitySelectedGroupAmaru extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -49,14 +52,15 @@ public class ActivitySelectedGroup extends AppCompatActivity
     TableLayout table;
     TableLayout tableGrupoComents;
     ImageView foto;
-    User usuario;
+    String usuario;
+    ArrayList<Long> ids;
 
     RetrofitNetwork rfn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selected_group);
+        setContentView(R.layout.activity_selected_group_amaru);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -82,6 +86,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         grupo = (Group) memoria.getSerializable("grupo");
+        usuario = (String) memoria.getString("usuario");
         groupName = (TextView) findViewById(R.id.txtGroupName);
         groupInstructor = (TextView) findViewById(R.id.txtGroupInstructor);
         groupDescription = (TextView) findViewById(R.id.txtGroupDescription);
@@ -92,6 +97,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
         table = (TableLayout) findViewById(R.id.tableGrupo);
         tableGrupoComents = (TableLayout) findViewById(R.id.tableGrupoComents);
         foto = (ImageView) findViewById(R.id.imageGroup);
+        ids = new ArrayList<Long>() ;
         rfn=new RetrofitNetwork();
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
@@ -104,9 +110,6 @@ public class ActivitySelectedGroup extends AppCompatActivity
         txtgroupTotalVotes.setText(String.valueOf(grupo.getTotalVotes()));
         txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
         Picasso.with(this).load(grupo.getImage()).into(foto);
-        btnRate.setVisibility(View.GONE);
-        ratingBar.setVisibility(View.GONE);
-        txtRateNumber.setVisibility(View.GONE);
 
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -131,6 +134,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
                         ratingBar.setEnabled(false);
                         txtRateNumber.setEnabled(false);
                         */
+
                         Handler h = new Handler(Looper.getMainLooper());
                         h.post(new Runnable() {
                             public void run() {
@@ -149,25 +153,66 @@ public class ActivitySelectedGroup extends AppCompatActivity
 
 
 
-        for (Clase clase :grupo.getClases()) {
+        for (final Clase clase :grupo.getClases()) {
             if (clase.getUsuario().equals(grupo.getInstructor())) {
 
 
                 TableRow tr_head = new TableRow(this);
+                final TextView label_lugar, label_fecha, label_hora;
                 // part1
                 tr_head.setLayoutParams(new DrawerLayout.LayoutParams(
                         DrawerLayout.LayoutParams.MATCH_PARENT,
                         DrawerLayout.LayoutParams.WRAP_CONTENT));
-                TextView label_lugar = new TextView(this);
+                label_lugar = new TextView(this);
+                label_fecha = new TextView(this);
+                label_hora = new TextView(this);
                 label_lugar.setText(clase.getPlace());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     label_lugar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 }
+                label_lugar.setClickable(true);
+                label_lugar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ids.contains(clase.getIdclase())) {
+                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Ya estas inscrito a esta clase", Toast.LENGTH_SHORT).show();
+                        } else {
+
+
+                            Snackbar.make(v, "Desea inscribirse a la clase en: " + label_lugar.getText() + " El dia: " + label_fecha.getText(), Snackbar.LENGTH_LONG)
+                                    .setAction("Inscribirse", new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
+                                            rfn.subscribe(new RequestCallback<Boolean>() {
+                                                @Override
+                                                public void onSuccess(Boolean response) {
+                                                    ids.add(clase.getIdclase());
+                                                    Handler h = new Handler(Looper.getMainLooper());
+                                                    h.post(new Runnable() {
+                                                        public void run() {
+                                                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Inscripcion realizada " + String.valueOf(clase.getIdclase()), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onFailed(NetworkException e) {
+
+                                                }
+                                            }, pojo);
+                                        }
+                                    }).show();
+                        }
+                    }
+                });
+
                 // part2
                 label_lugar.setPadding(5, 5, 5, 5);
                 tr_head.addView(label_lugar);// add the column to the table row here
 
-                TextView label_fecha = new TextView(this);    // part3
+                // part3
                 label_fecha.setText(clase.getFecha());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     label_fecha.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -175,7 +220,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
                 label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
                 tr_head.addView(label_fecha); // add the column to the table row here
 
-                TextView label_hora = new TextView(this);    // part3
+                // part3
                 label_hora.setText(clase.getHour());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     label_hora.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);

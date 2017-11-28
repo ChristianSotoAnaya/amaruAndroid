@@ -141,6 +141,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
             Intent intento=new Intent(PrincipalPageAmaru.this,UserListas.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("instructor",usuario );
+            datosExtra.putString("tipoUsuario", user.getType());
             datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
             startActivity(intento);

@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -174,11 +173,13 @@ public class UserListas extends AppCompatActivity
                                 rfn.getGroupbyId(new RequestCallback<Group>() {
                                     @Override
                                     public void onSuccess(Group response2) {
-                                        Intent intento=new Intent(UserListas.this,ActivitySelectedGroup.class);
+                                        Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
                                         Bundle datosExtra = new Bundle();
                                         datosExtra.putSerializable("grupo",response2);
+                                        datosExtra.putString("usuario",user);
                                         intento.putExtras(datosExtra);
                                         startActivity(intento);
+
 
                                     }
                                     @Override

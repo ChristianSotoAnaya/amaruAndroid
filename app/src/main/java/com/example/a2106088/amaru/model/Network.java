@@ -1,6 +1,7 @@
 package com.example.a2106088.amaru.model;
 
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
 
 import java.util.List;
@@ -47,6 +48,8 @@ public interface Network
     void editRateGroup(final RequestCallback<Group> requestCallback, Group group);
 
     void buy(final RequestCallback<User> requestCallback, User user);
+
+    void subscribe(final RequestCallback<Boolean> requestCallback, Pojo pojo);
 
 }
 

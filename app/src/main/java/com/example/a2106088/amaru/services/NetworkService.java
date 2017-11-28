@@ -3,6 +3,7 @@ package com.example.a2106088.amaru.services;
 
 
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.LoginWrapper;
 import com.example.a2106088.amaru.model.Token;
@@ -71,4 +72,7 @@ public interface NetworkService
 
     @POST("user/buy")
     Call<User> buy(@Body User user);
+
+    @POST("group/susbcribe")
+    Call<Boolean> subscribe(@Body Pojo pojo);
 }

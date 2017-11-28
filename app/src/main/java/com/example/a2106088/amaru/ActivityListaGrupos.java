@@ -55,6 +55,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
     String[] descr;
     String user;
+    String tipoUser;
 
     String[] imgid;
 
@@ -130,6 +131,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         memoria = anterior.getExtras();
 
         user= (String) memoria.getSerializable("instructor");
+        tipoUser= (String) memoria.getSerializable("tipoUsuario");
         quitar =(String) memoria.getSerializable("quitar");
         rfn = new RetrofitNetwork();
 

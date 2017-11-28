@@ -5,6 +5,7 @@ import android.util.Log;
 
 
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.services.NetworkService;
 
@@ -397,6 +398,28 @@ public class RetrofitNetwork implements Network
                 try
                 {
                     Response<User> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
+    public void subscribe(final RequestCallback<Boolean> requestCallback, final Pojo pojo) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Boolean> call = networkService.subscribe(pojo);
+
+                try
+                {
+                    Response<Boolean> execute = call.execute();
                     requestCallback.onSuccess( execute.body() );
                 }
                 catch ( IOException e )

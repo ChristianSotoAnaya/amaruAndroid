@@ -30,5 +30,6 @@
     <string name="title_activity_perfil_amaru">PerfilAmaru</string>
     <string name="title_activity_user_listas">UserListas</string>
     <string name="title_activity_user_category">UserCategory</string>
+    <string name="title_activity_selected_group_amaru">ActivitySelectedGroupAmaru</string>
 
 </resources>
