@@ -127,7 +127,7 @@ public class VerPerfilInstructor extends AppCompatActivity
         instrcutorPhone.setText(u.getPhone());
         instructorDescription.setText(u.getDescription());
         currentRating.setText(String.valueOf(u.getRate()));
-        totalVotes.setText(u.getTotalVotes());
+        totalVotes.setText(String.valueOf(u.getTotalVotes()));
 
         if (logedUser.getType().equals("INSTRUCTOR")){
             /*
