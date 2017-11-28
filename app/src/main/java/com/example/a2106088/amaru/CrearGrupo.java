@@ -38,7 +38,7 @@ public class CrearGrupo extends AppCompatActivity
 
     EditText edtNombreCrearGrupo;
     EditText edtDescripcionCrearGrupo;
-    EditText edtlugar;
+    Spinner spnlugar;
     EditText edtfecha;
     EditText edthora;
     Spinner spinner ;
@@ -57,7 +57,7 @@ public class CrearGrupo extends AppCompatActivity
         setSupportActionBar(toolbar);
         edtNombreCrearGrupo=(EditText) findViewById(R.id.edtNombreCrearGrupo);
         edtDescripcionCrearGrupo=(EditText) findViewById(R.id.edtDescripcionCrearGrupo);
-        edtlugar = (EditText) findViewById(R.id.edtlugar);
+        spnlugar = (Spinner) findViewById(R.id.spinnerLugar);
         edtfecha = (EditText) findViewById(R.id.edtfecha);
         edthora = (EditText) findViewById(R.id.edthora);
         table = (TableLayout) findViewById(R.id.table);
@@ -142,11 +142,11 @@ public class CrearGrupo extends AppCompatActivity
         if (id == R.id.createi3) {
 
         } else if (id == R.id.clasesi3) {
-            Intent intento=new Intent(CrearGrupo.this,PrincipalPageInstructor.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("usuario",u);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            Bundle memoria = new Bundle();
+            memoria.putSerializable("usuario",u);
+            Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+            ingreso.putExtras(memoria);
+            startActivity(ingreso);
         } else if (id == R.id.groupsi3) {
 
         } else if (id == R.id.profilei3) {
@@ -173,7 +173,8 @@ public class CrearGrupo extends AppCompatActivity
         EditText edtlugartxt = new EditText(this);
         edtlugartxt.setText(edtlugar.getText().toString());
         tableRow.addView(edtlugartxt);*/
-        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),edtlugar.getText().toString(),idClase,edtNombreCrearGrupo.getText().toString(),0, u.getUsername());
+        String lugar = spnlugar.getSelectedItem().toString();
+        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),lugar,idClase,edtNombreCrearGrupo.getText().toString(),0, u.getUsername());
         System.out.println(u.getUsername());
         idClase+=1;
         clases.add(clase);
@@ -183,7 +184,7 @@ public class CrearGrupo extends AppCompatActivity
                 DrawerLayout.LayoutParams.MATCH_PARENT,
                 DrawerLayout.LayoutParams.WRAP_CONTENT));
         TextView label_lugar = new TextView(this);
-        label_lugar.setText(edtlugar.getText().toString());
+        label_lugar.setText(lugar);
         // part2
         label_lugar.setPadding(5, 5, 5, 5);
         tr_head.addView(label_lugar);// add the column to the table row here
@@ -214,9 +215,14 @@ public class CrearGrupo extends AppCompatActivity
                 Handler h = new Handler(Looper.getMainLooper());
                 h.post(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
                     }
                 });
+                Bundle memoria = new Bundle();
+                memoria.putSerializable("usuario",u);
+                Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                ingreso.putExtras(memoria);
+                startActivity(ingreso);
             }
 
             @Override
@@ -232,10 +238,10 @@ public class CrearGrupo extends AppCompatActivity
     }
 
     public void cancelar(View view) {
-        Intent intento=new Intent(CrearGrupo.this,PrincipalPageInstructor.class);
-        Bundle datosExtra = new Bundle();
-        datosExtra.putSerializable("usuario",u);
-        intento.putExtras(datosExtra);
-        startActivity(intento);
+        Bundle memoria = new Bundle();
+        memoria.putSerializable("usuario",u);
+        Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+        ingreso.putExtras(memoria);
+        startActivity(ingreso);
     }
 }

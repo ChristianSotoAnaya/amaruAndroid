@@ -11,6 +11,20 @@
         <item>Danza</item>
         <item>Otro</item>
     </string-array>
+    <string-array name="parques">
+        <item>Parque El Tunal</item>
+        <item>Parque Central del Restrepo</item>
+        <item>Parque Milenta</item>
+        <item>Parque Bicentenario</item>
+        <item>Parque Boston</item>
+        <item>Parque Santa Catalina</item>
+        <item>Parque Boyaca Real</item>
+        <item>Parque Público Zonal Atahuan</item>
+        <item>Parque Lagos de suba</item>
+        <item>Parque Central Suba</item>
+        <item>Parque Público Fontanar del Río</item>
+        <item>Parque Urbanización Rodesia</item>
+    </string-array>
     <string name="title_activity_prueba">prueba</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
