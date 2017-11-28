@@ -31,5 +31,7 @@
     <string name="title_activity_user_listas">UserListas</string>
     <string name="title_activity_user_category">UserCategory</string>
     <string name="title_activity_selected_group_amaru">ActivitySelectedGroupAmaru</string>
+    <string name="title_activity_ver_usuario">VerUsuario</string>
+
 
 </resources>

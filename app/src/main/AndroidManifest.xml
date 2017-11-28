@@ -85,6 +85,11 @@
         <activity
             android:name=".ActivitySelectedGroupAmaru"
             android:label="@string/title_activity_selected_group_amaru"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".VerUsuario"
+            android:label="@string/title_activity_ver_usuario"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <group android:checkableBehavior="single"
+        >
+        <item
+            android:id="@+id/createiu"
+            android:icon="@drawable/add"
+            android:title="Create Group" />
+        <item
+            android:id="@+id/clasesiu"
+            android:icon="@drawable/calendar"
+            android:title="My Class" />
+        <item
+            android:id="@+id/nav_sendu"
+            android:icon="@drawable/grou"
+            android:title="My Groups" />
+        <item
+            android:id="@+id/profileiu"
+            android:icon="@drawable/profile"
+            android:title="My Profile" />
+
+    </group>
+
+    <item android:title="More With Amaru">
+        <menu>
+            <item
+                android:id="@+id/categoriesiu"
+                android:icon="@drawable/categoriesicon"
+                android:title="Categories" />
+            <item
+                android:id="@+id/groupsiu"
+                android:icon="@drawable/categories"
+                android:title="All Groups" />
+
+        </menu>
+    </item>
+
+</menu>
