@@ -85,6 +85,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
+
         grupo = (Group) memoria.getSerializable("grupo");
         usuario = (String) memoria.getString("usuario");
         groupName = (TextView) findViewById(R.id.txtGroupName);
@@ -318,5 +319,34 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         return true;
     }
 
+    public void verPerfilInstructor(View view) {
+        rfn.getuser(new RequestCallback<User>() {
+            @Override
+            public void onSuccess(final User response1) {
+                rfn.getuser(new RequestCallback<User>() {
+                    @Override
+                    public void onSuccess(User response2) {
+                        Intent verPerfilInstructor = new Intent(ActivitySelectedGroupAmaru.this,VerPerfilInstructor.class);
+                        Bundle memoria = new Bundle();
+                        memoria.putSerializable("usuario",response1);
+                        memoria.putSerializable("ins",response2);
+                        verPerfilInstructor.putExtras(memoria);
+                        startActivity(verPerfilInstructor);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },grupo.getInstructor());
+            }
+
+            @Override
+            public void onFailed(NetworkException e) {
+
+            }
+        },usuario);
+
+    }
 }
 
