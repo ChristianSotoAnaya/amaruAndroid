@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -29,6 +30,7 @@ import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
+import com.squareup.picasso.Picasso;
 
 public class ActivitySelectedGroup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +47,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
     Button btnRate;
     TableLayout table;
     TableLayout tableGrupoComents;
+    ImageView foto;
 
     RetrofitNetwork rfn;
 
@@ -86,6 +89,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
         btnRate = (Button) findViewById(R.id.btnRateGroup);
         table = (TableLayout) findViewById(R.id.tableGrupo);
         tableGrupoComents = (TableLayout) findViewById(R.id.tableGrupoComents);
+        foto = (ImageView) findViewById(R.id.imageGroup);
         rfn=new RetrofitNetwork();
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
@@ -97,6 +101,8 @@ public class ActivitySelectedGroup extends AppCompatActivity
         groupDescription.setText(String.valueOf(grupo.getDescription()));
         txtgroupTotalVotes.setText(String.valueOf(grupo.getTotalVotes()));
         txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
+        Picasso.with(this).load(grupo.getImage()).into(foto);
+
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
@@ -195,11 +201,6 @@ public class ActivitySelectedGroup extends AppCompatActivity
             label_fecha.setText(comentario.getContenido());
             label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
             tr_head.addView(label_fecha); // add the column to the table row here
-
-            TextView label_hora = new TextView(this);    // part3
-            label_hora.setText(comentario.getFecha());
-            label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
-            tr_head.addView(label_hora); // add the column to the table row here
 
             tableGrupoComents.addView(tr_head, new TableLayout.LayoutParams(
                     DrawerLayout.LayoutParams.MATCH_PARENT,
