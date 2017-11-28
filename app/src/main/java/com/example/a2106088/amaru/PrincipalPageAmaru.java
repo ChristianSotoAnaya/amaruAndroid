@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a2106088.amaru.R;
+
+import com.example.a2106088.amaru.entity.User;
+
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -33,6 +36,7 @@ import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class PrincipalPageAmaru extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,6 +62,11 @@ public class PrincipalPageAmaru extends AppCompatActivity
         setContentView(R.layout.activity_prueba);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        user= (User) memoria.getSerializable("usuario");
+        usuario = user.getUsername();
+        System.out.println(usuario);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,11 +89,6 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        Intent anterior = getIntent();
-        Bundle memoria = anterior.getExtras();
-        user= (User) memoria.getSerializable("usuario");
-        usuario = user.getUsername();
         clases=user.getClases();
         test();
 
@@ -145,15 +149,19 @@ public class PrincipalPageAmaru extends AppCompatActivity
         }
         // SI ESPICHA EN MY PROFILE
         else if (id == R.id.nav_slideshow) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilActivity.class);
+            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilAmaru.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putSerializable("userAmaru",user);
             intento.putExtras(datosExtra);
             startActivity(intento);
 
         } // SI ESPICHA EN COMPRAR
         else if (id == R.id.nav_manage) {
-            Toast.makeText(this, "nav_manage", Toast.LENGTH_SHORT).show();
+            Intent intento=new Intent(PrincipalPageAmaru.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
             // SI ESPICHA EN CATEGOR
         } else if (id == R.id.categories) {

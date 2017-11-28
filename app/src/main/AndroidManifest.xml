@@ -63,9 +63,21 @@
             android:label="Inscritos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".InicioAmaru"
+            android:label="@string/title_activity_inicio_amaru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Comprar"
+            android:label="@string/title_activity_comprar"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PerfilAmaru"
+            android:label="@string/title_activity_perfil_amaru"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".UserListas"
             android:label="@string/title_activity_user_listas"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".UserCategory"
             android:label="@string/title_activity_user_category"

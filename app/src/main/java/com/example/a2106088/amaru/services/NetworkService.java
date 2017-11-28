@@ -63,7 +63,12 @@ public interface NetworkService
     @GET( "group/groups/{name}" )
     Call<List<Group>> getCategory(@Path("name") String category);
 
+    @POST("group/groups")
+    Call<Group> createGroup(@Body Group group);
+
     @POST( "group/rate" )
     Call<Group> editRateGroup(@Body Group group);
 
+    @POST("user/buy")
+    Call<User> buy(@Body User user);
 }
