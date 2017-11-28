@@ -2,6 +2,8 @@ package com.example.a2106088.amaru;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -18,11 +20,18 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.a2106088.amaru.entity.Clase;
+import com.example.a2106088.amaru.entity.Comment;
+import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CrearGrupo extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -34,10 +43,11 @@ public class CrearGrupo extends AppCompatActivity
     EditText edthora;
     Spinner spinner ;
     TableLayout table;
-    int idClase = 0;
-    int idGrupo = 0;
+    long idClase = 0;
+    long idGrupo = 0;
     ArrayList<Clase> clases = new ArrayList<Clase>();
     User u;
+    RetrofitNetwork rfn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +61,24 @@ public class CrearGrupo extends AppCompatActivity
         edtfecha = (EditText) findViewById(R.id.edtfecha);
         edthora = (EditText) findViewById(R.id.edthora);
         table = (TableLayout) findViewById(R.id.table);
+        spinner=(Spinner) findViewById(R.id.spinner2);
+        rfn= new RetrofitNetwork();
+        rfn.getallgroups(new RequestCallback<List<Group>>(){
+            @Override
+            public void onSuccess(List<Group> response) {
+                idGrupo = response.size();
+            }
+
+            @Override
+            public void onFailed(NetworkException e) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Error al cargar grupos", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("user");
@@ -173,5 +201,41 @@ public class CrearGrupo extends AppCompatActivity
         table.addView(tr_head,new TableLayout.LayoutParams(
                 DrawerLayout.LayoutParams.MATCH_PARENT,
                 DrawerLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    public void crearGrupo(View view) {
+        String categoria = spinner.getSelectedItem().toString();
+        String nombre =  edtNombreCrearGrupo.getText().toString();
+        String descripcion = edtDescripcionCrearGrupo.getText().toString();
+        Group nuevo = new Group(idGrupo, nombre, u.getUsername(), null, descripcion, categoria, 0.0, 0,"https://i.imgur.com/1PKWVFW.png",clases);
+        rfn.createGroup(new RequestCallback<Group>() {
+            @Override
+            public void onSuccess(Group response) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(NetworkException e) {
+                Handler h = new Handler(Looper.getMainLooper());
+                h.post(new Runnable() {
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        },nuevo);
+    }
+
+    public void cancelar(View view) {
+        Intent intento=new Intent(CrearGrupo.this,PrincipalPageInstructor.class);
+        Bundle datosExtra = new Bundle();
+        datosExtra.putSerializable("usuario",u);
+        intento.putExtras(datosExtra);
+        startActivity(intento);
     }
 }

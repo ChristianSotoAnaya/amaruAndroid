@@ -322,6 +322,7 @@
 
                 <Button
                     android:id="@+id/btnCrearGrupo"
+                    android:onClick="crearGrupo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -339,6 +340,7 @@
 
                 <Button
                     android:id="@+id/btnCancelarCrearGrupo"
+                    android:onClick="cancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"

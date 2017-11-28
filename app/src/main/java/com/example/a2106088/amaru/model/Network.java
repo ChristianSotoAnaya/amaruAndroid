@@ -40,9 +40,13 @@ public interface Network
 
     void getallgroups(final RequestCallback<List<Group>> requestCallback);
 
+    void createGroup(final RequestCallback<Group> requestCallback, Group group);
+
     void getcategory(final RequestCallback<List<Group>> requestCallback,String category);
 
     void editRateGroup(final RequestCallback<Group> requestCallback, Group group);
+
+    void buy(final RequestCallback<User> requestCallback, User user);
 
 }
 
