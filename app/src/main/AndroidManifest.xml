@@ -77,10 +77,14 @@
         <activity
             android:name=".UserListas"
             android:label="@string/title_activity_user_listas"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserCategory"
             android:label="@string/title_activity_user_category"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VerUsuario"
+            android:label="@string/title_activity_ver_usuario"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
