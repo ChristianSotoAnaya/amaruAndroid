@@ -44,17 +44,18 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
     TextView groupName;
     TextView groupInstructor;
     TextView groupDescription;
-    TextView txtgroupTotalVotes;
-    TextView txtGroupCurrentRating;
+    //TextView txtgroupTotalVotes;
+    //TextView txtGroupCurrentRating;
     TextView txtRateNumber;
     RatingBar ratingBar;
+    RatingBar ratingBarGroup;
     Button btnRate;
     TableLayout table;
     TableLayout tableGrupoComents;
     ImageView foto;
     String usuario;
     ArrayList<Long> ids;
-
+    User user;
     RetrofitNetwork rfn;
 
     @Override
@@ -81,35 +82,75 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        rfn=new RetrofitNetwork();
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
 
+
+
         grupo = (Group) memoria.getSerializable("grupo");
         usuario = (String) memoria.getString("usuario");
+        user = (User) memoria.getSerializable("user");
+
+
         groupName = (TextView) findViewById(R.id.txtGroupName);
         groupInstructor = (TextView) findViewById(R.id.txtGroupInstructor);
         groupDescription = (TextView) findViewById(R.id.txtGroupDescription);
-        txtgroupTotalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
-        txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
+        //txtgroupTotalVotes = (TextView) findViewById(R.id.txtGroupTotalVotes);
+        //txtGroupCurrentRating = (TextView) findViewById(R.id.txtGroupCurrentRating);
         txtRateNumber = (TextView) findViewById(R.id.txtRateNumber);
         btnRate = (Button) findViewById(R.id.btnRateGroup);
         table = (TableLayout) findViewById(R.id.tableGrupo);
         tableGrupoComents = (TableLayout) findViewById(R.id.tableGrupoComents);
         foto = (ImageView) findViewById(R.id.imageGroup);
         ids = new ArrayList<Long>() ;
-        rfn=new RetrofitNetwork();
+
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
+
+        ratingBar.setEnabled(false);
+        txtRateNumber.setEnabled(false);
+        btnRate.setEnabled(false);
+        ratingBar.setVisibility(View.GONE);
+        txtRateNumber.setVisibility(View.GONE);
+        btnRate.setVisibility(View.GONE);
+        for (Clase clase : user.getClases()){
+            for (Clase claseGrupo : grupo.getClases()){
+                if (clase.getIdclase()==claseGrupo.getIdclase()){
+                    ratingBar.setEnabled(true);
+                    txtRateNumber.setEnabled(true);
+                    btnRate.setEnabled(true);
+                    ratingBar.setVisibility(View.VISIBLE);
+                    txtRateNumber.setVisibility(View.VISIBLE);
+                    btnRate.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+        }
         ratingBar.setNumStars(5);
+        ratingBar.setStepSize((float) 1.0);
+        ratingBar.setRating((float) 3.0);
         txtRateNumber.setText(String.valueOf((int) ratingBar.getRating()));
+
+
+
+
+
+
+
+        ratingBarGroup = (RatingBar) findViewById(R.id.ratingBarGroup);
+        ratingBarGroup.setNumStars(5);
+        ratingBarGroup.setStepSize((float) 1.0);
+        ratingBar.isIndicator();
+        ratingBarGroup.setRating(Float.parseFloat(String.valueOf((grupo.getRate()))));
 
         groupName.setText(String.valueOf(grupo.getNombre()));
         groupInstructor.setText(String.valueOf(grupo.getInstructor()));
         groupDescription.setText(String.valueOf(grupo.getDescription()));
-        txtgroupTotalVotes.setText(String.valueOf(grupo.getTotalVotes()));
-        txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
+        //txtgroupTotalVotes.setText(String.valueOf(grupo.getTotalVotes()));
+        //txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
         Picasso.with(this).load(grupo.getImage()).into(foto);
 
 

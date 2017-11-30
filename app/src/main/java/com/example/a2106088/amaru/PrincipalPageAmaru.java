@@ -141,6 +141,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
             Intent intento=new Intent(PrincipalPageAmaru.this,UserListas.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("instructor",usuario );
+            datosExtra.putSerializable("user",user);
             datosExtra.putString("tipoUsuario", user.getType());
             datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
@@ -207,6 +208,26 @@ public class PrincipalPageAmaru extends AppCompatActivity
                                     final int position, long id) {
                 // TODO Auto-generated method stub
                 Log.d("presss",String.valueOf(+position));
+                rfn.getGroupbyId(new RequestCallback<Group>() {
+                    @Override
+                    public void onSuccess(Group response) {
+                        Intent grupo = new Intent(PrincipalPageAmaru.this,ActivitySelectedGroupAmaru.class);
+                        Bundle memoria = new Bundle();
+                        memoria.putSerializable("grupo",response);
+                        memoria.putString("usuario",usuario);
+                        memoria.putSerializable("user",user);
+                        grupo.putExtras(memoria);
+                        startActivity(grupo);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },Integer.valueOf(ids[+position]));
+                /*
+
+
                 rfn.getUsers(new RequestCallback<List<User>>() {
                     @Override
                     public void onSuccess(List<User> response) {
@@ -247,7 +268,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
 
 
-
+                */
                 //String Slecteditem= itemname[+position];
                 //Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
             }});

@@ -20,6 +20,7 @@ import android.widget.SearchView;
 
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
@@ -42,6 +43,7 @@ public class UserListas extends AppCompatActivity
 
     String[] descr;
     String user;
+    User userA;
 
     String[] imgid;
 
@@ -120,6 +122,7 @@ public class UserListas extends AppCompatActivity
         memoria = anterior.getExtras();
 
         user= (String) memoria.getSerializable("instructor");
+        userA = (User) memoria.getSerializable("user");
         quitar =(String) memoria.getSerializable("quitar");
         rfn = new RetrofitNetwork();
 
@@ -177,6 +180,7 @@ public class UserListas extends AppCompatActivity
                                         Bundle datosExtra = new Bundle();
                                         datosExtra.putSerializable("grupo",response2);
                                         datosExtra.putString("usuario",user);
+                                        datosExtra.putSerializable("user",userA);
                                         intento.putExtras(datosExtra);
                                         startActivity(intento);
 
