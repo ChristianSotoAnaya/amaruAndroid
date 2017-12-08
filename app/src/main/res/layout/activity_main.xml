@@ -8,21 +8,14 @@
     android:weightSum="1">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="26dp"
-        android:orientation="horizontal"></LinearLayout>
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="190dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="27dp"
         app:srcCompat="@drawable/amaru" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:orientation="horizontal"></LinearLayout>
 
     <EditText
         android:id="@+id/edtUsuario"
@@ -32,10 +25,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.05"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:layout_weight="0.05" />
 
     <EditText
         android:id="@+id/edtClave"
@@ -45,24 +38,26 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:layout_weight="0.05"
         android:ems="10"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:layout_weight="0.05" />
 
     <Button
         android:id="@+id/btnIngreso"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        style="@style/black_button"
         android:text="Log In"
         android:textAllCaps="false" />
 
     <Button
         android:id="@+id/btnRegistro"
+        style="@style/black_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

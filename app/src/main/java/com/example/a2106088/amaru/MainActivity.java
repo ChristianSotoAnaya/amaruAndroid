@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru;
 
+        import android.app.ProgressDialog;
         import android.content.Context;
         import android.content.Intent;
         import android.content.SharedPreferences;
@@ -28,11 +29,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button btnRegistrarse;
     SharedPreferences inforUsuario;
     RetrofitNetwork rfn;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        progressDialog = new ProgressDialog( this );
+
         edtUsuario=(EditText) findViewById(R.id.edtUsuario);
         edtClave=(EditText) findViewById(R.id.edtClave);
         btnIngresar=(Button) findViewById(R.id.btnIngreso);
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
            */
-
+            showProgressDialog();
             rfn.login(new LoginWrapper(usuario,clave), new RequestCallback<Token>() {
                 @Override
                 public void onSuccess(Token response) {
@@ -119,12 +124,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Intent ingreso = new Intent(MainActivity.this, PrincipalPageAmaru.class);
                                 ingreso.putExtras(memoria);
                                 startActivity(ingreso);
+                                dismissProgressDialog();
                             }
                         }
 
                         @Override
                         public void onFailed(NetworkException e) {
-
+                            dismissProgressDialog();
                         }
                     },usuario);
 
@@ -135,13 +141,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                     Handler h = new Handler(Looper.getMainLooper());
                     h.post(new Runnable() {
                         public void run() {
                             Toast.makeText(getApplicationContext(), "Usuario O Contraseña Incorrectos", Toast.LENGTH_SHORT).show();
                         }
                     });                }
+
             });
 
 
@@ -152,4 +159,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
 }
