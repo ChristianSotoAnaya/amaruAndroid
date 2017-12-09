@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,10 +28,12 @@ import android.widget.Toast;
 import com.example.a2106088.amaru.Instructor.CrearGrupo;
 import com.example.a2106088.amaru.Instructor.PrincipalPageInstructor;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -45,15 +48,13 @@ public class VerPerfilInstructor extends AppCompatActivity
     TextView instrcutorEmail;
     TextView instrcutorPhone;
     TextView instructorDescription;
-    TextView instructoruserna;
+    TextView instructorNameA,instructorLastNameA;
     User u;
     User logedUser;
-    LinearLayout rateLayout;
     RatingBar ratingBar;
+    RatingBar ratingBarUser;
     TextView rateNumber;
-    TextView currentRating;
     Button btnRate;
-    TextView totalVotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,73 +80,71 @@ public class VerPerfilInstructor extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        instructorNameA = (TextView) findViewById(R.id.txtInstructorNameA);
+        instructorLastNameA = (TextView) findViewById(R.id.txtInstructorLastNameA);
         instrcutorEmail = (TextView) findViewById(R.id.instrcutorEmail1);
         instrcutorPhone= (TextView) findViewById(R.id.instrcutorPhone1);
         instructorDescription= (TextView) findViewById(R.id.instructorDescription1);
-        instructoruserna = (TextView) findViewById(R.id.nombredelinss1);
+        instructorimage = (ImageView) findViewById(R.id.imageUser);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         rateNumber= (TextView) findViewById(R.id.rateNumber);
-        currentRating= (TextView) findViewById(R.id.currentRating);
         btnRate = (Button) findViewById(R.id.btnRate);
-        rateLayout = (LinearLayout) findViewById(R.id.rateLayout);
-        totalVotes = (TextView) findViewById(R.id.totalVotes);
-
 
 
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("ins");
         logedUser= (User) memoria.getSerializable("usuario");
-        instructoruserna.setText("Username: "+ u.getUsername());
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try  {
-                    try {
-                        URL url = null;
-                        url = new URL(u.getImage());
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        ponerimagen(bmp);
+        instructorNameA.setText(String.valueOf(u.getNombre())+" ");
+        instructorLastNameA.setText(String.valueOf(u.getLastname()));
 
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        thread.start();
-
-
+        Picasso.with(this).load(u.getImage()).into(instructorimage);
         instrcutorEmail.setText(u.getEmail());
         instrcutorPhone.setText(u.getPhone());
         instructorDescription.setText(u.getDescription());
-        currentRating.setText(String.valueOf(u.getRate()));
-        totalVotes.setText(String.valueOf(u.getTotalVotes()));
 
-        if (logedUser.getType().equals("INSTRUCTOR")){
-            /*
-            btnRate.setEnabled(false);
-            ratingBar.setEnabled(false);
-            TextView txtRate = (TextView) findViewById(R.id.textView24);
-            txtRate.setEnabled(false);
-            rateNumber.setEnabled(false);
-            */
-            rateLayout.setEnabled(false);
+
+
+        ratingBar.setEnabled(false);
+        rateNumber.setEnabled(false);
+        btnRate.setEnabled(false);
+        ratingBar.setVisibility(View.GONE);
+        rateNumber.setVisibility(View.GONE);
+        btnRate.setVisibility(View.GONE);
+        for (Clase clase : u.getClases()){
+            for (Clase claseUsuario : logedUser.getClases()){
+                if (clase.getIdgrupo()==claseUsuario.getIdgrupo()){
+                    ratingBar.setEnabled(true);
+                    rateNumber.setEnabled(true);
+                    btnRate.setEnabled(true);
+                    ratingBar.setVisibility(View.VISIBLE);
+                    rateNumber.setVisibility(View.VISIBLE);
+                    btnRate.setVisibility(View.VISIBLE);
+                    break;
+                }
+            }
+
         }
+
+        // Current rating
+        ratingBarUser = (RatingBar) findViewById(R.id.ratingBarUser);
+        ratingBarUser.setNumStars(5);
+        ratingBarUser.setStepSize(1);
+        ratingBar.isIndicator();
+        ratingBarUser.setRating(Float.parseFloat(String.valueOf((u.getRate()))));
+
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                rateNumber.setText(String.valueOf((int) rating));
+            }
+        });
+
+
         rfn= new RetrofitNetwork();
 
     }
-    public void ponerimagen(Bitmap b){
-        instructorimage.setImageBitmap(b);
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -222,10 +221,18 @@ public class VerPerfilInstructor extends AppCompatActivity
         rfn.editRate(new RequestCallback<User>() {
             @Override
             public void onSuccess(User response) {
+                ratingBarUser.setRating(Float.parseFloat(String.valueOf((response.getRate()))));
                 Handler h = new Handler(Looper.getMainLooper());
                 h.post(new Runnable() {
                     public void run() {
-                        Toast.makeText(getApplicationContext(), "Editado Exitosamente", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Calificacion realizada", Toast.LENGTH_SHORT).show();
+                        ratingBar.setEnabled(false);
+                        rateNumber.setEnabled(false);
+                        btnRate.setEnabled(false);
+                        ratingBar.setVisibility(View.GONE);
+                        rateNumber.setVisibility(View.GONE);
+                        btnRate.setVisibility(View.GONE);
+
                     }
                 });
             }
@@ -243,8 +250,5 @@ public class VerPerfilInstructor extends AppCompatActivity
 
     }
 
-    public void setRateView(View view) {
-        rateNumber.setText((int) ratingBar.getRating());
-    }
 
 }

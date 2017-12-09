@@ -107,7 +107,7 @@
 
 
             <ScrollView
-                android:layout_width="201dp"
+                android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_gravity="center">
 
@@ -118,24 +118,16 @@
 
                     <TextView
                         android:id="@+id/txtGroupDescription"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="45dp"
                         android:text="GroupDescription"
+                        android:layout_gravity="center"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         tools:layout_editor_absoluteX="8dp"
                         tools:layout_editor_absoluteY="86dp" />
                 </LinearLayout>
             </ScrollView>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="1">
-
-            </LinearLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -148,8 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="false"
-                    android:numStars="5"
-                    />
+                    android:numStars="5" />
 
                 <TextView
                     android:id="@+id/txtRateNumber"

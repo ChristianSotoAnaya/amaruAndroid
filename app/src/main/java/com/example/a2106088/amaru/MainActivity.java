@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Intent ingreso = new Intent(MainActivity.this, PrincipalPageInstructor.class);
                                 ingreso.putExtras(memoria);
                                 startActivity(ingreso);
+                                dismissProgressDialog();
                             }
                             else{
                                 Bundle memoria = new Bundle();

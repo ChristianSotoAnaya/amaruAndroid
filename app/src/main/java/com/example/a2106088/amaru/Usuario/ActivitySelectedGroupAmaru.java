@@ -136,11 +136,6 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         txtRateNumber.setText(String.valueOf((int) ratingBar.getRating()));
 
 
-
-
-
-
-
         ratingBarGroup = (RatingBar) findViewById(R.id.ratingBarGroup);
         ratingBarGroup.setNumStars(5);
         ratingBarGroup.setStepSize((float) 1.0);
@@ -171,17 +166,17 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                 rfn.editRateGroup(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
-                        /*
-                        txtgroupTotalVotes.setText(String.valueOf(response.getTotalVotes()));
-                        txtGroupCurrentRating.setText(String.valueOf(response.getRate()));
-                        ratingBar.setEnabled(false);
-                        txtRateNumber.setEnabled(false);
-                        */
-
+                        ratingBarGroup.setRating(Float.parseFloat(String.valueOf((response.getRate()))));
                         Handler h = new Handler(Looper.getMainLooper());
                         h.post(new Runnable() {
                             public void run() {
-                                Toast.makeText(getApplicationContext(), "Successful rating", Toast.LENGTH_SHORT).show();
+                                ratingBar.setEnabled(false);
+                                txtRateNumber.setEnabled(false);
+                                btnRate.setEnabled(false);
+                                ratingBar.setVisibility(View.GONE);
+                                txtRateNumber.setVisibility(View.GONE);
+                                btnRate.setVisibility(View.GONE);
+                                Toast.makeText(getApplicationContext(), "Calificacion realizada", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
