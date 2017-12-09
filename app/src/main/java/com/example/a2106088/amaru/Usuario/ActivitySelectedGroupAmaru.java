@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -54,10 +55,11 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
     TableLayout table;
     TableLayout tableGrupoComents;
     ImageView foto;
-    String usuario;
     ArrayList<Long> ids;
     User user;
     RetrofitNetwork rfn;
+    String usuario;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +67,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         setContentView(R.layout.activity_selected_group_amaru);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        progressDialog = new ProgressDialog( this );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,10 +82,8 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
 
-
-
         grupo = (Group) memoria.getSerializable("grupo");
-        usuario = (String) memoria.getString("usuario");
+        usuario = memoria.getString("usuario");
         user = (User) memoria.getSerializable("user");
 
 
@@ -163,6 +155,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                 Group temp = new Group();
                 temp.setRate(Double.parseDouble(String.valueOf(ratingBar.getRating())));
                 temp.setId(grupo.getId());
+                showProgressDialog();
                 rfn.editRateGroup(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
@@ -176,6 +169,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                                 ratingBar.setVisibility(View.GONE);
                                 txtRateNumber.setVisibility(View.GONE);
                                 btnRate.setVisibility(View.GONE);
+                                dismissProgressDialog();
                                 Toast.makeText(getApplicationContext(), "Calificacion realizada", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -223,10 +217,12 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                                         public void onClick(View v) {
 
                                             Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
+                                            showProgressDialog();
                                             rfn.subscribe(new RequestCallback<Boolean>() {
                                                 @Override
                                                 public void onSuccess(Boolean response) {
                                                     ids.add(clase.getIdclase());
+                                                    dismissProgressDialog();
                                                     Handler h = new Handler(Looper.getMainLooper());
                                                     h.post(new Runnable() {
                                                         public void run() {
@@ -337,26 +333,86 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi) {
-            // Handle the camera action
-        } else if (id == R.id.clasesi) {
+        if (id == R.id.nav_camera) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(ActivitySelectedGroupAmaru.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
 
-        } else if (id == R.id.groupsi) {
+                @Override
+                public void onFailed(NetworkException e) {
 
-        } else if (id == R.id.profilei) {
-
-        } else if (id == R.id.categoriesi) {
-
-        } else if (id == R.id.nav_send) {
+                }
+            },usuario);
 
         }
+        // SI ESPICHA EN ALL GROUPS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(ActivitySelectedGroupAmaru.this,UserListas.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("user",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        }
+        // SI ESPICHA EN MY PROFILE
+        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(ActivitySelectedGroupAmaru.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },user.getUsername());
+
+
+        } // SI ESPICHA EN COMPRAR
+        else if (id == R.id.nav_manage) {
+            Intent intento=new Intent(ActivitySelectedGroupAmaru.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+            // SI ESPICHA EN CATEGOR
+        } else if (id == R.id.categories) {
+            Intent intento = new Intent(ActivitySelectedGroupAmaru.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     public void verPerfilInstructor(View view) {
+        showProgressDialog();
         rfn.getuser(new RequestCallback<User>() {
             @Override
             public void onSuccess(final User response1) {
@@ -369,6 +425,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                         memoria.putSerializable("ins",response2);
                         verPerfilInstructor.putExtras(memoria);
                         startActivity(verPerfilInstructor);
+                        dismissProgressDialog();
                     }
 
                     @Override
@@ -384,6 +441,30 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
             }
         },usuario);
 
+    }
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
     }
 }
 

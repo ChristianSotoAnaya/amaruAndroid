@@ -46,13 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnIngresar.setOnClickListener(this);
         btnRegistrarse.setOnClickListener(this);
         rfn= new RetrofitNetwork();
-        //inforUsuario
         inforUsuario=this.getSharedPreferences("asd", Context.MODE_PRIVATE);
-        /*if (!inforUsuario.contains("usuario")){
-            edtUsuario.setEnabled(false);               ----- Relacion 1
-            edtClave.setEnabled(false);
-            btnIngresar.setEnabled(false);
-        }*/
+
 
     }
 
@@ -122,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                             else{
                                 Bundle memoria = new Bundle();
-                                memoria.putSerializable("usuario",response);
+                                memoria.putSerializable("user",response);
                                 Intent ingreso = new Intent(MainActivity.this, PrincipalPageAmaru.class);
                                 ingreso.putExtras(memoria);
                                 startActivity(ingreso);

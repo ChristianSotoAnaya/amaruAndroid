@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@drawable/nabv"
         app:headerLayout="@layout/nav_header_ver_usuario"
-        app:menu="@menu/activity_ver_usuario_drawer" />
+        app:menu="@menu/activity_principal_page_instructor_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,6 +1,7 @@
 package com.example.a2106088.amaru.Instructor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 public class PerfilInstructor extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
-
+    ProgressDialog progressDialog;
     RetrofitNetwork rfn;
     ImageView instructorimage;
     EditText instrcutorEmail;
@@ -60,6 +61,7 @@ public class PerfilInstructor extends AppCompatActivity
     Button buttoneditimage;
     Bitmap photo;
     User u;
+    String usuario;
     Button edituser;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://amaru-cosw.appspot.com");
@@ -67,7 +69,30 @@ public class PerfilInstructor extends AppCompatActivity
     String urlImagen;
     User temp;
 
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
 
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,15 +100,7 @@ public class PerfilInstructor extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        progressDialog = new ProgressDialog( this );
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -106,7 +123,7 @@ public class PerfilInstructor extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("ins");
-
+        usuario=u.getUsername();
         instructoruserna.setText("Username: "+ u.getUsername());
         Picasso.with(this).load(u.getImage()).into(instructorimage);
         instrcutorEmail.setText(u.getEmail());
@@ -154,29 +171,80 @@ public class PerfilInstructor extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi1) {
-            String usuario="";
-            usuario = u.getUsername();
-            Intent intento=new Intent(PerfilInstructor.this,CrearGrupo.class);
+        if (id == R.id.createi) {
+            Intent intento = new Intent(PerfilInstructor.this, CrearGrupo.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("user",u);
+
+            datosExtra.putString("user", usuario);
             intento.putExtras(datosExtra);
             startActivity(intento);
-        } else if (id == R.id.clasesi1) {
-            Intent intento=new Intent(PerfilInstructor.this,PrincipalPageInstructor.class);
+        } else if (id == R.id.clasesi) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Bundle memoria = new Bundle();
+                    memoria.putSerializable("usuario",response);
+                    Intent ingreso = new Intent(PerfilInstructor.this, PrincipalPageInstructor.class);
+                    ingreso.putExtras(memoria);
+                    startActivity(ingreso);
+                    dismissProgressDialog();
+                }
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
+
+        } else if (id == R.id.groupsi) {
+
+
+            Intent intento = new Intent(PerfilInstructor.this, ActivityListaGrupos.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("usuario",u);
+            datosExtra.putString("instructor",usuario );
+            datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
             startActivity(intento);
 
-        } else if (id == R.id.groupsi1) {
 
-        } else if (id == R.id.profilei1) {
+        } else if (id == R.id.profilei) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(PerfilInstructor.this, PerfilInstructor.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },u.getUsername());
 
 
-        } else if (id == R.id.categoriesi1) {
+        } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(PerfilInstructor.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_send1) {
+
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+
+            Intent intento = new Intent(PerfilInstructor.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor", u.getUsername());
+            datosExtra.putString("quitar",u.getUsername());
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
         }
 
@@ -240,7 +308,7 @@ public class PerfilInstructor extends AppCompatActivity
                     temp.setEmail(instrcutorEmail.getText().toString());
                     temp.setPhone(instrcutorPhone.getText().toString());
                     temp.setDescription(instructorDescription.getText().toString());
-
+                    showProgressDialog();
                     rfn.editimage(new RequestCallback<User>() {
                         @Override
                         public void onSuccess(User response) {
@@ -253,6 +321,7 @@ public class PerfilInstructor extends AppCompatActivity
                                             rfn.editemail(new RequestCallback<User>() {
                                                 @Override
                                                 public void onSuccess(User response) {
+                                                    dismissProgressDialog();
                                                     Handler h = new Handler(Looper.getMainLooper());
                                                     h.post(new Runnable() {
                                                         public void run() {
@@ -260,6 +329,7 @@ public class PerfilInstructor extends AppCompatActivity
 
                                                         }
                                                     });
+
                                                 }
 
                                                 @Override

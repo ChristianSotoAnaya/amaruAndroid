@@ -90,11 +90,12 @@
 
                     <Button
                         android:id="@+id/btnVerPerfilInstructor"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
+                        android:layout_width="102dp"
+                        android:layout_height="38dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="15dp"
                         android:text="Ver perfil"
+                        style="@style/black_button"
                         android:onClick="verPerfilInstructor"
                         android:textAllCaps="false" />
 
@@ -157,10 +158,11 @@
 
             <Button
                 android:id="@+id/btnRateGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="110dp"
+                android:layout_height="38dp"
                 android:layout_gravity="center"
                 android:text="Calificar"
+                style="@style/black_button"
                 android:textAllCaps="false"
                 tools:layout_editor_absoluteX="78dp"
                 tools:layout_editor_absoluteY="494dp" />

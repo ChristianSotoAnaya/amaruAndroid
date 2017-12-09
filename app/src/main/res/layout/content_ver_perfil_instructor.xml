@@ -152,10 +152,11 @@
 
             <Button
                 android:id="@+id/btnRate"
-                android:layout_width="wrap_content"
+                android:layout_width="223dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Calificar"
+                style="@style/black_button"
                 android:onClick="RateInstructor"
                 android:textAllCaps="false" />
 

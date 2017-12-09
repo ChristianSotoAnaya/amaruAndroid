@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -55,6 +56,32 @@ public class VerPerfilInstructor extends AppCompatActivity
     RatingBar ratingBarUser;
     TextView rateNumber;
     Button btnRate;
+    ProgressDialog progressDialog;
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,15 +89,9 @@ public class VerPerfilInstructor extends AppCompatActivity
         setContentView(R.layout.activity_ver_perfil_instructor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        progressDialog = new ProgressDialog( this );
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -184,40 +205,89 @@ public class VerPerfilInstructor extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi2) {
-            String usuario="";
-            Intent intento=new Intent(VerPerfilInstructor.this,CrearGrupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-        } else if (id == R.id.clasesi2) {
-            Intent intento=new Intent(VerPerfilInstructor.this,PrincipalPageInstructor.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("usuario",u);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+        if (id == R.id.nav_camera) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(VerPerfilInstructor.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",logedUser.getUsername() );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
 
-        } else if (id == R.id.groupsi2) {
+                @Override
+                public void onFailed(NetworkException e) {
 
-        } else if (id == R.id.profilei2) {
-
-
-        } else if (id == R.id.categoriesi2) {
-
-        } else if (id == R.id.nav_send2) {
+                }
+            },logedUser.getUsername());
 
         }
+        // SI ESPICHA EN ALL GROUPS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(VerPerfilInstructor.this,UserListas.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("user",logedUser.getUsername() );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        }
+        // SI ESPICHA EN MY PROFILE
+        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(VerPerfilInstructor.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },logedUser.getUsername());
+
+
+        } // SI ESPICHA EN COMPRAR
+        else if (id == R.id.nav_manage) {
+            Intent intento=new Intent(VerPerfilInstructor.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",logedUser.getUsername());
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+            // SI ESPICHA EN CATEGOR
+        } else if (id == R.id.categories) {
+            Intent intento = new Intent(VerPerfilInstructor.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", logedUser.getUsername());
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     public void RateInstructor(View view) {
         User temp= new User();
         temp.setUsername(u.getUsername());
         temp.setRate(Double.parseDouble(String.valueOf(ratingBar.getRating())));
+        showProgressDialog();
         rfn.editRate(new RequestCallback<User>() {
             @Override
             public void onSuccess(User response) {
@@ -232,7 +302,7 @@ public class VerPerfilInstructor extends AppCompatActivity
                         ratingBar.setVisibility(View.GONE);
                         rateNumber.setVisibility(View.GONE);
                         btnRate.setVisibility(View.GONE);
-
+                        dismissProgressDialog();
                     }
                 });
             }

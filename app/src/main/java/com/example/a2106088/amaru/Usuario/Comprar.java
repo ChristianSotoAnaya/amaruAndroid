@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,7 @@ import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 public class Comprar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    ProgressDialog progressDialog;
     int tickets = 0;
     String usuario;
     RetrofitNetwork rfn;
@@ -34,6 +35,30 @@ public class Comprar extends AppCompatActivity
     TextView row1num,row2num,row3num,row4num,row5num;
     TextView row1value,row2value,row3value,row4value,row5value;
     User user;
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +67,7 @@ public class Comprar extends AppCompatActivity
         setSupportActionBar(toolbar);
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
+        progressDialog = new ProgressDialog( this );
         usuario = memoria.getString("username");
         row1num = (TextView) findViewById(R.id.row1num);
         row2num = (TextView) findViewById(R.id.row2num);
@@ -66,14 +92,7 @@ public class Comprar extends AppCompatActivity
             }
         },usuario);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,30 +143,21 @@ public class Comprar extends AppCompatActivity
         int id = item.getItemId();
 
         // SI OPRIME EN MIS CLASES
+
         if (id == R.id.nav_camera) {
-
-        }
-        // SI OPRIME EN TODOS LOS GRUPOS
-        else if (id == R.id.nav_gallery) {
-            Intent intento=new Intent(Comprar.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-
-
-        }
-        // SI OPRIME EN MI PERFIL
-        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
-                    user = response;
-                    Intent intento=new Intent(Comprar.this,PerfilAmaru.class);
+                    Intent intento=new Intent(Comprar.this,PrincipalPageAmaru.class);
                     Bundle datosExtra = new Bundle();
-                    datosExtra.putSerializable("userAmaru",user);
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
                     intento.putExtras(datosExtra);
                     startActivity(intento);
+                    dismissProgressDialog();
                 }
 
                 @Override
@@ -156,22 +166,60 @@ public class Comprar extends AppCompatActivity
                 }
             },usuario);
 
+        }
+        // SI ESPICHA EN ALL GROUPS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(Comprar.this,UserListas.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("user",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } // SI OPRIME EN COMPRAR
-        else if (id == R.id.nav_manage) {
-
-            // SI OPRIME EN CATEGORIAS
-        } else if (id == R.id.categories) {
-            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
 
         }
+        // SI ESPICHA EN MY PROFILE
+        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(Comprar.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },user.getUsername());
+
+
+        } // SI ESPICHA EN COMPRAR
+        else if (id == R.id.nav_manage) {
+            Intent intento=new Intent(Comprar.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+            // SI ESPICHA EN CATEGOR
+        } else if (id == R.id.categories) {
+            Intent intento = new Intent(Comprar.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     public void compraVeinteTickets(View view) {
@@ -254,9 +302,11 @@ public class Comprar extends AppCompatActivity
         System.out.println("Cupo: " + cupo);
         System.out.println("Tickets: " + tickets);
         user.setCupo(tickets);
+        showProgressDialog();
         rfn.buy(new RequestCallback<User>() {
             @Override
             public void onSuccess(User response) {
+                dismissProgressDialog();
                 Handler h = new Handler(Looper.getMainLooper());
                 h.post(new Runnable() {
                             public void run() {Toast.makeText(getApplicationContext(), "Compra exitosa...", Toast.LENGTH_SHORT).show();}

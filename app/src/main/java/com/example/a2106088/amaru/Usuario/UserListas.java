@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -34,7 +35,7 @@ public class UserListas extends AppCompatActivity
 
 
     CustomListAdapter adapter;
-
+    ProgressDialog progressDialog;
     List<Group> grupos;
     List<Group> gruposfiltro;
 
@@ -44,7 +45,7 @@ public class UserListas extends AppCompatActivity
 
     String[] descr;
     String user;
-    User userA;
+    String usuario;
 
     String[] imgid;
 
@@ -55,22 +56,37 @@ public class UserListas extends AppCompatActivity
 
     SearchView buscar;
 
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
 
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_listas);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        progressDialog = new ProgressDialog( this );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,6 +104,7 @@ public class UserListas extends AppCompatActivity
             public boolean onQueryTextSubmit(String query) {
 // do something on text submit
                 Log.d("texty",String.valueOf(buscar.getQuery()));
+                showProgressDialog();
                 rfn.getGrByName(new RequestCallback<List<Group>>() {
                     @Override
                     public void onSuccess(List<Group> response) {
@@ -100,6 +117,7 @@ public class UserListas extends AppCompatActivity
                         datosExtra.putSerializable("quitar","cate");
                         intento.putExtras(datosExtra);
                         startActivity(intento);
+                        dismissProgressDialog();
                     }
 
                     @Override
@@ -122,11 +140,10 @@ public class UserListas extends AppCompatActivity
         Intent anterior = getIntent();
         memoria = anterior.getExtras();
 
-        user= (String) memoria.getSerializable("instructor");
-        userA = (User) memoria.getSerializable("user");
-        quitar =(String) memoria.getSerializable("quitar");
+        usuario =  memoria.getString("user");
+        quitar =memoria.getString("quitar");
         rfn = new RetrofitNetwork();
-
+        showProgressDialog();
         rfn.getallgroups(new RequestCallback<List<Group>>() {
             @Override
             public void onSuccess(List<Group> response) {
@@ -140,13 +157,6 @@ public class UserListas extends AppCompatActivity
                     temp=new ArrayList(groupss);
                 }
 
-                else{
-                    for (Group g : grupos) {
-                        if(g.getInstructor().equals(user)) {
-                            temp.add(g);
-                        }
-                    }
-                }
 
                 itemname = new String[temp.size()];
                 itemid  = new int[temp.size()];
@@ -163,7 +173,7 @@ public class UserListas extends AppCompatActivity
 
                 adapter=new CustomListAdapter(UserListas.this, itemname, imgid,descr);
                 lista=(ListView) findViewById(R.id.listaaauser);
-
+                dismissProgressDialog();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -176,14 +186,25 @@ public class UserListas extends AppCompatActivity
                                 // TODO Auto-generated method stub
                                 rfn.getGroupbyId(new RequestCallback<Group>() {
                                     @Override
-                                    public void onSuccess(Group response2) {
-                                        Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
-                                        Bundle datosExtra = new Bundle();
-                                        datosExtra.putSerializable("grupo",response2);
-                                        datosExtra.putString("usuario",user);
-                                        datosExtra.putSerializable("user",userA);
-                                        intento.putExtras(datosExtra);
-                                        startActivity(intento);
+                                    public void onSuccess(final Group response2) {
+                                        rfn.getuser(new RequestCallback<User>() {
+                                            @Override
+                                            public void onSuccess(User response) {
+                                                Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
+                                                Bundle datosExtra = new Bundle();
+                                                datosExtra.putSerializable("grupo",response2);
+                                                datosExtra.putString("usuario",usuario);
+                                                datosExtra.putSerializable("user",response);
+                                                intento.putExtras(datosExtra);
+                                                startActivity(intento);
+                                            }
+
+                                            @Override
+                                            public void onFailed(NetworkException e) {
+
+                                            }
+                                        },usuario);
+
 
 
                                     }
@@ -202,13 +223,9 @@ public class UserListas extends AppCompatActivity
 
             @Override
             public void onFailed(NetworkException e) {
-
+                dismissProgressDialog();
             }
         });
-
-
-
-
 
     }
 
@@ -250,20 +267,86 @@ public class UserListas extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(UserListas.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    dismissProgressDialog();
+                    startActivity(intento);
 
-        } else if (id == R.id.nav_slideshow) {
+                }
 
-        } else if (id == R.id.nav_manage) {
+                @Override
+                public void onFailed(NetworkException e) {
 
-        } else if (id == R.id.nav_send) {
+                }
+            },usuario);
 
         }
+        // SI ESPICHA EN ALL GROUPS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(UserListas.this,UserListas.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("user",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        }
+        // SI ESPICHA EN MY PROFILE
+        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(UserListas.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    dismissProgressDialog();
+                    startActivity(intento);
+
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },usuario);
+
+
+        } // SI ESPICHA EN COMPRAR
+        else if (id == R.id.nav_manage) {
+            Intent intento=new Intent(UserListas.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+            // SI ESPICHA EN CATEGOR
+        } else if (id == R.id.categories) {
+            Intent intento = new Intent(UserListas.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
+
 }

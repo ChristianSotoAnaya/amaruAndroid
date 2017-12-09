@@ -21,6 +21,6 @@
         android:fitsSystemWindows="true"
         android:background="@drawable/nabv"
         app:headerLayout="@layout/nav_header_categorias"
-        app:menu="@menu/activity_categorias_drawer" />
+        app:menu="@menu/activity_principal_page_instructor_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

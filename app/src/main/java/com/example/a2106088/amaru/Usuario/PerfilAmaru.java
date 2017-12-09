@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -59,26 +60,46 @@ public class PerfilAmaru extends AppCompatActivity
     Bitmap photo;
     User u;
     String usuario;
+    ProgressDialog progressDialog;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://amaru-cosw.appspot.com");
     StorageReference mountainsRef ;
     String urlImagen;
     User temp;
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_amaru);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        progressDialog = new ProgressDialog( this );
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -151,25 +172,63 @@ public class PerfilAmaru extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        // SI OPRIME EN MIS CLASES
+
+
         if (id == R.id.nav_camera) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(PerfilAmaru.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },usuario);
 
         }
-        // SI OPRIME EN TODOS LOS GRUPOS
+        // SI ESPICHA EN ALL GROUPS
         else if (id == R.id.nav_gallery) {
-            Intent intento=new Intent(PerfilAmaru.this,Grupo.class);
+            Intent intento=new Intent(PerfilAmaru.this,UserListas.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
+            datosExtra.putString("user",usuario );
+            datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
             startActivity(intento);
 
 
         }
-        // SI OPRIME EN MI PERFIL
+        // SI ESPICHA EN MY PROFILE
         else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(PerfilAmaru.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },usuario);
 
 
-        } // SI OPRIME EN COMPRAR
+        } // SI ESPICHA EN COMPRAR
         else if (id == R.id.nav_manage) {
             Intent intento=new Intent(PerfilAmaru.this,Comprar.class);
             Bundle datosExtra = new Bundle();
@@ -177,18 +236,20 @@ public class PerfilAmaru extends AppCompatActivity
             intento.putExtras(datosExtra);
             startActivity(intento);
 
-            // SI OPRIME EN CATEGORIAS
+            // SI ESPICHA EN CATEGOR
         } else if (id == R.id.categories) {
-            Toast.makeText(this, "nav_share", Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
-
+            Intent intento = new Intent(PerfilAmaru.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     @Override
@@ -240,7 +301,7 @@ public class PerfilAmaru extends AppCompatActivity
                     temp.setPhone(amaruPhone.getText().toString());
                     temp.setDescription(amaruDescription.getText().toString());
 
-
+                    showProgressDialog();
                     rfn.editemail(new RequestCallback<User>() {
                         @Override
                         public void onSuccess(User response) {
@@ -254,6 +315,7 @@ public class PerfilAmaru extends AppCompatActivity
                                             rfn.editimage(new RequestCallback<User>() {
                                                 @Override
                                                 public void onSuccess(User response) {
+                                                    dismissProgressDialog();
                                                     Handler h = new Handler(Looper.getMainLooper());
                                                     h.post(new Runnable() {
                                                         public void run() {
@@ -265,6 +327,8 @@ public class PerfilAmaru extends AppCompatActivity
 
                                                 @Override
                                                 public void onFailed(NetworkException e) {
+                                                    dismissProgressDialog();
+
                                                     Handler h = new Handler(Looper.getMainLooper());
                                                     h.post(new Runnable() {
                                                         public void run() {
