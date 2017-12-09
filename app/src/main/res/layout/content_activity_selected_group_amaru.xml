@@ -247,7 +247,7 @@
                 android:layout_width="350dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:stretchColumns="0,1"
+                android:stretchColumns="0,1,2"
                 android:gravity="center"
                 android:id="@+id/tableGrupoComents">
 
@@ -283,9 +283,29 @@
                         android:gravity="center"
                         android:textStyle="bold"
                         />
+                    <TextView
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:text="Fecha"
+                        android:layout_margin="1dp"
+                        android:layout_column="1"
+                        android:background="#FFFFFF"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        />
 
                 </TableRow>
             </TableLayout>
+
+            <Button
+                android:id="@+id/btnComentarGrupo"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:text="Comentar"
+                android:onClick="comentarGrupo"
+                android:textAllCaps="false" />
 
 
 

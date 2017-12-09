@@ -104,7 +104,14 @@ public class VerPerfilInstructor extends AppCompatActivity
         instructorDescription.setText(u.getDescription());
 
 
+        showRatingBars();
 
+
+        rfn= new RetrofitNetwork();
+
+    }
+
+    private void showRatingBars() {
         ratingBar.setEnabled(false);
         rateNumber.setEnabled(false);
         btnRate.setEnabled(false);
@@ -129,9 +136,16 @@ public class VerPerfilInstructor extends AppCompatActivity
         // Current rating
         ratingBarUser = (RatingBar) findViewById(R.id.ratingBarUser);
         ratingBarUser.setNumStars(5);
-        ratingBarUser.setStepSize(1);
-        ratingBar.isIndicator();
+        ratingBarUser.setStepSize((float) 1.0);
         ratingBarUser.setRating(Float.parseFloat(String.valueOf((u.getRate()))));
+
+        ratingBar.setNumStars(5);
+        ratingBar.setStepSize(1);
+        ratingBar.setRating(3);
+        //ratingBar.isIndicator();
+        rateNumber.setText(String.valueOf((int) ratingBar.getRating()));
+
+
 
 
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -140,10 +154,6 @@ public class VerPerfilInstructor extends AppCompatActivity
                 rateNumber.setText(String.valueOf((int) rating));
             }
         });
-
-
-        rfn= new RetrofitNetwork();
-
     }
 
     @Override

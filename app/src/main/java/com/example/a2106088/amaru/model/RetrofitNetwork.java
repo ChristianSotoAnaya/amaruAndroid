@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 
+import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
@@ -420,6 +421,28 @@ public class RetrofitNetwork implements Network
                 try
                 {
                     Response<Boolean> execute = call.execute();
+                    requestCallback.onSuccess( execute.body() );
+                }
+                catch ( IOException e )
+                {
+                    requestCallback.onFailed( new NetworkException( null, e ) );
+                }
+            }
+        } );
+    }
+
+    @Override
+    public void addCommentGroup(final RequestCallback<Group> requestCallback, final Comment comment) {
+        backgroundExecutor.execute( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Call<Group> call = networkService.addCommentGroup(comment);
+
+                try
+                {
+                    Response<Group> execute = call.execute();
                     requestCallback.onSuccess( execute.body() );
                 }
                 catch ( IOException e )
