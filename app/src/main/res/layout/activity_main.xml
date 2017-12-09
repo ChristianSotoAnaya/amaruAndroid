@@ -28,6 +28,7 @@
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
+        android:text="csoto"
         android:layout_weight="0.05" />
 
     <EditText
@@ -40,6 +41,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Password"
+        android:text="password"
         android:inputType="textPassword"
         android:layout_weight="0.05" />
 

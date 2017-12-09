@@ -4,8 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="1"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@drawable/fondoinstr">
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,168 +18,26 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="37dp"
-                android:orientation="horizontal"></LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="183dp"
-                android:layout_weight="0.35"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/instructorimage1"
-                    android:layout_width="222dp"
-                    android:layout_height="150dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.74" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/nombredelinss1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center"
-                android:layout_weight="0.25"
-                android:text="TextView"
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="69dp"
-                android:orientation="horizontal"
-                android:weightSum="1">
+                android:layout_marginBottom="8dp">
 
                 <TextView
-                    android:id="@+id/instrcutorEmail1"
+                    android:id="@+id/txtInstructorNameA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:orientation="horizontal">
-
+                    android:layout_gravity="center"
+                    android:text="Name"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
                 <TextView
-                    android:id="@+id/instrcutorPhone1"
+                    android:id="@+id/txtInstructorLastNameA"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="62dp"
-                android:layout_weight="0.21"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView26"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/instructorDescription1"
-                    android:layout_width="289dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView25"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Current rating: "
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/currentRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:id="@+id/rateLayout">
-
-                <TextView
-                    android:id="@+id/textView24"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:layout_weight="0.15"
-                    android:text="Rate: "
-                    android:textAlignment="center" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="3dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.41"
-                    android:isIndicator="false"
-                    android:numStars="5"
-                    android:onClick="setRateView"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.15"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/txtTotalVotes"
-                        android:layout_marginTop="6dp"
-                        android:layout_width="99dp"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center"
-                        android:text="Total votes: " />
-
-                    <TextView
-                        android:id="@+id/totalVotes"
-                        android:layout_width="104dp"
-                        android:layout_marginTop="6dp"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/rateNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView"
+                    android:layout_gravity="center"
+                    android:text=" Last Name"
                     android:textAlignment="center"
                     android:textSize="24sp" />
             </LinearLayout>
@@ -186,16 +45,119 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
-                <Button
-                    android:id="@+id/btnRate"
+                    <ImageView
+                        android:id="@+id/imageUser"
+                        android:layout_width="190dp"
+                        android:layout_height="142dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@color/white" />
+
+                    <RatingBar
+                        android:id="@+id/ratingBarUser"
+                        style="@style/Widget.AppCompat.RatingBar.Indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:numStars="5"
+                        android:visibility="visible" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Contacto"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/instrcutorEmail1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="TextView"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/instrcutorPhone1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="TextView"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/instructorDescription1"
+                        android:layout_width="289dp"
+                        android:layout_height="45dp"
+                        android:layout_gravity="center"
+                        android:ems="10"
+                        android:inputType="textPersonName"
+                        android:text="Instructor Description"
+                        android:textAlignment="center"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+
+            </ScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="false"
+                    android:numStars="5" />
+
+                <TextView
+                    android:id="@+id/rateNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:layout_weight="1"
-                    android:text="Rate"
-                    android:onClick="RateInstructor"/>
+                    android:text="This Rate"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
             </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btnRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Calificar"
+                android:onClick="RateInstructor"
+                android:textAllCaps="false" />
 
         </LinearLayout>
 
