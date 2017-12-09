@@ -62,7 +62,7 @@ public class CrearGrupo extends AppCompatActivity
     long idClase = 0;
     long idGrupo = 0;
     ArrayList<Clase> clases = new ArrayList<Clase>();
-    User u;
+    String user;
     RetrofitNetwork rfn;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://amaru-cosw.appspot.com");
@@ -102,7 +102,7 @@ public class CrearGrupo extends AppCompatActivity
         });
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        u= (User) memoria.getSerializable("user");
+        user= memoria.getString("user");
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,18 +164,28 @@ public class CrearGrupo extends AppCompatActivity
 
         } else if (id == R.id.clasesi3) {
             Bundle memoria = new Bundle();
-            memoria.putSerializable("usuario",u);
+            memoria.putString("usuario",user);
             Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
             ingreso.putExtras(memoria);
             startActivity(ingreso);
         } else if (id == R.id.groupsi3) {
 
         } else if (id == R.id.profilei3) {
-            Intent intento=new Intent(CrearGrupo.this,PerfilInstructor.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins",u);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(CrearGrupo.this, PerfilInstructor.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },user);
 
         } else if (id == R.id.categoriesi) {
 
@@ -195,8 +205,7 @@ public class CrearGrupo extends AppCompatActivity
         edtlugartxt.setText(edtlugar.getText().toString());
         tableRow.addView(edtlugartxt);*/
         String lugar = spnlugar.getSelectedItem().toString();
-        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),lugar,idClase,edtNombreCrearGrupo.getText().toString(),0, u.getUsername());
-        System.out.println(u.getUsername());
+        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),lugar,idClase,edtNombreCrearGrupo.getText().toString(),0, user);
         idClase+=1;
         clases.add(clase);
         TableRow tr_head = new TableRow(this);
@@ -255,7 +264,7 @@ public class CrearGrupo extends AppCompatActivity
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        mountainsRef = storageRef.child(u.getUsername()+nombre+".jpg");
+        mountainsRef = storageRef.child(user+nombre+".jpg");
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -269,7 +278,7 @@ public class CrearGrupo extends AppCompatActivity
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 Log.d("urlimagen",downloadUrl.toString());
                 urlImagen=downloadUrl.toString();
-                Group nuevo = new Group(idGrupo, nombre, u.getUsername(), null, descripcion, categoria, 0.0, 0,urlImagen,clases);
+                Group nuevo = new Group(idGrupo, nombre, user, null, descripcion, categoria, 0.0, 0,urlImagen,clases);
                 rfn.createGroup(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
@@ -279,11 +288,20 @@ public class CrearGrupo extends AppCompatActivity
                                 Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
                             }
                         });
-                        Bundle memoria = new Bundle();
-                        memoria.putSerializable("usuario",u);
-                        Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
-                        ingreso.putExtras(memoria);
-                        startActivity(ingreso);
+                        rfn.getuser(new RequestCallback<User>() {
+                            @Override
+                            public void onSuccess(User response) {
+                                Bundle memoria = new Bundle();
+                                memoria.putSerializable("usuario",response);
+                                Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                                ingreso.putExtras(memoria);
+                                startActivity(ingreso);
+                            }
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },user);
                     }
 
                     @Override
@@ -313,7 +331,7 @@ public class CrearGrupo extends AppCompatActivity
 
     public void cancelar(View view) {
         Bundle memoria = new Bundle();
-        memoria.putSerializable("usuario",u);
+        memoria.putSerializable("usuario",user);
         Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
         ingreso.putExtras(memoria);
         startActivity(ingreso);

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"
         android:text="" />
 
     <TextView
@@ -23,44 +24,28 @@
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title" />
 
 
-    <TextView
-        android:id="@+id/ToursPendientes"
-        android:layout_width="match_parent"
-        android:layout_height="68dp"
-        android:gravity="center"
-        android:text="Clases"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-
-
-
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="390dp"
+        android:layout_weight="1.20">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <ListView
                 android:id="@+id/listaaa3"
                 android:layout_width="match_parent"
-                android:layout_height="440dp"
+                android:layout_height="431dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
         </LinearLayout>
 
 
-
-
     </ScrollView>
-
-
 
 
 </LinearLayout>

@@ -5,19 +5,19 @@
     <group android:checkableBehavior="single"
         >
         <item
-            android:id="@+id/createiu"
+            android:id="@+id/createi"
             android:icon="@drawable/add"
             android:title="Create Group" />
         <item
-            android:id="@+id/clasesiu"
+            android:id="@+id/clasesi"
             android:icon="@drawable/calendar"
             android:title="My Class" />
         <item
-            android:id="@+id/nav_sendu"
+            android:id="@+id/nav_send"
             android:icon="@drawable/grou"
             android:title="My Groups" />
         <item
-            android:id="@+id/profileiu"
+            android:id="@+id/profilei"
             android:icon="@drawable/profile"
             android:title="My Profile" />
 
@@ -26,11 +26,11 @@
     <item android:title="More With Amaru">
         <menu>
             <item
-                android:id="@+id/categoriesiu"
+                android:id="@+id/categoriesi"
                 android:icon="@drawable/categoriesicon"
                 android:title="Categories" />
             <item
-                android:id="@+id/groupsiu"
+                android:id="@+id/groupsi"
                 android:icon="@drawable/categories"
                 android:title="All Groups" />
 

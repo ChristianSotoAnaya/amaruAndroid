@@ -50,7 +50,7 @@
             android:label="Crear Grupo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Instructor.ActivityListaGrupos$ActivitySelectedGroup"
+            android:name=".Instructor.ActivitySelectedGroup"
             android:label="@string/title_activity_selected_group"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

@@ -17,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.Usuario.PrincipalPageAmaru;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -79,17 +81,6 @@ public class PrincipalPageInstructor extends AppCompatActivity
     private void test() {
 
 
-        /*LayoutPendientes = (LinearLayout) findViewById(R.id.LayoutPendientes);
-        List<Clase> clases= user.getClases();
-        for (int i=0;i<clases.size();i++){
-            btnWord[i] = new Button(this);
-            btnWord[i].setHeight(50);
-            btnWord[i].setWidth(50);
-            btnWord[i].setTag(i);
-            btnWord[i].setText(clases.get(i).getNombregrupo()+" - "+clases.get(i).getFecha()+" - "+clases.get(i).getHour());
-            btnWord[i].setOnClickListener(btnClicked);
-            LayoutPendientes.addView(btnWord[i]);
-        }*/
         itemname = new String[clases.size()];
         ids=new String[clases.size()];
         descr= new String[clases.size()];
@@ -186,12 +177,11 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //if (drawer.isDrawerOpen(GravityCompat.START)) {
+        //    drawer.closeDrawer(GravityCompat.START);
+        //} else {
+        //    super.onBackPressed(); }
     }
 
     @Override
@@ -226,11 +216,24 @@ public class PrincipalPageInstructor extends AppCompatActivity
             Intent intento = new Intent(PrincipalPageInstructor.this, CrearGrupo.class);
             Bundle datosExtra = new Bundle();
 
-            datosExtra.putSerializable("user", user);
+            datosExtra.putString("user", usuario);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                        Bundle memoria = new Bundle();
+                        memoria.putSerializable("usuario",response);
+                        Intent ingreso = new Intent(PrincipalPageInstructor.this, PrincipalPageInstructor.class);
+                        ingreso.putExtras(memoria);
+                        startActivity(ingreso);
+                }
+                @Override
+                public void onFailed(NetworkException e) {
 
+                }
+            },usuario);
 
         } else if (id == R.id.groupsi) {
 
@@ -244,11 +247,22 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.profilei) {
-            Intent intento = new Intent(PrincipalPageInstructor.this, PerfilInstructor.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins", user);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(PrincipalPageInstructor.this, PerfilInstructor.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },user.getUsername());
+
 
         } else if (id == R.id.categoriesi) {
             rfn.getuser(new RequestCallback<User>() {
