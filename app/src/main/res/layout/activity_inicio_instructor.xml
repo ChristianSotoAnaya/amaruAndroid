@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/inicio"
-    tools:context="com.example.a2106088.amaru.InicioActivity">
+    tools:context="com.example.a2106088.amaru.Usuario.InicioActivity">
 
     <ImageView
         android:id="@+id/imageView11"

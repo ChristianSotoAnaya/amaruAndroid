@@ -1,4 +1,4 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Usuario;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,20 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a2106088.amaru.R;
-
 import com.example.a2106088.amaru.entity.User;
 
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
-import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
@@ -151,11 +147,22 @@ public class PrincipalPageAmaru extends AppCompatActivity
         }
         // SI ESPICHA EN MY PROFILE
         else if (id == R.id.nav_slideshow) {
-            Intent intento=new Intent(PrincipalPageAmaru.this,PerfilAmaru.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("userAmaru",user);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(PrincipalPageAmaru.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },user.getUsername());
+
 
         } // SI ESPICHA EN COMPRAR
         else if (id == R.id.nav_manage) {

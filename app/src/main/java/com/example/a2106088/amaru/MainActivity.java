@@ -8,12 +8,13 @@ package com.example.a2106088.amaru;
         import android.os.Looper;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
-        import android.util.Log;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.Toast;
 
+        import com.example.a2106088.amaru.Instructor.PrincipalPageInstructor;
+        import com.example.a2106088.amaru.Usuario.PrincipalPageAmaru;
         import com.example.a2106088.amaru.entity.User;
         import com.example.a2106088.amaru.model.LoginWrapper;
         import com.example.a2106088.amaru.model.NetworkException;

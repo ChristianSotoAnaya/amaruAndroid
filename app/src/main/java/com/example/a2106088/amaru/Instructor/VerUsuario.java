@@ -1,5 +1,6 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Instructor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,14 +13,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-public class InicioAmaru extends AppCompatActivity
+import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.RetrofitNetwork;
+import com.squareup.picasso.Picasso;
+
+public class VerUsuario extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ImageView amaruimage;
+    TextView amaruEmail;
+    TextView amaruPhone;
+    TextView amaruDescription;
+    TextView amaruUserna;
+    User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inicio_amaru);
+        setContentView(R.layout.activity_ver_usuario);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -35,11 +50,26 @@ public class InicioAmaru extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
+        drawer.setDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        amaruimage = (ImageView) findViewById(R.id.amaruimage1);
+        amaruUserna = (TextView) findViewById(R.id.nombreAmaru1);
+        amaruEmail = (TextView) findViewById(R.id.amaruEmail1);
+        amaruDescription = (TextView) findViewById(R.id.amaruDescription1);
+        amaruPhone = (TextView) findViewById(R.id.amaruPhone1);
+
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        u= (User) memoria.getSerializable("usuario");
+        System.out.println(u.getUsername());
+        amaruUserna.setText("Nombre: " + u.getNombre() + " " + u.getLastname());
+        Picasso.with(this).load(u.getImage()).into(amaruimage);
+        amaruEmail.setText(u.getEmail());
+        amaruPhone.setText(u.getPhone());
+        amaruDescription.setText(u.getDescription());
     }
 
     @Override
@@ -55,7 +85,7 @@ public class InicioAmaru extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.inicio_amaru, menu);
+        getMenuInflater().inflate(R.menu.ver_usuario, menu);
         return true;
     }
 

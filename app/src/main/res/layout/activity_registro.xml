@@ -4,19 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondoinstr"
     tools:context="com.example.a2106088.amaru.RegistroActivity"
     android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/txtRegistro"
-        android:layout_width="wrap_content"
+        android:layout_width="374dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="150dp"
-        android:layout_marginRight="8dp"
+        android:textAlignment="center"
         android:layout_marginTop="8dp"
-        android:text="Registro"
+        android:text="¡ Nunca Es Tarde Para Empezar !"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -49,19 +49,19 @@
         android:hint="Name"
         android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/edtLastName"
-        android:layout_width="323dp"
-        android:layout_height="43dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Last name"
-        android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/edtLastName"
+                android:layout_width="323dp"
+                android:layout_height="43dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="Last name"
+                android:inputType="textPersonName" />
 
-    <EditText
+            <EditText
         android:id="@+id/edtEmail"
         android:layout_width="323dp"
         android:layout_height="43dp"
@@ -86,19 +86,19 @@
         android:hint="Username"
         android:inputType="text" />
 
-    <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="323dp"
-        android:layout_height="43dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_width="323dp"
+                android:layout_height="43dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="Password"
+                android:inputType="textPassword" />
 
-    <EditText
+            <EditText
         android:id="@+id/edtConfirmPassword"
         android:layout_width="323dp"
         android:layout_height="43dp"
@@ -162,7 +162,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
+            style="@style/black_button"
             android:text="Adjuntar foto"
+            android:onClick="adjuntar"
             android:textAllCaps="false" />
 
         <Button
@@ -171,6 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            style="@style/black_button"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"

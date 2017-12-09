@@ -1,4 +1,4 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Instructor;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,34 +13,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageButton;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
-import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class UserCategory extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
+public class AlmunosInscritos extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
+    ArrayList<User> users;
+    ListView lista;
+    String[] itemname ;
 
-    ImageButton imageButtonaero;
-    ImageButton imageButtondance;
-    ImageButton imageButtonflexi;
-    ImageButton imageButtonmartial;
-    ImageButton imageButtonsports;
-    ImageButton imageButtonother;
+    String[] descr;
+
     RetrofitNetwork rfn;
-    List<Group> grupos;
+    String[] imgid;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_category);
+        setContentView(R.layout.activity_almunos_inscritos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -62,18 +63,56 @@ public class UserCategory extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        imageButtonaero = (ImageButton) findViewById(R.id.imageButtonaerou);
-        imageButtondance= (ImageButton) findViewById(R.id.imageButtondanceu);
-        imageButtonflexi =(ImageButton) findViewById(R.id.imageButtonflexiu);
-        imageButtonmartial =(ImageButton) findViewById(R.id.imageButtonmartialu);
-        imageButtonsports =(ImageButton) findViewById(R.id.imageButtonsportsu);
-        imageButtonother =(ImageButton) findViewById(R.id.imageButtonotheru);
-        imageButtonaero.setOnClickListener(this);
-        imageButtondance.setOnClickListener(this);
-        imageButtonflexi.setOnClickListener(this);
-        imageButtonmartial.setOnClickListener(this);
-        imageButtonsports.setOnClickListener(this);
-        imageButtonother.setOnClickListener(this);
+
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        users= (ArrayList<User>) memoria.getSerializable("usuarios");
+
+        rfn= new RetrofitNetwork();
+        itemname = new String[users.size()];
+
+        descr= new String[users.size()]; ;
+
+
+        imgid = new String[users.size()]; ;
+        for (int i=0;i<users.size();i++){
+
+            itemname[i]=users.get(i).getNombre()+" "+ users.get(i).getLastname();
+            descr[i]=users.get(i).getUsername();
+            imgid[i]=users.get(i).getImage();
+        }
+
+
+        CustomListAdapter adapter=new CustomListAdapter(AlmunosInscritos.this, descr, imgid, itemname);
+        lista=(ListView) findViewById(R.id.listaaa4);
+        lista.setAdapter(adapter);
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO Auto-generated method stub
+                String seleccionado = (String) lista.getItemAtPosition(position);
+                System.out.println(seleccionado);
+                rfn.getuser(new RequestCallback<User>() {
+                    @Override
+                    public void onSuccess(User response) {
+                        Intent intento=new Intent(AlmunosInscritos.this,VerUsuario.class);
+                        Bundle datosExtra = new Bundle();
+                        datosExtra.putSerializable("usuario",response);
+                        intento.putExtras(datosExtra);
+                        startActivity(intento);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+
+                    }
+                },seleccionado);
+            }
+        });
+
+
     }
 
     @Override
@@ -89,7 +128,7 @@ public class UserCategory extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.user_category, menu);
+        getMenuInflater().inflate(R.menu.almunos_inscritos, menu);
         return true;
     }
 
@@ -129,49 +168,5 @@ public class UserCategory extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onClick(View view) {
-        String selected="";
-        if (view.getId() == imageButtonaero.getId()) {
-            selected="Aerobics";
-        }
-        else if (view.getId() == imageButtondance.getId()) {
-            selected="Dance";
-        }
-        else if (view.getId() == imageButtonflexi.getId()) {
-            selected="Flexibility";
-        }
-        else if (view.getId() == imageButtonmartial.getId()) {
-            selected="Martial arts";
-        }
-        else if (view.getId() == imageButtonsports.getId()) {
-            selected="Sports";
-        }
-        else if (view.getId() == imageButtonother.getId()) {
-            selected="Others";
-        }
-        rfn= new RetrofitNetwork();
-
-        rfn.getcategory(new RequestCallback<List<Group>>() {
-            @Override
-            public void onSuccess(List<Group> response) {
-                grupos=response;
-                Intent intento=new Intent(UserCategory.this,UserListas.class);
-                Bundle datosExtra = new Bundle();
-                ArrayList<Group> temp= new ArrayList(grupos);
-                datosExtra.putSerializable("grupos",temp);
-                datosExtra.putSerializable("instructor","");
-                datosExtra.putSerializable("quitar","cate");
-                intento.putExtras(datosExtra);
-                startActivity(intento);
-            }
-
-            @Override
-            public void onFailed(NetworkException e) {
-
-            }
-        },selected);
     }
 }

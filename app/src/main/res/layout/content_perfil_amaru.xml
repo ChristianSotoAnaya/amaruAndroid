@@ -4,12 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/fondoinstr"
     android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="183dp"
-        android:layout_weight="0.24"
+        android:layout_weight="0.35"
         android:orientation="horizontal">
 
         <ImageView
@@ -20,30 +26,40 @@
             android:layout_weight="0.74" />
 
         <Button
-            android:id="@+id/buttonImage"
+            android:id="@+id/buttoneditimageam"
+            style="@style/black_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="EDIT" />
+            android:text="Editar" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/nombreAmaru"
+        android:id="@+id/amaruuserna"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_weight="0.20"
+        android:layout_weight="0.13"
         android:textAlignment="center"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="57dp"
         android:orientation="horizontal"
         android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textView38"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.53"
+            android:text="Correo:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/amaruEmail"
@@ -53,20 +69,21 @@
             android:ems="10"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/buttonEmail"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="EDIT"
-            android:layout_gravity="center"/>
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="65dp"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView39"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Teléfono"
+            android:textSize="18sp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <EditText
             android:id="@+id/amaruPhone"
@@ -76,38 +93,40 @@
             android:ems="10"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/buttonPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.10"
-            android:gravity="center"
-            android:text="EDIT" />
-
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        android:layout_weight="0.02"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView40"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="18"
+            android:text="Descripción"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/amaruDescription"
-            android:layout_width="289dp"
+            android:layout_width="262dp"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName" />
 
-        <Button
-            android:id="@+id/buttonDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="EDIT" />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/editamaru"
+        style="@style/black_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_weight="0.07"
+        android:layout_marginBottom="15dp"
+        android:text="Guardar Cambios" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -115,18 +134,20 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView37"
+            android:id="@+id/textView301"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tickets actuales:" />
+            android:text="Tickets actuales:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
         <TextView
             android:id="@+id/cupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </LinearLayout>
 
 </LinearLayout>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "944812985199",
+    "firebase_url": "https://amaru-cosw.firebaseio.com",
+    "project_id": "amaru-cosw",
+    "storage_bucket": "amaru-cosw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944812985199:android:af944e1016913e5f",
+        "android_client_info": {
+          "package_name": "com.example.a2106088.amaru"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "944812985199-uq5nruo2hbul7l7gfghhkdas9a4rjr0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnx_CWU7LpdqEwWAMcHM9ym063SPSjJFA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

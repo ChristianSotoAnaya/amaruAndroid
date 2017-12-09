@@ -1,11 +1,18 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Instructor;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,14 +29,22 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Clase;
-import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +56,7 @@ public class CrearGrupo extends AppCompatActivity
     Spinner spnlugar;
     EditText edtfecha;
     EditText edthora;
+    Bitmap photo;
     Spinner spinner ;
     TableLayout table;
     long idClase = 0;
@@ -48,6 +64,11 @@ public class CrearGrupo extends AppCompatActivity
     ArrayList<Clase> clases = new ArrayList<Clase>();
     User u;
     RetrofitNetwork rfn;
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReferenceFromUrl("gs://amaru-cosw.appspot.com");
+    StorageReference mountainsRef ;
+    String urlImagen;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,37 +225,90 @@ public class CrearGrupo extends AppCompatActivity
                 DrawerLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    public void crearGrupo(View view) {
-        String categoria = spinner.getSelectedItem().toString();
-        String nombre =  edtNombreCrearGrupo.getText().toString();
-        String descripcion = edtDescripcionCrearGrupo.getText().toString();
-        Group nuevo = new Group(idGrupo, nombre, u.getUsername(), null, descripcion, categoria, 0.0, 0,"https://i.imgur.com/1PKWVFW.png",clases);
-        rfn.createGroup(new RequestCallback<Group>() {
-            @Override
-            public void onSuccess(Group response) {
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
-                    }
-                });
-                Bundle memoria = new Bundle();
-                memoria.putSerializable("usuario",u);
-                Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
-                ingreso.putExtras(memoria);
-                startActivity(ingreso);
-            }
+    public void subirfotogrupol(View view) {
 
-            @Override
-            public void onFailed(NetworkException e) {
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("How do you want import the image?")
+                .setCancelable(true)
+                .setPositiveButton("From Gallery", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                        photoPickerIntent.setType("image/*");
+                        startActivityForResult(photoPickerIntent, 1);
+                    }
+                })
+                .setNegativeButton("Take a Photo", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, 2);
                     }
                 });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void crearGrupo(View view) {
+        final String categoria = spinner.getSelectedItem().toString();
+        final String nombre =  edtNombreCrearGrupo.getText().toString();
+        final String descripcion = edtDescripcionCrearGrupo.getText().toString();
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        mountainsRef = storageRef.child(u.getUsername()+nombre+".jpg");
+        UploadTask uploadTask = mountainsRef.putBytes(byteArray);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
             }
-        },nuevo);
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Log.d("urlimagen",downloadUrl.toString());
+                urlImagen=downloadUrl.toString();
+                Group nuevo = new Group(idGrupo, nombre, u.getUsername(), null, descripcion, categoria, 0.0, 0,urlImagen,clases);
+                rfn.createGroup(new RequestCallback<Group>() {
+                    @Override
+                    public void onSuccess(Group response) {
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        Bundle memoria = new Bundle();
+                        memoria.putSerializable("usuario",u);
+                        Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                        ingreso.putExtras(memoria);
+                        startActivity(ingreso);
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                },nuevo);
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
     }
 
     public void cancelar(View view) {
@@ -243,5 +317,29 @@ public class CrearGrupo extends AppCompatActivity
         Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
         ingreso.putExtras(memoria);
         startActivity(ingreso);
+    }
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+        if (reqCode == 2 && resultCode == RESULT_OK) {
+            photo = (Bitmap) data.getExtras().get("data");
+        }
+
+        else if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = this.getApplicationContext().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                photo=selectedImage;
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
     }
 }

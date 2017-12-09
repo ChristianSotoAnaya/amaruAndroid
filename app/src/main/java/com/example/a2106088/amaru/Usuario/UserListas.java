@@ -1,12 +1,6 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Usuario;
 
-import android.app.Activity;
-import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,14 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
+import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
@@ -35,27 +26,25 @@ import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityListaGrupos extends AppCompatActivity
+public class UserListas extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    CustomListAdapter adapter;
-    SearchView buscar;
 
-    List<Group> gruposfiltro;
+    CustomListAdapter adapter;
+
     List<Group> grupos;
+    List<Group> gruposfiltro;
+
     ListView lista;
     String[] itemname ;
     int[] itemid ;
 
     String[] descr;
     String user;
-    String tipoUser;
+    User userA;
 
     String[] imgid;
 
@@ -64,13 +53,15 @@ public class ActivityListaGrupos extends AppCompatActivity
 
     Bundle memoria;
 
+    SearchView buscar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_grupos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
-       setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_user_listas);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,8 +78,10 @@ public class ActivityListaGrupos extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        buscar = (SearchView) findViewById(R.id.buscr);
+        buscar = (SearchView) findViewById(R.id.buscar);
 
         buscar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -99,7 +92,7 @@ public class ActivityListaGrupos extends AppCompatActivity
                     @Override
                     public void onSuccess(List<Group> response) {
                         gruposfiltro=response;
-                        Intent intento=new Intent(ActivityListaGrupos.this,ActivityListaGrupos.class);
+                        Intent intento=new Intent(UserListas.this,UserListas.class);
                         Bundle datosExtra = new Bundle();
                         ArrayList<Group> temp= new ArrayList(gruposfiltro);
                         datosExtra.putSerializable("grupos",temp);
@@ -126,12 +119,11 @@ public class ActivityListaGrupos extends AppCompatActivity
         });
 
 
-
         Intent anterior = getIntent();
         memoria = anterior.getExtras();
 
         user= (String) memoria.getSerializable("instructor");
-        tipoUser= (String) memoria.getSerializable("tipoUsuario");
+        userA = (User) memoria.getSerializable("user");
         quitar =(String) memoria.getSerializable("quitar");
         rfn = new RetrofitNetwork();
 
@@ -151,9 +143,9 @@ public class ActivityListaGrupos extends AppCompatActivity
                 else{
                     for (Group g : grupos) {
                         if(g.getInstructor().equals(user)) {
-                                temp.add(g);
-                            }
+                            temp.add(g);
                         }
+                    }
                 }
 
                 itemname = new String[temp.size()];
@@ -169,8 +161,8 @@ public class ActivityListaGrupos extends AppCompatActivity
                     itemid[i]=(int) temp.get(i).getId();
                 }
 
-                adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
-                lista=(ListView) findViewById(R.id.listaaa2);
+                adapter=new CustomListAdapter(UserListas.this, itemname, imgid,descr);
+                lista=(ListView) findViewById(R.id.listaaauser);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -183,19 +175,22 @@ public class ActivityListaGrupos extends AppCompatActivity
                                                     int position, long id) {
                                 // TODO Auto-generated method stub
                                 rfn.getGroupbyId(new RequestCallback<Group>() {
-                                @Override
-                                public void onSuccess(Group response2) {
-                                    Intent intento=new Intent(ActivityListaGrupos.this,ActivitySelectedGroup.class);
-                                    Bundle datosExtra = new Bundle();
-                                    datosExtra.putSerializable("grupo",response2);
-                                    intento.putExtras(datosExtra);
-                                    startActivity(intento);
+                                    @Override
+                                    public void onSuccess(Group response2) {
+                                        Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
+                                        Bundle datosExtra = new Bundle();
+                                        datosExtra.putSerializable("grupo",response2);
+                                        datosExtra.putString("usuario",user);
+                                        datosExtra.putSerializable("user",userA);
+                                        intento.putExtras(datosExtra);
+                                        startActivity(intento);
 
-                             }
-                             @Override
-                              public void onFailed(NetworkException e) {
-                              }
-                         },itemid[+position]);}
+
+                                    }
+                                    @Override
+                                    public void onFailed(NetworkException e) {
+                                    }
+                                },itemid[+position]);}
                         });
                     }
                 });
@@ -213,8 +208,9 @@ public class ActivityListaGrupos extends AppCompatActivity
 
 
 
-            }
 
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -229,7 +225,7 @@ public class ActivityListaGrupos extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_lista_grupos, menu);
+        getMenuInflater().inflate(R.menu.user_listas, menu);
         return true;
     }
 
@@ -265,15 +261,9 @@ public class ActivityListaGrupos extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
-
-
 }

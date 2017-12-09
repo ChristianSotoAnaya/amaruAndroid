@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/comentario"
-    tools:context="com.example.a2106088.amaru.Comentario">
+    tools:context="com.example.a2106088.amaru.Usuario.Comentario">
 
 
     <TextView

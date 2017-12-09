@@ -1,17 +1,17 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Usuario;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.a2106088.amaru.Instructor.PerfilInstructor;
+import com.example.a2106088.amaru.R;
 
 public class InicioActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -43,7 +43,7 @@ public class InicioActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId()==btnPerfil.getId()) {
-            Intent perfil = new Intent(InicioActivity.this, PerfilActivity.class);
+            Intent perfil = new Intent(InicioActivity.this, PerfilInstructor.class);
             startActivityForResult(perfil, 1);
 
         }

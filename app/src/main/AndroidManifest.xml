@@ -20,75 +20,74 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistroActivity" />
-        <activity android:name=".InicioActivity" />
-        <activity android:name=".PerfilActivity" />
-        <activity android:name=".CrearGrupoActivity" />
-        <activity android:name=".InicioActivityInstructor" />
-        <activity android:name=".Grupo" />
-        <activity android:name=".Comentario" />
+        <activity android:name=".Usuario.InicioActivity" />
+        <activity android:name=".Instructor.CrearGrupoActivity" />
+        <activity android:name=".Instructor.InicioActivityInstructor" />
+        <activity android:name=".Usuario.Grupo" />
+        <activity android:name=".Usuario.Comentario" />
         <activity
-            android:name=".PrincipalPageAmaru"
+            android:name=".Usuario.PrincipalPageAmaru"
             android:label="@string/title_activity_prueba"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PrincipalPageInstructor"
+            android:name=".Instructor.PrincipalPageInstructor"
             android:label="Próximas Clases"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PerfilInstructor"
+            android:name=".Instructor.PerfilInstructor"
             android:label="Mi Perfil"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".VerPerfilInstructor"
+            android:name=".Usuario.VerPerfilInstructor"
             android:label="@string/title_activity_ver_perfil_instructor"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ActivityListaGrupos"
+            android:name=".Instructor.ActivityListaGrupos"
             android:label="Grupos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CrearGrupo"
+            android:name=".Instructor.CrearGrupo"
             android:label="Crear Grupo"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ActivitySelectedGroup"
+            android:name=".Instructor.ActivityListaGrupos$ActivitySelectedGroup"
             android:label="@string/title_activity_selected_group"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Categorias"
+            android:name=".Instructor.Categorias"
             android:label="@string/title_activity_categorias"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AlmunosInscritos"
+            android:name=".Instructor.AlmunosInscritos"
             android:label="Inscritos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".InicioAmaru"
+            android:name=".Usuario.InicioAmaru"
             android:label="@string/title_activity_inicio_amaru"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Comprar"
+            android:name=".Usuario.Comprar"
             android:label="@string/title_activity_comprar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PerfilAmaru"
+            android:name=".Usuario.PerfilAmaru"
             android:label="@string/title_activity_perfil_amaru"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UserListas"
+            android:name=".Usuario.UserListas"
             android:label="@string/title_activity_user_listas"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UserCategory"
+            android:name=".Usuario.UserCategory"
             android:label="@string/title_activity_user_category"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ActivitySelectedGroupAmaru"
+            android:name=".Usuario.ActivitySelectedGroupAmaru"
             android:label="@string/title_activity_selected_group_amaru"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
-            android:name=".VerUsuario"
+            android:name=".Instructor.VerUsuario"
             android:label="@string/title_activity_ver_usuario"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

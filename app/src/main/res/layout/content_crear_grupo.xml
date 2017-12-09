@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/fondoinstr"
-    tools:context="com.example.a2106088.amaru.CrearGrupo">
+    tools:context="com.example.a2106088.amaru.Instructor.CrearGrupo">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -296,7 +296,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="30dp"
                     android:layout_weight="1"
-                    android:text="Image:"
+                    android:text="Imagen:"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.073"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -305,13 +305,14 @@
                     app:layout_constraintVertical_bias="0.771" />
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/subirfotogrupo"
                     android:layout_width="72dp"
                     android:layout_height="66dp"
                     android:layout_marginBottom="8dp"
                     android:layout_marginLeft="73dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="8dp"
+                    android:onClick="subirfotogrupol"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.092"
                     app:layout_constraintLeft_toLeftOf="parent"

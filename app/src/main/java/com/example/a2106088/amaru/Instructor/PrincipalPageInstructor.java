@@ -1,11 +1,8 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Instructor;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.PermissionChecker;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,12 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -256,11 +251,22 @@ public class PrincipalPageInstructor extends AppCompatActivity
             startActivity(intento);
 
         } else if (id == R.id.categoriesi) {
-            Intent intento = new Intent(PrincipalPageInstructor.this, Categorias.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins", user);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(PrincipalPageInstructor.this, Categorias.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },user.getUsername());
+
 
         }
         //Mis grupos

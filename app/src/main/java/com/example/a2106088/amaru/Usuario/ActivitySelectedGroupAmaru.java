@@ -1,4 +1,4 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Usuario;
 
 import android.content.Intent;
 import android.os.Build;
@@ -24,6 +24,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;

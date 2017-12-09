@@ -1,4 +1,4 @@
-package com.example.a2106088.amaru;
+package com.example.a2106088.amaru.Instructor;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.Usuario.Grupo;
 
 public class InicioActivityInstructor extends AppCompatActivity implements View.OnClickListener{
 
@@ -42,7 +45,7 @@ public class InicioActivityInstructor extends AppCompatActivity implements View.
     @Override
     public void onClick(View v) {
         if (v.getId()==btnPerfil.getId()){
-            Intent perfil = new Intent(InicioActivityInstructor.this, PerfilActivity.class);
+            Intent perfil = new Intent(InicioActivityInstructor.this, PerfilInstructor.class);
             startActivityForResult(perfil,1);
 
         }else if(v.getId()==btnCrearGrupo.getId()){

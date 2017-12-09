@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/grupo"
-    tools:context="com.example.a2106088.amaru.Grupo">
+    tools:context="com.example.a2106088.amaru.Usuario.Grupo">
 
     <ImageView
         android:id="@+id/imageView16"
