@@ -8,7 +8,7 @@ package com.example.a2106088.amaru.entity;
 public class Comment  implements java.io.Serializable{
 
     private String contenido;
-    private long GroupId;
+    private long groupId;
     private String usuario;
     private String fecha;
     private long id;
@@ -17,12 +17,14 @@ public class Comment  implements java.io.Serializable{
     }
 
     public Comment(String contenido, long Groupid, String usuario, String fecha,long id) {
-        this.setContenido(contenido);
-        this.setGroupId(Groupid);
-        this.setUsuario(usuario);
-        this.setFecha(fecha);
-        this.setId(id);
+        this.contenido=contenido;
+        this.groupId=Groupid;
+        this.usuario=usuario;
+        this.fecha=fecha;
+        this.id=id;
+
     }
+
 
     public String getContenido() {
         return contenido;
@@ -33,11 +35,11 @@ public class Comment  implements java.io.Serializable{
     }
 
     public long getGroupId() {
-        return GroupId;
+        return groupId;
     }
 
     public void setGroupId(long groupId) {
-        GroupId = groupId;
+        this.groupId = groupId;
     }
 
     public String getUsuario() {
