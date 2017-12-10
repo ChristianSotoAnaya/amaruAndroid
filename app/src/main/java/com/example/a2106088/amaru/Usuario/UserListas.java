@@ -193,7 +193,7 @@ public class UserListas extends AppCompatActivity
                                                 Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
                                                 Bundle datosExtra = new Bundle();
                                                 datosExtra.putSerializable("grupo",response2);
-                                                datosExtra.putString("username",usuario);
+                                                datosExtra.putString("usuario",usuario);
                                                 datosExtra.putSerializable("user",response);
                                                 intento.putExtras(datosExtra);
                                                 startActivity(intento);
