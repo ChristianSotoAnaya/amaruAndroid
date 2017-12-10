@@ -29,7 +29,8 @@ import com.example.a2106088.amaru.model.RetrofitNetwork;
 public class Comprar extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ProgressDialog progressDialog;
-    int tickets = 0;
+    int tickets;
+    int cupo;
     String usuario;
     RetrofitNetwork rfn;
     TextView row1,row2,row3,row4,row5;
@@ -81,17 +82,7 @@ public class Comprar extends AppCompatActivity
         row4value = (TextView) findViewById(R.id.row4value);
         row5value = (TextView) findViewById(R.id.row5value);
         rfn= new RetrofitNetwork();
-        rfn.getuser(new RequestCallback<User>() {
-            @Override
-            public void onSuccess(User response) {
-                user = response;
-            }
 
-            @Override
-            public void onFailed(NetworkException e) {
-
-            }
-        },usuario);
 
 
 
@@ -224,7 +215,7 @@ public class Comprar extends AppCompatActivity
 
     public void compraVeinteTickets(View view) {
         //normal = "#FFFFFF", "#2ECCFA"
-        this.tickets = 20;
+        tickets = 20;
         row1num.setBackgroundResource(R.color.blanco);
         row2num.setBackgroundResource(R.color.blanco);
         row3num.setBackgroundResource(R.color.blanco);
@@ -238,7 +229,7 @@ public class Comprar extends AppCompatActivity
     }
 
     public void compraDoceTickets(View view) {
-        this.tickets = 12;
+        tickets = 12;
         row1num.setBackgroundResource(R.color.blanco);
         row2num.setBackgroundResource(R.color.blanco);
         row3num.setBackgroundResource(R.color.blanco);
@@ -253,7 +244,7 @@ public class Comprar extends AppCompatActivity
 
     public void compraOchoTickets(View view) {
 
-        this.tickets = 8;
+        tickets = 8;
         row1num.setBackgroundResource(R.color.blanco);
         row2num.setBackgroundResource(R.color.blanco);
         row3num.setBackgroundResource(R.color.blue);
@@ -268,7 +259,7 @@ public class Comprar extends AppCompatActivity
 
     public void compraCuatroTickets(View view) {
 
-        this.tickets = 4;
+        tickets = 4;
         row1num.setBackgroundResource(R.color.blanco);
         row2num.setBackgroundResource(R.color.blue);
         row3num.setBackgroundResource(R.color.blanco);
@@ -283,7 +274,7 @@ public class Comprar extends AppCompatActivity
 
     public void compraTicketUnico(View view) {
 
-        this.tickets = 1;
+        tickets = 1;
         row1num.setBackgroundResource(R.color.blue);
         row2num.setBackgroundResource(R.color.blanco);
         row3num.setBackgroundResource(R.color.blanco);
@@ -297,30 +288,44 @@ public class Comprar extends AppCompatActivity
     }
 
     public void comprar(View view) {
-        final int tickets = this.tickets;
-        int cupo = user.getCupo();
-        System.out.println("Cupo: " + cupo);
-        System.out.println("Tickets: " + tickets);
-        user.setCupo(tickets);
+
         showProgressDialog();
-        rfn.buy(new RequestCallback<User>() {
+
+        rfn.getuser(new RequestCallback<User>() {
             @Override
             public void onSuccess(User response) {
-                dismissProgressDialog();
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
+                user = response;
+                cupo= user.getCupo();
+                user.setCupo(tickets);
+                rfn.buy(new RequestCallback<User>() {
+                    @Override
+                    public void onSuccess(User response) {
+                        dismissProgressDialog();
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
                             public void run() {Toast.makeText(getApplicationContext(), "Compra exitosa...", Toast.LENGTH_SHORT).show();}
-                });
+                        });
+                    }
+
+                    @Override
+                    public void onFailed(NetworkException e) {
+                        Handler h = new Handler(Looper.getMainLooper());
+                        h.post(new Runnable() {
+                            public void run() {Toast.makeText(getApplicationContext(), "Error comprando tickets...", Toast.LENGTH_SHORT).show();}
+                        });
+                    }
+                },user);
+
             }
 
             @Override
             public void onFailed(NetworkException e) {
-                Handler h = new Handler(Looper.getMainLooper());
-                h.post(new Runnable() {
-                            public void run() {Toast.makeText(getApplicationContext(), "Error comprando tickets...", Toast.LENGTH_SHORT).show();}
-                });
+
             }
-        },user);
+        },usuario);
+
+
+
     }
 
     public void cancelarCompra(View view) {

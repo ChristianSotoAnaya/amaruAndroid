@@ -480,24 +480,34 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         builder.setMessage(msg)
                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
-                        rfn.subscribe(new RequestCallback<Boolean>() {
-                            @Override
-                            public void onSuccess(Boolean response) {
-                                ids.add(clase.getIdclase());
-                                Handler h = new Handler(Looper.getMainLooper());
-                                h.post(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(ActivitySelectedGroupAmaru.this, "Inscripcion realizada", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
 
-                            @Override
-                            public void onFailed(NetworkException e) {
+                        if (user.getCupo() > 0) {
+                            Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
+                            rfn.subscribe(new RequestCallback<Boolean>() {
+                                @Override
+                                public void onSuccess(Boolean response) {
+                                    ids.add(clase.getIdclase());
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Inscripcion realizada", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
 
-                            }
-                        }, pojo);
+                                @Override
+                                public void onFailed(NetworkException e) {
+
+                                }
+                            }, pojo);
+                        } else {
+                            Handler h = new Handler(Looper.getMainLooper());
+                            h.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(ActivitySelectedGroupAmaru.this, "No Tienes Tickets", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 })
                 .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
