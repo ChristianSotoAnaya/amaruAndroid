@@ -246,7 +246,7 @@ public class UserCategory extends AppCompatActivity
                 Bundle datosExtra = new Bundle();
                 ArrayList<Group> temp= new ArrayList(grupos);
                 datosExtra.putSerializable("grupos",temp);
-                datosExtra.putSerializable("instructor","");
+                datosExtra.putSerializable("user",usuario);
                 datosExtra.putSerializable("quitar","cate");
                 intento.putExtras(datosExtra);
                 startActivity(intento);

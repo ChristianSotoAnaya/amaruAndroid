@@ -113,8 +113,8 @@ public class UserListas extends AppCompatActivity
                         Bundle datosExtra = new Bundle();
                         ArrayList<Group> temp= new ArrayList(gruposfiltro);
                         datosExtra.putSerializable("grupos",temp);
-                        datosExtra.putSerializable("instructor","");
-                        datosExtra.putSerializable("quitar","cate");
+                        datosExtra.putString("user",usuario);
+                        datosExtra.putString("quitar","cate");
                         intento.putExtras(datosExtra);
                         startActivity(intento);
                         dismissProgressDialog();
@@ -193,7 +193,7 @@ public class UserListas extends AppCompatActivity
                                                 Intent intento=new Intent(UserListas.this,ActivitySelectedGroupAmaru.class);
                                                 Bundle datosExtra = new Bundle();
                                                 datosExtra.putSerializable("grupo",response2);
-                                                datosExtra.putString("usuario",usuario);
+                                                datosExtra.putString("username",usuario);
                                                 datosExtra.putSerializable("user",response);
                                                 intento.putExtras(datosExtra);
                                                 startActivity(intento);
@@ -276,10 +276,7 @@ public class UserListas extends AppCompatActivity
                 public void onSuccess(User response) {
                     Intent intento=new Intent(UserListas.this,PrincipalPageAmaru.class);
                     Bundle datosExtra = new Bundle();
-                    datosExtra.putString("instructor",usuario );
                     datosExtra.putSerializable("user",response);
-                    datosExtra.putString("tipoUsuario", response.getType());
-                    datosExtra.putString("quitar", "");
                     intento.putExtras(datosExtra);
                     dismissProgressDialog();
                     startActivity(intento);

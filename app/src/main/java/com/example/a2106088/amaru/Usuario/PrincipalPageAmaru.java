@@ -196,7 +196,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
                 @Override
                 public void onFailed(NetworkException e) {dismissProgressDialog();
                 }
-            },user.getUsername());
+            },usuario);
 
 
         } // SI ESPICHA EN COMPRAR
