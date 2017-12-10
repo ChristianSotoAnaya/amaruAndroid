@@ -15,39 +15,41 @@
     </string-array>
     <string-array name="parques">
         <item>Parque El Tunal</item>
+        <item>Parque De La 93</item>
         <item>Parque Central del Restrepo</item>
         <item>Parque Milenta</item>
         <item>Parque Bicentenario</item>
         <item>Parque Boston</item>
         <item>Parque Santa Catalina</item>
         <item>Parque Boyaca Real</item>
-        <item>Parque Público Zonal Atahuan</item>
+        <item>Parque Público Zonal Atahualpa</item>
         <item>Parque Lagos de suba</item>
         <item>Parque Central Suba</item>
         <item>Parque Público Fontanar del Río</item>
         <item>Parque Urbanización Rodesia</item>
+        <item>Parque El Virrey</item>
     </string-array>
-    <string name="title_activity_prueba">prueba</string>
+    <string name="title_activity_prueba">Mis Clases</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Salir</string>
-    <string name="title_activity_principal_page_instructor">PrincipalPageInstructor</string>
-    <string name="title_activity_perfil_instructor">PerfilInstructor</string>
-    <string name="title_activity_ver_perfil_instructor">VerPerfilInstructor</string>
-    <string name="title_activity_lista_grupos">ActivityListaGrupos</string>
-    <string name="title_activity_crear_grupo">CrearGrupo</string>
-    <string name="title_activity_selected_group">ActivitySelectedGroup</string>
+    <string name="title_activity_principal_page_instructor">Mis Clases</string>
+    <string name="title_activity_perfil_instructor">Mi Perfil</string>
+    <string name="title_activity_ver_perfil_instructor">Perfil</string>
+    <string name="title_activity_lista_grupos">Grupos</string>
+    <string name="title_activity_crear_grupo">Crear Grupo</string>
+    <string name="title_activity_selected_group">Grupo</string>
     <string name="title_activity_categorias">Categorias</string>
-    <string name="title_activity_almunos_inscritos">AlmunosInscritos</string>
-    <string name="title_activity_inicio_amaru">inicioAmaru</string>
+    <string name="title_activity_almunos_inscritos">Alumnos Inscritos</string>
+    <string name="title_activity_inicio_amaru">Bienvenido</string>
     <string name="title_activity_comprar">Comprar</string>
-    <string name="title_activity_perfil_amaru">PerfilAmaru</string>
-    <string name="title_activity_user_listas">UserListas</string>
-    <string name="title_activity_user_category">UserCategory</string>
-    <string name="title_activity_selected_group_amaru">ActivitySelectedGroupAmaru</string>
-    <string name="title_activity_ver_usuario">VerUsuario</string>
+    <string name="title_activity_perfil_amaru">Mi Perfil</string>
+    <string name="title_activity_user_listas">Grupos</string>
+    <string name="title_activity_user_category">Categorias</string>
+    <string name="title_activity_selected_group_amaru">Grupo</string>
+    <string name="title_activity_ver_usuario">Perfil</string>
 
 
 </resources>

@@ -227,22 +227,22 @@ rfn= new RetrofitNetwork();
     public void onClick(View view) {
         String selected="";
         if (view.getId() == imageButtonaero.getId()) {
-            selected="Aerobics";
+            selected="Aerobico";
         }
         else if (view.getId() == imageButtondance.getId()) {
-            selected="Dance";
+            selected="Danza";
         }
         else if (view.getId() == imageButtonflexi.getId()) {
-            selected="Flexibility";
+            selected="Flexibilidad";
         }
         else if (view.getId() == imageButtonmartial.getId()) {
-            selected="Martial arts";
+            selected="Arte Marcial";
         }
         else if (view.getId() == imageButtonsports.getId()) {
-            selected="Sports";
+            selected="Deporte";
         }
         else if (view.getId() == imageButtonother.getId()) {
-            selected="Others";
+            selected="Otro";
         }
         rfn= new RetrofitNetwork();
         showProgressDialog();

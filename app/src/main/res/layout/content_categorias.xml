@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Aerobics"
+            android:text="Aerobicos"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Dance"
+            android:text="Danza"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
@@ -90,7 +90,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Flexibility"
+            android:text="Flexibilidad"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Martial Arts"
+            android:text="Arte Marcial"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sports"
+            android:text="Deporte"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -144,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Others"
+            android:text="Otro"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
     </LinearLayout>
