@@ -6,9 +6,11 @@
         <item>Todos los Cursos</item>
     </string-array>
     <string-array name="categoria">
-        <item>Deporte</item>
-        <item>Arte Marcial</item>
+        <item>Aerobico</item>
         <item>Danza</item>
+        <item>Flexibilidad</item>
+        <item>Arte Marcial</item>
+        <item>Deporte</item>
         <item>Otro</item>
     </string-array>
     <string-array name="parques">

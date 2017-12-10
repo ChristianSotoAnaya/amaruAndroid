@@ -324,5 +324,6 @@ public class Comprar extends AppCompatActivity
     }
 
     public void cancelarCompra(View view) {
+        finish();
     }
 }

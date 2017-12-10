@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -219,25 +220,26 @@ public class UserCategory extends AppCompatActivity
     public void onClick(View view) {
         String selected="";
         if (view.getId() == imageButtonaero.getId()) {
-            selected="Aerobics";
+            selected="Aerobico";
         }
         else if (view.getId() == imageButtondance.getId()) {
-            selected="Dance";
+            selected="Danza";
         }
         else if (view.getId() == imageButtonflexi.getId()) {
-            selected="Flexibility";
+            selected="Flexibilidad";
         }
         else if (view.getId() == imageButtonmartial.getId()) {
-            selected="Martial arts";
+            selected="Arte Marcial";
         }
         else if (view.getId() == imageButtonsports.getId()) {
-            selected="Sports";
+            selected="Deporte";
         }
         else if (view.getId() == imageButtonother.getId()) {
-            selected="Others";
+            selected="Otro";
         }
 
         showProgressDialog();
+        Log.d("CATT",selected);
         rfn.getcategory(new RequestCallback<List<Group>>() {
             @Override
             public void onSuccess(List<Group> response) {

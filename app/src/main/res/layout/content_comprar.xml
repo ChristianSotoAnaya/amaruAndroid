@@ -263,6 +263,7 @@
             android:layout_weight="1"
             android:text="Comprar"
             style="@style/black_button"
+            android:textAllCaps="false"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:onClick="comprar"/>
@@ -273,6 +274,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancelar"
+            android:textAllCaps="false"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             style="@style/black_button"
