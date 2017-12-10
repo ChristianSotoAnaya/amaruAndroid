@@ -56,6 +56,14 @@ import java.util.ArrayList;
 
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener{
 
+    String username ;
+    String password ;
+    String confirmPassword ;
+    String name;
+    String lastName ;
+    String phone ;
+    String email;
+    String tipo ;
     EditText edtUsername;
     ProgressDialog progressDialog;
     EditText edtPassword;
@@ -104,19 +112,25 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         if (view.getId()==btnRegistro.getId()) {
 
 
-            final String username = edtUsername.getText().toString();
-            final String password = edtPassword.getText().toString();
-            final String confirmPassword = edtConfirmPassword.getText().toString();
-            final String name = edtName.getText().toString();
-            final String lastName = edtLastName.getText().toString();
-            final String phone = edtPhone.getText().toString();
-            final String email = edtEmail.getText().toString();
-            final String tipo = spinner.getSelectedItem().toString();
+             username = edtUsername.getText().toString();
+              password = edtPassword.getText().toString();
+              confirmPassword = edtConfirmPassword.getText().toString();
+              name = edtName.getText().toString();
+              lastName = edtLastName.getText().toString();
+              phone = edtPhone.getText().toString();
+              email = edtEmail.getText().toString();
+              tipo = spinner.getSelectedItem().toString();
 
 
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(this, "No coinciden las claves", Toast.LENGTH_LONG).show();
             } else {
+
+                if (username.equals("") ||password.equals("") || name.equals("") || lastName.equals("") || phone.equals("") || email.equals("") || !email.contains("@")){
+                    Toast.makeText(this, "Por favor llene todos los campos correctamente", Toast.LENGTH_LONG).show();
+                }
+                else{
+
                 try{
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -228,6 +242,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
                 }
+        }
 
     }
 

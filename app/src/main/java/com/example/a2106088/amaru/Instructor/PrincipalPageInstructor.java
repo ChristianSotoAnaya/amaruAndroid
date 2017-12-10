@@ -31,6 +31,7 @@ import com.example.a2106088.amaru.model.RetrofitNetwork;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class PrincipalPageInstructor extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -142,11 +143,17 @@ public class PrincipalPageInstructor extends AppCompatActivity
                             @Override
                             public void onSuccess(Group response2) {
                                 Clase temp= clases.get(+position);
+                                ArrayList<String> usernames=new ArrayList<String>();
                                 usuarios= new ArrayList<User>();
                                 for (Clase cl: response2.getClases()){
                                     if(temp.equals1(cl) ){
                                         User uo= buscar(todos,cl.getUsuario());
-                                        usuarios.add(uo);
+                                        if (!usernames.contains(uo.getUsername())){
+                                            usuarios.add(uo);
+                                            usernames.add(uo.getUsername());
+                                        }
+
+
                                     }
                                 }
                                 Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
