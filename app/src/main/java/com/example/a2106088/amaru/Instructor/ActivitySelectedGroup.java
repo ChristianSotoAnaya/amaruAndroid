@@ -235,8 +235,25 @@ public class ActivitySelectedGroup extends AppCompatActivity
             label_lugar.setPadding(5, 5, 5, 5);
             tr_head.addView(label_lugar);// add the column to the table row here
 
+            TextView label_comentario = new TextView(this);// part3
+            String tmp = comentario.getContenido();
+            for (int i=1; i<comentario.getContenido().length();i++){
+                if (i%30 == 0){
+                    String part1 =tmp.substring(0,i);
+                    String part2 =tmp.substring(i,tmp.length());
+                    tmp=part1+"\n"+part2;
+                }
+
+            }
+            label_comentario.setText(tmp);
+            label_comentario.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_comentario); // add the column to the table row here
+
             TextView label_fecha = new TextView(this);    // part3
-            label_fecha.setText(comentario.getContenido());
+            Log.d("FECHA",comentario.getFecha());
+            String[] fecha = comentario.getFecha().split(" ");
+            String date = fecha[1]+" "+fecha[2]+" "+fecha[5];
+            label_fecha.setText(date);
             label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
             tr_head.addView(label_fecha); // add the column to the table row here
 

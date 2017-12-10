@@ -2,6 +2,7 @@ package com.example.a2106088.amaru.services;
 
 
 
+import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
@@ -75,4 +76,7 @@ public interface NetworkService
 
     @POST("group/susbcribe")
     Call<Boolean> subscribe(@Body Pojo pojo);
+
+    @POST("group/comment")
+    Call<Group> addCommentGroup(@Body Comment comment);
 }

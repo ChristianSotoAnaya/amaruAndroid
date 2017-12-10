@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.content.DialogInterface;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -8,6 +9,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
@@ -102,37 +106,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
 
         ratingBar = (RatingBar) findViewById(R.id.ratingBar2);
 
-        ratingBar.setEnabled(false);
-        txtRateNumber.setEnabled(false);
-        btnRate.setEnabled(false);
-        ratingBar.setVisibility(View.GONE);
-        txtRateNumber.setVisibility(View.GONE);
-        btnRate.setVisibility(View.GONE);
-        for (Clase clase : user.getClases()){
-            for (Clase claseGrupo : grupo.getClases()){
-                if (clase.getIdclase()==claseGrupo.getIdclase()){
-                    ratingBar.setEnabled(true);
-                    txtRateNumber.setEnabled(true);
-                    btnRate.setEnabled(true);
-                    ratingBar.setVisibility(View.VISIBLE);
-                    txtRateNumber.setVisibility(View.VISIBLE);
-                    btnRate.setVisibility(View.VISIBLE);
-
-                }
-            }
-
-        }
-        ratingBar.setNumStars(5);
-        ratingBar.setStepSize((float) 1.0);
-        ratingBar.setRating((float) 3.0);
-        txtRateNumber.setText(String.valueOf((int) ratingBar.getRating()));
-
-
-        ratingBarGroup = (RatingBar) findViewById(R.id.ratingBarGroup);
-        ratingBarGroup.setNumStars(5);
-        ratingBarGroup.setStepSize((float) 1.0);
-        ratingBar.isIndicator();
-        ratingBarGroup.setRating(Float.parseFloat(String.valueOf((grupo.getRate()))));
+        showRatingBars();
 
         groupName.setText(String.valueOf(grupo.getNombre()));
         groupInstructor.setText(String.valueOf(grupo.getInstructor()));
@@ -141,13 +115,6 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         //txtGroupCurrentRating.setText(String.valueOf(grupo.getRate()));
         Picasso.with(this).load(grupo.getImage()).into(foto);
 
-
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                txtRateNumber.setText(String.valueOf((int) rating));
-            }
-        });
 
         btnRate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,6 +140,7 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                                 Toast.makeText(getApplicationContext(), "Calificacion realizada", Toast.LENGTH_SHORT).show();
                             }
                         });
+                        
                     }
 
                     @Override
@@ -184,7 +152,13 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         });
 
 
+        MostrarClases();
 
+        MostrarComentarios();
+
+    }
+
+    private void MostrarClases() {
         for (final Clase clase :grupo.getClases()) {
             if (clase.getUsuario().equals(grupo.getInstructor())) {
 
@@ -210,34 +184,8 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                             Toast.makeText(ActivitySelectedGroupAmaru.this, "Ya estas inscrito a esta clase", Toast.LENGTH_SHORT).show();
                         } else {
 
-
-                            Snackbar.make(v, "Desea inscribirse a la clase en: " + label_lugar.getText() + " El dia: " + label_fecha.getText(), Snackbar.LENGTH_LONG)
-                                    .setAction("Inscribirse", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-
-                                            Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
-                                            showProgressDialog();
-                                            rfn.subscribe(new RequestCallback<Boolean>() {
-                                                @Override
-                                                public void onSuccess(Boolean response) {
-                                                    ids.add(clase.getIdclase());
-                                                    dismissProgressDialog();
-                                                    Handler h = new Handler(Looper.getMainLooper());
-                                                    h.post(new Runnable() {
-                                                        public void run() {
-                                                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Inscripcion realizada " + String.valueOf(clase.getIdclase()), Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void onFailed(NetworkException e) {
-
-                                                }
-                                            }, pojo);
-                                        }
-                                    }).show();
+                            String msg = "Desea inscribirse a la clase en: " + label_lugar.getText() + " El dia: " + label_fecha.getText();
+                            showMessageDialog(msg,clase,v);
                         }
                     }
                 });
@@ -251,6 +199,18 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     label_fecha.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 }
+                label_fecha.setClickable(true);
+                label_fecha.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ids.contains(clase.getIdclase())) {
+                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Ya estas inscrito a esta clase", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String msg = "Desea inscribirse a la clase en: " + label_lugar.getText() + " El dia: " + label_fecha.getText();
+                            showMessageDialog(msg,clase,v);
+                        }
+                    }
+                });
                 label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
                 tr_head.addView(label_fecha); // add the column to the table row here
 
@@ -259,6 +219,18 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     label_hora.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 }
+                label_hora.setClickable(true);
+                label_hora.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (ids.contains(clase.getIdclase())) {
+                            Toast.makeText(ActivitySelectedGroupAmaru.this, "Ya estas inscrito a esta clase", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String msg = "Desea inscribirse a la clase en: " + label_lugar.getText() + " El dia: " + label_fecha.getText();
+                            showMessageDialog(msg,clase,v);
+                        }
+                    }
+                });
                 label_hora.setPadding(5, 5, 5, 5); // set the padding (if required)
                 tr_head.addView(label_hora); // add the column to the table row here
 
@@ -267,7 +239,9 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
                         DrawerLayout.LayoutParams.WRAP_CONTENT));
             }
         }
+    }
 
+    private void MostrarComentarios() {
         for (Comment comentario :grupo.getComments()) {
             TableRow tr_head = new TableRow(this);
             // part1
@@ -279,20 +253,78 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
                 label_lugar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             }
-            // part2
             label_lugar.setPadding(5, 5, 5, 5);
             tr_head.addView(label_lugar);// add the column to the table row here
+            // part2
 
+            TextView label_comentario = new TextView(this);    // part3
+            String tmp = comentario.getContenido();
+            for (int i=1; i<comentario.getContenido().length();i++){
+                if (i%30 == 0){
+                    String part1 =tmp.substring(0,i);
+                    String part2 =tmp.substring(i,tmp.length());
+                    tmp=part1+"\n"+part2;
+                }
+
+            }
+            label_comentario.setText(tmp);
+            label_comentario.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_comentario); // add the column to the table row here
+
+            // part3
             TextView label_fecha = new TextView(this);    // part3
-            label_fecha.setText(comentario.getContenido());
+            Log.d("FECHA",comentario.getFecha());
+            String[] fecha = comentario.getFecha().split(" ");
+            String date = fecha[1]+" "+fecha[2]+" "+fecha[5];
+            label_fecha.setText(date);
             label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
             tr_head.addView(label_fecha); // add the column to the table row here
 
-            tableGrupoComents.addView(tr_head, new TableLayout.LayoutParams(
-                    DrawerLayout.LayoutParams.MATCH_PARENT,
-                    DrawerLayout.LayoutParams.WRAP_CONTENT));
+            tableGrupoComents.addView(tr_head,
+                    new TableLayout.LayoutParams(
+                    DrawerLayout.LayoutParams.WRAP_CONTENT,//ancho
+                    DrawerLayout.LayoutParams.WRAP_CONTENT));//Alto
         }
+    }
 
+    private void showRatingBars() {
+        ratingBar.setEnabled(false);
+        txtRateNumber.setEnabled(false);
+        btnRate.setEnabled(false);
+        ratingBar.setVisibility(View.GONE);
+        txtRateNumber.setVisibility(View.GONE);
+        btnRate.setVisibility(View.GONE);
+        for (Clase clase : user.getClases()){
+            for (Clase claseGrupo : grupo.getClases()){
+                if (clase.getIdclase()==claseGrupo.getIdclase()){
+                    ratingBar.setEnabled(true);
+                    txtRateNumber.setEnabled(true);
+                    btnRate.setEnabled(true);
+                    ratingBar.setVisibility(View.VISIBLE);
+                    txtRateNumber.setVisibility(View.VISIBLE);
+                    btnRate.setVisibility(View.VISIBLE);
+
+                }
+            }
+
+        }
+        ratingBar.setNumStars(5);
+        ratingBar.setStepSize(1);
+        ratingBar.setRating((float) 3.0);
+        txtRateNumber.setText(String.valueOf((int) ratingBar.getRating()));
+
+
+        ratingBarGroup = (RatingBar) findViewById(R.id.ratingBarGroup);
+        ratingBarGroup.setNumStars(5);
+        ratingBarGroup.setStepSize((float) 1.0);
+        ratingBarGroup.setRating(Float.parseFloat(String.valueOf((grupo.getRate()))));
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                txtRateNumber.setText(String.valueOf((int) rating));
+            }
+        });
     }
 
     @Override
@@ -442,6 +474,81 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
         },usuario);
 
     }
+    private void showMessageDialog(String msg,final Clase clase, View v){
+        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage(msg)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Pojo pojo = new Pojo(clase.getIdclase(), grupo.getId(), usuario);
+                        rfn.subscribe(new RequestCallback<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean response) {
+                                ids.add(clase.getIdclase());
+                                Handler h = new Handler(Looper.getMainLooper());
+                                h.post(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(ActivitySelectedGroupAmaru.this, "Inscripcion realizada", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        }, pojo);
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void comentarGrupo(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        final EditText txt = new EditText(this);
+        txt.setHint("Comentario ...");
+        builder.setMessage("Escribe tu comentario").setView(txt)
+                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Comment comentario = new Comment(txt.getText().toString(),grupo.getId(),user.getUsername(),"fehca",grupo.getId());
+                        Log.d("COMMENT",grupo.getNombre()+" -- id: "+String.valueOf(grupo.getId()));
+                        rfn.addCommentGroup(new RequestCallback<Group>() {
+                            @Override
+                            public void onSuccess(Group response) {
+                                Log.d("COMMENT RESPONSE",response.getNombre()+" -- id: "+String.valueOf(response.getId()));
+                                Intent repetir = new Intent(ActivitySelectedGroupAmaru.this,ActivitySelectedGroupAmaru.class);
+                                Bundle datosExtra = new Bundle();
+                                datosExtra.putSerializable("grupo",response);
+                                datosExtra.putString("usuario",user.getUsername());
+                                datosExtra.putSerializable("user",user);
+                                repetir.putExtras(datosExtra);
+                                startActivity(repetir);
+                                finish();
+
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },comentario);
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+
     protected void showProgressDialog()
     {
         runOnUiThread( new Runnable()

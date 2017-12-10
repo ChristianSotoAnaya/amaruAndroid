@@ -16,13 +16,15 @@ public class Comment  implements java.io.Serializable{
     public Comment() {
     }
 
-    public Comment(String contenido, long groupId, String usuario, String fecha,long id) {
-        this.contenido = contenido;
-        this.groupId=groupId;
-        this.usuario = usuario;
-        this.fecha = fecha;
+    public Comment(String contenido, long Groupid, String usuario, String fecha,long id) {
+        this.contenido=contenido;
+        this.groupId=Groupid;
+        this.usuario=usuario;
+        this.fecha=fecha;
         this.id=id;
+
     }
+
 
     public String getContenido() {
         return contenido;
@@ -32,7 +34,13 @@ public class Comment  implements java.io.Serializable{
         this.contenido = contenido;
     }
 
+    public long getGroupId() {
+        return groupId;
+    }
 
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
 
     public String getUsuario() {
         return usuario;
@@ -46,8 +54,8 @@ public class Comment  implements java.io.Serializable{
         return fecha;
     }
 
-    public void setFecha(String date) {
-        this.fecha = date;
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public long getId() {
@@ -56,13 +64,5 @@ public class Comment  implements java.io.Serializable{
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.model;
 
+import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.Pojo;
 import com.example.a2106088.amaru.entity.User;
@@ -50,6 +51,8 @@ public interface Network
     void buy(final RequestCallback<User> requestCallback, User user);
 
     void subscribe(final RequestCallback<Boolean> requestCallback, Pojo pojo);
+
+    void addCommentGroup(final RequestCallback<Group> requestCallback, Comment comment);
 
 }
 
