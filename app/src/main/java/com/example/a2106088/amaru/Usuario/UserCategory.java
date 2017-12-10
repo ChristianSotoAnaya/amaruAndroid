@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
@@ -124,9 +125,8 @@ public class UserCategory extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(UserCategory.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 

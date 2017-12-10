@@ -30,7 +30,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.Usuario.PrincipalPageAmaru;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
@@ -170,9 +172,8 @@ public class CrearGrupo extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(CrearGrupo.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -328,75 +329,111 @@ public class CrearGrupo extends AppCompatActivity
         final String nombre =  edtNombreCrearGrupo.getText().toString();
         final String descripcion = edtDescripcionCrearGrupo.getText().toString();
 
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        mountainsRef = storageRef.child(usuario+nombre+".jpg");
-        UploadTask uploadTask = mountainsRef.putBytes(byteArray);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Log.d("urlimagen",downloadUrl.toString());
-                urlImagen=downloadUrl.toString();
-                Group nuevo = new Group(idGrupo, nombre, usuario, null, descripcion, categoria, 0.0, 0,urlImagen,clases);
-                showProgressDialog();
-                rfn.createGroup(new RequestCallback<Group>() {
-                    @Override
-                    public void onSuccess(Group response) {
-                        Handler h = new Handler(Looper.getMainLooper());
-                        h.post(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        rfn.getuser(new RequestCallback<User>() {
-                            @Override
-                            public void onSuccess(User response) {
-                                Bundle memoria = new Bundle();
-                                memoria.putSerializable("usuario",response);
-                                Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
-                                ingreso.putExtras(memoria);
-                                startActivity(ingreso);
-                                dismissProgressDialog();
-                            }
-                            @Override
-                            public void onFailed(NetworkException e) {
-                                dismissProgressDialog();
-                            }
-                        },usuario);
-                    }
+        try{
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            mountainsRef = storageRef.child(usuario+nombre+".jpg");
+            UploadTask uploadTask = mountainsRef.putBytes(byteArray);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    Log.d("urlimagen",downloadUrl.toString());
+                    urlImagen=downloadUrl.toString();
+                    Group nuevo = new Group(idGrupo, nombre, usuario, null, descripcion, categoria, 0.0, 0,urlImagen,clases);
+                    showProgressDialog();
+                    rfn.createGroup(new RequestCallback<Group>() {
+                        @Override
+                        public void onSuccess(Group response) {
+                            Handler h = new Handler(Looper.getMainLooper());
+                            h.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            rfn.getuser(new RequestCallback<User>() {
+                                @Override
+                                public void onSuccess(User response) {
+                                    Bundle memoria = new Bundle();
+                                    memoria.putSerializable("usuario",response);
+                                    Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                                    ingreso.putExtras(memoria);
+                                    startActivity(ingreso);
+                                    dismissProgressDialog();
+                                }
+                                @Override
+                                public void onFailed(NetworkException e) {
+                                    dismissProgressDialog();
+                                }
+                            },usuario);
+                        }
 
-                    @Override
-                    public void onFailed(NetworkException e) {
-                        Handler h = new Handler(Looper.getMainLooper());
-                        h.post(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                },nuevo);
+                        @Override
+                        public void onFailed(NetworkException e) {
+                            Handler h = new Handler(Looper.getMainLooper());
+                            h.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    },nuevo);
 
-            }
-        });
+                }
+            });
 
+        }
+        catch(Exception e){
 
+                    Group nuevo = new Group(idGrupo, nombre, usuario, null, descripcion, categoria, 0.0, 0,"https://images.clarin.com/2017/10/04/Sy7x2OfnW_720x0.jpg",clases);
+                    showProgressDialog();
+                    rfn.createGroup(new RequestCallback<Group>() {
+                        @Override
+                        public void onSuccess(Group response) {
+                            Handler h = new Handler(Looper.getMainLooper());
+                            h.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Grupo creado exitosamente", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            rfn.getuser(new RequestCallback<User>() {
+                                @Override
+                                public void onSuccess(User response) {
+                                    Bundle memoria = new Bundle();
+                                    memoria.putSerializable("usuario",response);
+                                    Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                                    ingreso.putExtras(memoria);
+                                    startActivity(ingreso);
+                                    dismissProgressDialog();
+                                }
+                                @Override
+                                public void onFailed(NetworkException e) {
+                                    dismissProgressDialog();
+                                }
+                            },usuario);
+                        }
+
+                        @Override
+                        public void onFailed(NetworkException e) {
+                            Handler h = new Handler(Looper.getMainLooper());
+                            h.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Error en la creación del grupo", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    },nuevo);
+                }
     }
 
-    public void cancelar(View view) {
-        Bundle memoria = new Bundle();
-        memoria.putSerializable("usuario",usuario);
-        Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
-        ingreso.putExtras(memoria);
-        startActivity(ingreso);
-    }
+
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {

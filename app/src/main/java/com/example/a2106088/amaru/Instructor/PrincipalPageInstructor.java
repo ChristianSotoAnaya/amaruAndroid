@@ -194,11 +194,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed(); }
+
     }
 
     @Override
@@ -217,10 +213,10 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(PrincipalPageInstructor.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

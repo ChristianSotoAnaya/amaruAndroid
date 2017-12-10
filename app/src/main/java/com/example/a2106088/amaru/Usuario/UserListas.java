@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
 import com.example.a2106088.amaru.entity.Group;
@@ -255,9 +256,8 @@ public class UserListas extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(UserListas.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 

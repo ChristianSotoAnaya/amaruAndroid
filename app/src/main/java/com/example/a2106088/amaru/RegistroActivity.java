@@ -65,6 +65,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
     EditText edtPhone;
     EditText edtEmail;
     Button btnRegistro;
+    boolean subiofoto;
     Bitmap photo;
     SharedPreferences infoUsuarios;
     Spinner spinner ;
@@ -94,6 +95,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, letra));
         infoUsuarios=this.getSharedPreferences("asd", Context.MODE_PRIVATE);
         rfn= new RetrofitNetwork();
+        subiofoto=false;
     }
 
 
@@ -115,82 +117,118 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
             if (!password.equals(confirmPassword)) {
                 Toast.makeText(this, "No coinciden las claves", Toast.LENGTH_LONG).show();
             } else {
+                try{
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    mountainsRef = storageRef.child(username+".jpg");
+                    UploadTask uploadTask = mountainsRef.putBytes(byteArray);
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle unsuccessful uploads
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                            @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                            Log.d("urlimagen",downloadUrl.toString());
+                            urlImagen=downloadUrl.toString();
+                            User temp= new User();
+                            temp.setNombre(name);
+                            temp.setLastname(lastName);
+                            temp.setPhone(phone);
+                            temp.setPassword(password);
+                            temp.setEmail(email);
+                            temp.setDescription("");
+                            temp.setType(tipo);
+                            temp.setUsername(username);
+                            temp.setRate(0.0);
+                            temp.setTotalVotes(0);
+                            temp.setClases(new ArrayList<Clase>());
+                            temp.setCupo(5);
+                            temp.setImage(urlImagen);
+                            showProgressDialog();
+                            rfn.createUser(new RequestCallback<User>() {
+                                @Override
+                                public void onSuccess(User response) {
+                                    dismissProgressDialog();
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Registrado Exitosamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    Intent ingreso = new Intent(RegistroActivity.this, MainActivity.class);
+                                    startActivity(ingreso);
+                                }
 
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                mountainsRef = storageRef.child(username+".jpg");
-                UploadTask uploadTask = mountainsRef.putBytes(byteArray);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
+                                @Override
+                                public void onFailed(NetworkException e) {
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "NO Registrado Exitosamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            },temp);
+
+
+
+                        }
+                    });
+
+                }
+                catch (Exception e){
+
+                            User temp= new User();
+                            temp.setNombre(name);
+                            temp.setLastname(lastName);
+                            temp.setPhone(phone);
+                            temp.setPassword(password);
+                            temp.setEmail(email);
+                            temp.setDescription("");
+                            temp.setType(tipo);
+                            temp.setUsername(username);
+                            temp.setRate(0.0);
+                            temp.setTotalVotes(0);
+                            temp.setClases(new ArrayList<Clase>());
+                            temp.setCupo(5);
+                            temp.setImage("https://n6-img-fp.akamaized.net/iconos-gratis/la-imagen-del-usuario-con-el-fondo-negro_318-34564.jpg");
+                            showProgressDialog();
+                            rfn.createUser(new RequestCallback<User>() {
+                                @Override
+                                public void onSuccess(User response) {
+                                    dismissProgressDialog();
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Registrado Exitosamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    Intent ingreso = new Intent(RegistroActivity.this, MainActivity.class);
+                                    startActivity(ingreso);
+                                }
+
+                                @Override
+                                public void onFailed(NetworkException e) {
+                                    Handler h = new Handler(Looper.getMainLooper());
+                                    h.post(new Runnable() {
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "NO Registrado Exitosamente", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            },temp);
+
+
+
+                        }
                     }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Log.d("urlimagen",downloadUrl.toString());
-                        urlImagen=downloadUrl.toString();
-                        User temp= new User();
-                        temp.setNombre(name);
-                        temp.setLastname(lastName);
-                        temp.setPhone(phone);
-                        temp.setPassword(password);
-                        temp.setEmail(email);
-                        temp.setDescription("");
-                        temp.setType(tipo);
-                        temp.setUsername(username);
-                        temp.setRate(0.0);
-                        temp.setTotalVotes(0);
-                        temp.setClases(new ArrayList<Clase>());
-                        temp.setCupo(5);
-                        temp.setImage(urlImagen);
-                        showProgressDialog();
-                        rfn.createUser(new RequestCallback<User>() {
-                            @Override
-                            public void onSuccess(User response) {
-                                dismissProgressDialog();
-                                Handler h = new Handler(Looper.getMainLooper());
-                                h.post(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), "Registrado Exitosamente", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                }
 
-                            @Override
-                            public void onFailed(NetworkException e) {
-                                Handler h = new Handler(Looper.getMainLooper());
-                                h.post(new Runnable() {
-                                    public void run() {
-                                        Toast.makeText(getApplicationContext(), "NO Registrado Exitosamente", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        },temp);
-
-
-                        finish();
-                        Intent siguiente = new Intent();
-                        setResult(Activity.RESULT_OK, siguiente);
-                    }
-                });
-
-
-
-
-
-
-
-
-
-
-
-
-            }
-        }
     }
 
 

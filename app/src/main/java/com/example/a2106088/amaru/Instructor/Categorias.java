@@ -16,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageButton;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.Usuario.PrincipalPageAmaru;
 import com.example.a2106088.amaru.entity.Group;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
@@ -126,9 +128,8 @@ rfn= new RetrofitNetwork();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(Categorias.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -210,7 +211,7 @@ rfn= new RetrofitNetwork();
             Intent intento = new Intent(Categorias.this, ActivityListaGrupos.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("instructor", usuario);
-            datosExtra.putString("quitar",usuario);
+            datosExtra.putString("quitar","cate");
             intento.putExtras(datosExtra);
             startActivity(intento);
 
@@ -253,7 +254,7 @@ rfn= new RetrofitNetwork();
                 Bundle datosExtra = new Bundle();
                 ArrayList<Group> temp= new ArrayList(grupos);
                 datosExtra.putSerializable("grupos",temp);
-                datosExtra.putSerializable("instructor","");
+                datosExtra.putSerializable("instructor",usuario);
                 datosExtra.putSerializable("quitar","cate");
                 intento.putExtras(datosExtra);
                 dismissProgressDialog();

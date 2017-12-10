@@ -25,11 +25,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_weight="0.05"
         android:ems="10"
         android:hint="Username"
-        android:inputType="textPersonName"
-        android:text="csoto"
-        android:layout_weight="0.05" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edtClave"
@@ -39,11 +38,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_weight="0.05"
         android:ems="10"
         android:hint="Password"
-        android:text="password"
-        android:inputType="textPassword"
-        android:layout_weight="0.05" />
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/btnIngreso"

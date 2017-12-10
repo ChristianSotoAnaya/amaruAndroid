@@ -29,6 +29,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.Instructor.ActivitySelectedGroup;
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.Comment;
@@ -353,9 +355,8 @@ public class ActivitySelectedGroupAmaru extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(ActivitySelectedGroupAmaru.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 

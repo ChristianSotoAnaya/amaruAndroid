@@ -21,7 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.Instructor.PrincipalPageInstructor;
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.RegistroActivity;
 import com.example.a2106088.amaru.entity.User;
 
 import com.example.a2106088.amaru.entity.Clase;
@@ -108,12 +111,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+
     }
 
     @Override
@@ -132,9 +130,8 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(PrincipalPageAmaru.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 

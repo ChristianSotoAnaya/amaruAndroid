@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.example.a2106088.amaru.Instructor.CrearGrupo;
 import com.example.a2106088.amaru.Instructor.PrincipalPageInstructor;
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.User;
@@ -203,9 +204,8 @@ public class VerPerfilInstructor extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(VerPerfilInstructor.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 

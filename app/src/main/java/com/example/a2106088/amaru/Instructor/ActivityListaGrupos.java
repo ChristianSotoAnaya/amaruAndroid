@@ -29,7 +29,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
+import com.example.a2106088.amaru.Usuario.PrincipalPageAmaru;
 import com.example.a2106088.amaru.entity.Clase;
 import com.example.a2106088.amaru.entity.Comment;
 import com.example.a2106088.amaru.entity.CustomListAdapter;
@@ -57,7 +59,6 @@ public class ActivityListaGrupos extends AppCompatActivity
 
     String[] descr;
     String user;
-    String tipoUser;
 
     String[] imgid;
     ProgressDialog progressDialog;
@@ -134,8 +135,8 @@ public class ActivityListaGrupos extends AppCompatActivity
                         Bundle datosExtra = new Bundle();
                         ArrayList<Group> temp= new ArrayList(gruposfiltro);
                         datosExtra.putSerializable("grupos",temp);
-                        datosExtra.putSerializable("instructor","");
-                        datosExtra.putSerializable("quitar","cate");
+                        datosExtra.putString("instructor",usuario);
+                        datosExtra.putString("quitar","cate");
                         intento.putExtras(datosExtra);
                         startActivity(intento);
                         dismissProgressDialog();
@@ -162,10 +163,9 @@ public class ActivityListaGrupos extends AppCompatActivity
         Intent anterior = getIntent();
         memoria = anterior.getExtras();
 
-        user= (String) memoria.getSerializable("instructor");
+        user= memoria.getString("instructor");
         usuario=user;
-        tipoUser= (String) memoria.getSerializable("tipoUsuario");
-        quitar =(String) memoria.getSerializable("quitar");
+        quitar =memoria.getString("quitar");
         rfn = new RetrofitNetwork();
         showProgressDialog();
         rfn.getallgroups(new RequestCallback<List<Group>>() {
@@ -276,10 +276,10 @@ public class ActivityListaGrupos extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(ActivityListaGrupos.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -321,6 +321,7 @@ public class ActivityListaGrupos extends AppCompatActivity
             Intent intento = new Intent(ActivityListaGrupos.this, ActivityListaGrupos.class);
             Bundle datosExtra = new Bundle();
             datosExtra.putString("instructor",usuario );
+
             datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
             startActivity(intento);

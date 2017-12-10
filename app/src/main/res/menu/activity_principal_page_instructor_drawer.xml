@@ -7,32 +7,32 @@
         <item
             android:id="@+id/createi"
             android:icon="@drawable/add"
-            android:title="Create Group" />
+            android:title="Crear Grupo" />
         <item
             android:id="@+id/clasesi"
             android:icon="@drawable/calendar"
-            android:title="My Class" />
+            android:title="Mis Clases" />
         <item
             android:id="@+id/nav_send"
             android:icon="@drawable/grou"
-            android:title="My Groups" />
+            android:title="Mis Grupos" />
         <item
             android:id="@+id/profilei"
             android:icon="@drawable/profile"
-            android:title="My Profile" />
+            android:title="Mi Perfil" />
 
     </group>
 
-    <item android:title="More With Amaru">
+    <item android:title="Más Con Amaru">
         <menu>
             <item
                 android:id="@+id/categoriesi"
                 android:icon="@drawable/categoriesicon"
-                android:title="Categories" />
+                android:title="Categorias" />
             <item
                 android:id="@+id/groupsi"
                 android:icon="@drawable/categories"
-                android:title="All Groups" />
+                android:title="Todos Los Grupos" />
 
         </menu>
     </item>

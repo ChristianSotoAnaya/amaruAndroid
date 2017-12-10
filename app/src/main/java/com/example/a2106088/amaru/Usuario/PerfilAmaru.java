@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.a2106088.amaru.MainActivity;
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
@@ -160,9 +161,8 @@ public class PerfilAmaru extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
-        }
-
+            Intent ingreso = new Intent(PerfilAmaru.this, MainActivity.class);
+            startActivity(ingreso);        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -254,7 +254,7 @@ public class PerfilAmaru extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-        if (view.getId() ==editamaru.getId()) {
+        if (view.getId() ==buttoneditimageam.getId()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("How do you want import the image?")
                     .setCancelable(true)
@@ -276,97 +276,164 @@ public class PerfilAmaru extends AppCompatActivity
 
         }
         else if (view.getId() == editamaru.getId()) {
+            temp=new User();
 
+            try{ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                mountainsRef = storageRef.child(u.getUsername()+".jpg");
+                UploadTask uploadTask = mountainsRef.putBytes(byteArray);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.d("urlimagen",downloadUrl.toString());
+                        urlImagen=downloadUrl.toString();
+                        temp.setImage(urlImagen);
+                        temp.setUsername(u.getUsername());
+                        temp.setEmail(amaruEmail.getText().toString());
+                        temp.setPhone(amaruPhone.getText().toString());
+                        temp.setDescription(amaruDescription.getText().toString());
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-            mountainsRef = storageRef.child(u.getUsername()+".jpg");
-            UploadTask uploadTask = mountainsRef.putBytes(byteArray);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
+                        showProgressDialog();
+                        rfn.editemail(new RequestCallback<User>() {
+                            @Override
+                            public void onSuccess(User response) {
+                                rfn.editphone(new RequestCallback<User>() {
+                                    @Override
+                                    public void onSuccess(User response) {
+                                        rfn.editdescription(new RequestCallback<User>() {
+                                            @Override
+                                            public void onSuccess(User response) {
+
+                                                rfn.editimage(new RequestCallback<User>() {
+                                                    @Override
+                                                    public void onSuccess(User response) {
+                                                        dismissProgressDialog();
+                                                        Handler h = new Handler(Looper.getMainLooper());
+                                                        h.post(new Runnable() {
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "Editado Exitosamente", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onFailed(NetworkException e) {
+                                                        dismissProgressDialog();
+
+                                                        Handler h = new Handler(Looper.getMainLooper());
+                                                        h.post(new Runnable() {
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "No Ha Sido Editado Exitosamente", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+                                                    }
+                                                },temp);
+
+                                            }
+
+                                            @Override
+                                            public void onFailed(NetworkException e) {
+
+                                            }
+                                        },temp);
+                                    }
+                                    @Override
+                                    public void onFailed(NetworkException e) {
+
+                                    }
+                                },temp);
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },temp);
+                    }
+
+                });}
+            catch (Exception e){
+
+                        temp.setImage(u.getImage());
+                        temp.setUsername(u.getUsername());
+                        temp.setEmail(amaruEmail.getText().toString());
+                        temp.setPhone(amaruPhone.getText().toString());
+                        temp.setDescription(amaruDescription.getText().toString());
+
+                        showProgressDialog();
+                        rfn.editemail(new RequestCallback<User>() {
+                            @Override
+                            public void onSuccess(User response) {
+                                rfn.editphone(new RequestCallback<User>() {
+                                    @Override
+                                    public void onSuccess(User response) {
+                                        rfn.editdescription(new RequestCallback<User>() {
+                                            @Override
+                                            public void onSuccess(User response) {
+
+                                                rfn.editimage(new RequestCallback<User>() {
+                                                    @Override
+                                                    public void onSuccess(User response) {
+                                                        dismissProgressDialog();
+                                                        Handler h = new Handler(Looper.getMainLooper());
+                                                        h.post(new Runnable() {
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "Editado Exitosamente", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onFailed(NetworkException e) {
+                                                        dismissProgressDialog();
+
+                                                        Handler h = new Handler(Looper.getMainLooper());
+                                                        h.post(new Runnable() {
+                                                            public void run() {
+                                                                Toast.makeText(getApplicationContext(), "No Ha Sido Editado Exitosamente", Toast.LENGTH_SHORT).show();
+
+                                                            }
+                                                        });
+                                                    }
+                                                },temp);
+
+                                            }
+
+                                            @Override
+                                            public void onFailed(NetworkException e) {
+
+                                            }
+                                        },temp);
+                                    }
+                                    @Override
+                                    public void onFailed(NetworkException e) {
+
+                                    }
+                                },temp);
+                            }
+
+                            @Override
+                            public void onFailed(NetworkException e) {
+
+                            }
+                        },temp);
                 }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                    Log.d("urlimagen",downloadUrl.toString());
-                    urlImagen=downloadUrl.toString();
-                    temp.setImage(urlImagen);
-                    temp.setUsername(u.getUsername());
-                    temp.setEmail(amaruEmail.getText().toString());
-                    temp.setPhone(amaruPhone.getText().toString());
-                    temp.setDescription(amaruDescription.getText().toString());
-
-                    showProgressDialog();
-                    rfn.editemail(new RequestCallback<User>() {
-                        @Override
-                        public void onSuccess(User response) {
-                            rfn.editphone(new RequestCallback<User>() {
-                                @Override
-                                public void onSuccess(User response) {
-                                    rfn.editdescription(new RequestCallback<User>() {
-                                        @Override
-                                        public void onSuccess(User response) {
-
-                                            rfn.editimage(new RequestCallback<User>() {
-                                                @Override
-                                                public void onSuccess(User response) {
-                                                    dismissProgressDialog();
-                                                    Handler h = new Handler(Looper.getMainLooper());
-                                                    h.post(new Runnable() {
-                                                        public void run() {
-                                                            Toast.makeText(getApplicationContext(), "Editado Exitosamente", Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void onFailed(NetworkException e) {
-                                                    dismissProgressDialog();
-
-                                                    Handler h = new Handler(Looper.getMainLooper());
-                                                    h.post(new Runnable() {
-                                                        public void run() {
-                                                            Toast.makeText(getApplicationContext(), "No Ha Sido Editado Exitosamente", Toast.LENGTH_SHORT).show();
-
-                                                        }
-                                                    });
-                                                }
-                                            },temp);
-
-                                        }
-
-                                        @Override
-                                        public void onFailed(NetworkException e) {
-
-                                        }
-                                    },temp);
-                                }
-                                @Override
-                                public void onFailed(NetworkException e) {
-
-                                }
-                            },temp);
-                        }
-
-                        @Override
-                        public void onFailed(NetworkException e) {
-
-                        }
-                    },temp);
-                }
-
-            });
-
+            }
         }
 
 
-        }
+
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
