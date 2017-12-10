@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Instructor;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,6 +49,33 @@ public class PrincipalPageInstructor extends AppCompatActivity
     List<Clase> clases;
     ArrayList<User> usuarios;
     List<User> todos;
+    ProgressDialog progressDialog;
+
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +83,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
         setContentView(R.layout.activity_principal_page_instructor);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        progressDialog = new ProgressDialog( this );
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -104,6 +132,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
                                     final int position, long id) {
                 // TODO Auto-generated method stub
                 Log.d("presss",String.valueOf(+position));
+                showProgressDialog();
                 rfn.getUsers(new RequestCallback<List<User>>() {
                     @Override
                     public void onSuccess(List<User> response) {
@@ -122,10 +151,11 @@ public class PrincipalPageInstructor extends AppCompatActivity
                                 }
                                 Intent intento=new Intent(PrincipalPageInstructor.this,AlmunosInscritos.class);
                                 Bundle datosExtra = new Bundle();
+                                datosExtra.putString("user",usuario);
                                 datosExtra.putSerializable("usuarios",usuarios);
                                 intento.putExtras(datosExtra);
                                 startActivity(intento);
-
+                                dismissProgressDialog();
                             }
 
                             @Override
@@ -137,7 +167,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
                     @Override
                     public void onFailed(NetworkException e) {
-
+                        dismissProgressDialog();
                     }
                 });
 
@@ -161,19 +191,6 @@ public class PrincipalPageInstructor extends AppCompatActivity
         }
         return temp;
     }
-/*
-
-    View.OnClickListener btnClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Object tag = v.getTag();
-            Intent intento=new Intent(PrincipalPageInstructor.this,Grupo.class);
-            Bundle datosExtra = new Bundle();
-            datosExtra.putString("username",usuario);
-            intento.putExtras(datosExtra);
-            startActivity(intento);
-        }
-    };*/
 
     @Override
     public void onBackPressed() {
@@ -220,6 +237,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -228,10 +246,11 @@ public class PrincipalPageInstructor extends AppCompatActivity
                         Intent ingreso = new Intent(PrincipalPageInstructor.this, PrincipalPageInstructor.class);
                         ingreso.putExtras(memoria);
                         startActivity(ingreso);
+                        dismissProgressDialog();
                 }
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                 }
             },usuario);
 
@@ -247,6 +266,7 @@ public class PrincipalPageInstructor extends AppCompatActivity
 
 
         } else if (id == R.id.profilei) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -255,31 +275,22 @@ public class PrincipalPageInstructor extends AppCompatActivity
                     datosExtra.putSerializable("ins", response);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
+                    dismissProgressDialog();
                 }
 
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                 }
             },user.getUsername());
 
 
         } else if (id == R.id.categoriesi) {
-            rfn.getuser(new RequestCallback<User>() {
-                @Override
-                public void onSuccess(User response) {
                     Intent intento = new Intent(PrincipalPageInstructor.this, Categorias.class);
                     Bundle datosExtra = new Bundle();
-                    datosExtra.putSerializable("ins", response);
+                    datosExtra.putString("usuario", usuario);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-                }
-
-                @Override
-                public void onFailed(NetworkException e) {
-
-                }
-            },user.getUsername());
 
 
         }
@@ -292,8 +303,6 @@ public class PrincipalPageInstructor extends AppCompatActivity
                     datosExtra.putString("quitar",user.getUsername());
                     intento.putExtras(datosExtra);
                     startActivity(intento);
-
-
 
         }
 

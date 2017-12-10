@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Instructor;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,13 +60,36 @@ public class ActivityListaGrupos extends AppCompatActivity
     String tipoUser;
 
     String[] imgid;
-
+    ProgressDialog progressDialog;
     RetrofitNetwork rfn;
     String quitar;
     String usuario;
 
     Bundle memoria;
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
 
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +97,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         setContentView(R.layout.activity_lista_grupos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar2);
        setSupportActionBar(toolbar);
+        progressDialog = new ProgressDialog( this );
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +125,7 @@ public class ActivityListaGrupos extends AppCompatActivity
             public boolean onQueryTextSubmit(String query) {
 // do something on text submit
                 Log.d("texty",String.valueOf(buscar.getQuery()));
+                showProgressDialog();
                 rfn.getGrByName(new RequestCallback<List<Group>>() {
                     @Override
                     public void onSuccess(List<Group> response) {
@@ -112,6 +138,7 @@ public class ActivityListaGrupos extends AppCompatActivity
                         datosExtra.putSerializable("quitar","cate");
                         intento.putExtras(datosExtra);
                         startActivity(intento);
+                        dismissProgressDialog();
                     }
 
                     @Override
@@ -140,7 +167,7 @@ public class ActivityListaGrupos extends AppCompatActivity
         tipoUser= (String) memoria.getSerializable("tipoUsuario");
         quitar =(String) memoria.getSerializable("quitar");
         rfn = new RetrofitNetwork();
-
+        showProgressDialog();
         rfn.getallgroups(new RequestCallback<List<Group>>() {
             @Override
             public void onSuccess(List<Group> response) {
@@ -177,7 +204,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
                 adapter=new CustomListAdapter(ActivityListaGrupos.this, itemname, imgid,descr);
                 lista=(ListView) findViewById(R.id.listaaa2);
-
+                dismissProgressDialog();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -188,6 +215,7 @@ public class ActivityListaGrupos extends AppCompatActivity
                             public void onItemClick(AdapterView<?> parent, View view,
                                                     int position, long id) {
                                 // TODO Auto-generated method stub
+                                showProgressDialog();
                                 rfn.getGroupbyId(new RequestCallback<Group>() {
                                 @Override
                                 public void onSuccess(Group response2) {
@@ -197,6 +225,7 @@ public class ActivityListaGrupos extends AppCompatActivity
                                     datosExtra.putSerializable("myuser",user);
                                     intento.putExtras(datosExtra);
                                     startActivity(intento);
+                                    dismissProgressDialog();
 
                              }
                              @Override
@@ -214,7 +243,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
             @Override
             public void onFailed(NetworkException e) {
-
+                dismissProgressDialog();
             }
         });
 
@@ -269,6 +298,7 @@ public class ActivityListaGrupos extends AppCompatActivity
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -277,10 +307,11 @@ public class ActivityListaGrupos extends AppCompatActivity
                     Intent ingreso = new Intent(ActivityListaGrupos.this, PrincipalPageInstructor.class);
                     ingreso.putExtras(memoria);
                     startActivity(ingreso);
+                    dismissProgressDialog();
                 }
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                 }
             },usuario);
 
@@ -296,6 +327,7 @@ public class ActivityListaGrupos extends AppCompatActivity
 
 
         } else if (id == R.id.profilei) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -304,31 +336,22 @@ public class ActivityListaGrupos extends AppCompatActivity
                     datosExtra.putSerializable("ins", response);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
+                    dismissProgressDialog();
                 }
 
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                 }
             },usuario);
 
 
         } else if (id == R.id.categoriesi) {
-            rfn.getuser(new RequestCallback<User>() {
-                @Override
-                public void onSuccess(User response) {
-                    Intent intento = new Intent(ActivityListaGrupos.this, Categorias.class);
-                    Bundle datosExtra = new Bundle();
-                    datosExtra.putSerializable("ins", response);
-                    intento.putExtras(datosExtra);
-                    startActivity(intento);
-                }
-
-                @Override
-                public void onFailed(NetworkException e) {
-
-                }
-            },usuario);
+            Intent intento = new Intent(ActivityListaGrupos.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
 
         }
@@ -342,13 +365,12 @@ public class ActivityListaGrupos extends AppCompatActivity
             intento.putExtras(datosExtra);
             startActivity(intento);
 
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }}
 
 

@@ -19,7 +19,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_activity_selected_group_amaru"
-        app:menu="@menu/activity_selected_group_amaru_drawer" />
+        app:headerLayout="@layout/nav_header_comprar"
+        android:background="@drawable/nabv"
+        app:menu="@menu/activity_prueba_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

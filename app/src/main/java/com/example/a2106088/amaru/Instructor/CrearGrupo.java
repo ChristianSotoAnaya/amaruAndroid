@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Instructor;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -50,7 +51,7 @@ import java.util.List;
 
 public class CrearGrupo extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    ProgressDialog progressDialog;
     EditText edtNombreCrearGrupo;
     EditText edtDescripcionCrearGrupo;
     Spinner spnlugar;
@@ -62,12 +63,37 @@ public class CrearGrupo extends AppCompatActivity
     long idClase = 0;
     long idGrupo = 0;
     ArrayList<Clase> clases = new ArrayList<Clase>();
-    String user;
+    String usuario;
     RetrofitNetwork rfn;
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://amaru-cosw.appspot.com");
     StorageReference mountainsRef ;
     String urlImagen;
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
 
 
     @Override
@@ -75,6 +101,7 @@ public class CrearGrupo extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_grupo);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progressDialog = new ProgressDialog( this );
         setSupportActionBar(toolbar);
         edtNombreCrearGrupo=(EditText) findViewById(R.id.edtNombreCrearGrupo);
         edtDescripcionCrearGrupo=(EditText) findViewById(R.id.edtDescripcionCrearGrupo);
@@ -84,10 +111,12 @@ public class CrearGrupo extends AppCompatActivity
         table = (TableLayout) findViewById(R.id.table);
         spinner=(Spinner) findViewById(R.id.spinner2);
         rfn= new RetrofitNetwork();
+        showProgressDialog();
         rfn.getallgroups(new RequestCallback<List<Group>>(){
             @Override
             public void onSuccess(List<Group> response) {
                 idGrupo = response.size();
+                dismissProgressDialog();
             }
 
             @Override
@@ -96,21 +125,14 @@ public class CrearGrupo extends AppCompatActivity
                 h.post(new Runnable() {
                     public void run() {
                         Toast.makeText(getApplicationContext(), "Error al cargar grupos", Toast.LENGTH_SHORT).show();
+                        dismissProgressDialog();
                     }
                 });
             }
         });
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        user= memoria.getString("user");
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        usuario= memoria.getString("user");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -160,17 +182,44 @@ public class CrearGrupo extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.createi3) {
+        if (id == R.id.createi) {
+            Intent intento = new Intent(CrearGrupo.this, CrearGrupo.class);
+            Bundle datosExtra = new Bundle();
 
-        } else if (id == R.id.clasesi3) {
-            Bundle memoria = new Bundle();
-            memoria.putString("usuario",user);
-            Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
-            ingreso.putExtras(memoria);
-            startActivity(ingreso);
-        } else if (id == R.id.groupsi3) {
+            datosExtra.putString("user", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        } else if (id == R.id.clasesi) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Bundle memoria = new Bundle();
+                    memoria.putSerializable("usuario",response);
+                    Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
+                    ingreso.putExtras(memoria);
+                    startActivity(ingreso);
+                    dismissProgressDialog();
+                }
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
 
-        } else if (id == R.id.profilei3) {
+        } else if (id == R.id.groupsi) {
+
+
+            Intent intento = new Intent(CrearGrupo.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        } else if (id == R.id.profilei) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -179,23 +228,41 @@ public class CrearGrupo extends AppCompatActivity
                     datosExtra.putSerializable("ins", response);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
+                    dismissProgressDialog();
                 }
 
                 @Override
                 public void onFailed(NetworkException e) {
-
+                    dismissProgressDialog();
                 }
-            },user);
+            },usuario);
+
 
         } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(CrearGrupo.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_send) {
+
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+
+            Intent intento = new Intent(CrearGrupo.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor", usuario);
+            datosExtra.putString("quitar",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     public void nuevaClase(View view){
@@ -205,7 +272,7 @@ public class CrearGrupo extends AppCompatActivity
         edtlugartxt.setText(edtlugar.getText().toString());
         tableRow.addView(edtlugartxt);*/
         String lugar = spnlugar.getSelectedItem().toString();
-        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),lugar,idClase,edtNombreCrearGrupo.getText().toString(),0, user);
+        Clase clase = new Clase(idGrupo,edtfecha.getText().toString(),edthora.getText().toString(),lugar,idClase,edtNombreCrearGrupo.getText().toString(),0, usuario);
         idClase+=1;
         clases.add(clase);
         TableRow tr_head = new TableRow(this);
@@ -264,7 +331,7 @@ public class CrearGrupo extends AppCompatActivity
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        mountainsRef = storageRef.child(user+nombre+".jpg");
+        mountainsRef = storageRef.child(usuario+nombre+".jpg");
         UploadTask uploadTask = mountainsRef.putBytes(byteArray);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -278,7 +345,8 @@ public class CrearGrupo extends AppCompatActivity
                 @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 Log.d("urlimagen",downloadUrl.toString());
                 urlImagen=downloadUrl.toString();
-                Group nuevo = new Group(idGrupo, nombre, user, null, descripcion, categoria, 0.0, 0,urlImagen,clases);
+                Group nuevo = new Group(idGrupo, nombre, usuario, null, descripcion, categoria, 0.0, 0,urlImagen,clases);
+                showProgressDialog();
                 rfn.createGroup(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
@@ -296,12 +364,13 @@ public class CrearGrupo extends AppCompatActivity
                                 Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
                                 ingreso.putExtras(memoria);
                                 startActivity(ingreso);
+                                dismissProgressDialog();
                             }
                             @Override
                             public void onFailed(NetworkException e) {
-
+                                dismissProgressDialog();
                             }
-                        },user);
+                        },usuario);
                     }
 
                     @Override
@@ -319,19 +388,11 @@ public class CrearGrupo extends AppCompatActivity
         });
 
 
-
-
-
-
-
-
-
-
     }
 
     public void cancelar(View view) {
         Bundle memoria = new Bundle();
-        memoria.putSerializable("usuario",user);
+        memoria.putSerializable("usuario",usuario);
         Intent ingreso = new Intent(CrearGrupo.this, PrincipalPageInstructor.class);
         ingreso.putExtras(memoria);
         startActivity(ingreso);

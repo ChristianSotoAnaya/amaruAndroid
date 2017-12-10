@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,7 @@ import android.widget.ImageButton;
 
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.Group;
+import com.example.a2106088.amaru.entity.User;
 import com.example.a2106088.amaru.model.NetworkException;
 import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
@@ -36,23 +38,19 @@ public class UserCategory extends AppCompatActivity
     ImageButton imageButtonother;
     RetrofitNetwork rfn;
     List<Group> grupos;
-
+    String usuario;
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_category);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
+        progressDialog = new ProgressDialog( this );
+        Intent anterior = getIntent();
+        Bundle memoria = anterior.getExtras();
+        rfn= new RetrofitNetwork();
+        usuario=  memoria.getString("usuario");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -76,6 +74,30 @@ public class UserCategory extends AppCompatActivity
         imageButtonother.setOnClickListener(this);
     }
 
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -114,21 +136,83 @@ public class UserCategory extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(UserCategory.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
 
-        } else if (id == R.id.nav_slideshow) {
+                @Override
+                public void onFailed(NetworkException e) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_send) {
+                }
+            },usuario);
 
         }
+        // SI ESPICHA EN ALL GROUPS
+        else if (id == R.id.nav_gallery) {
+            Intent intento=new Intent(UserCategory.this,UserListas.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("user",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        }
+        // SI ESPICHA EN MY PROFILE
+        else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(UserCategory.this,PerfilAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("userAmaru",response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {dismissProgressDialog();
+                }
+            },usuario);
+
+
+        } // SI ESPICHA EN COMPRAR
+        else if (id == R.id.nav_manage) {
+            Intent intento=new Intent(UserCategory.this,Comprar.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("username",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+            // SI ESPICHA EN CATEGOR
+        } else if (id == R.id.categories) {
+            Intent intento = new Intent(UserCategory.this, UserCategory.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     @Override
@@ -152,8 +236,8 @@ public class UserCategory extends AppCompatActivity
         else if (view.getId() == imageButtonother.getId()) {
             selected="Others";
         }
-        rfn= new RetrofitNetwork();
 
+        showProgressDialog();
         rfn.getcategory(new RequestCallback<List<Group>>() {
             @Override
             public void onSuccess(List<Group> response) {
@@ -166,6 +250,7 @@ public class UserCategory extends AppCompatActivity
                 datosExtra.putSerializable("quitar","cate");
                 intento.putExtras(datosExtra);
                 startActivity(intento);
+                dismissProgressDialog();
             }
 
             @Override

@@ -2,6 +2,7 @@ package com.example.a2106088.amaru;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,6 +57,7 @@ import java.util.ArrayList;
 public class RegistroActivity extends AppCompatActivity implements View.OnClickListener{
 
     EditText edtUsername;
+    ProgressDialog progressDialog;
     EditText edtPassword;
     EditText edtConfirmPassword;
     EditText edtName;
@@ -84,7 +86,7 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         edtLastName=(EditText) findViewById(R.id.edtLastName);
         edtPhone=(EditText) findViewById(R.id.edtPhone);
         edtEmail=(EditText) findViewById(R.id.edtEmail);
-
+        progressDialog = new ProgressDialog( this );
         btnRegistro=(Button) findViewById(R.id.Registrarse);
         btnRegistro.setOnClickListener(this);
         spinner=(Spinner) findViewById(R.id.spinner);
@@ -145,10 +147,11 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
                         temp.setClases(new ArrayList<Clase>());
                         temp.setCupo(5);
                         temp.setImage(urlImagen);
-
+                        showProgressDialog();
                         rfn.createUser(new RequestCallback<User>() {
                             @Override
                             public void onSuccess(User response) {
+                                dismissProgressDialog();
                                 Handler h = new Handler(Looper.getMainLooper());
                                 h.post(new Runnable() {
                                     public void run() {
@@ -235,5 +238,30 @@ public class RegistroActivity extends AppCompatActivity implements View.OnClickL
         }else {
             Toast.makeText(this, "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
+    }
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
     }
 }

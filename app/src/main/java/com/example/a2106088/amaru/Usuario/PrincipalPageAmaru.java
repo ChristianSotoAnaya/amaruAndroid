@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Usuario;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ import java.util.List;
 public class PrincipalPageAmaru extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    ProgressDialog progressDialog;
     SharedPreferences infousuario;
     TextView username;
     String usuario;
@@ -52,29 +53,44 @@ public class PrincipalPageAmaru extends AppCompatActivity
     List<Clase> clases;
     ArrayList<User> usuarios;
     List<User> todos;
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prueba);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        progressDialog = new ProgressDialog( this );
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
-        user= (User) memoria.getSerializable("usuario");
+        user= (User) memoria.getSerializable("user");
         usuario = user.getUsername();
-        System.out.println(usuario);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-
+        rfn= new RetrofitNetwork();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,15 +146,33 @@ public class PrincipalPageAmaru extends AppCompatActivity
 
         // SI ESPICHA EN MY CLASS
         if (id == R.id.nav_camera) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento=new Intent(PrincipalPageAmaru.this,PrincipalPageAmaru.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putString("instructor",usuario );
+                    datosExtra.putSerializable("user",response);
+                    datosExtra.putString("tipoUsuario", response.getType());
+                    datosExtra.putString("quitar", "");
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+
+                }
+            },usuario);
 
         }
         // SI ESPICHA EN ALL GROUPS
         else if (id == R.id.nav_gallery) {
             Intent intento=new Intent(PrincipalPageAmaru.this,UserListas.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putString("instructor",usuario );
-            datosExtra.putSerializable("user",user);
-            datosExtra.putString("tipoUsuario", user.getType());
+            datosExtra.putString("user",usuario );
             datosExtra.putString("quitar", "");
             intento.putExtras(datosExtra);
             startActivity(intento);
@@ -147,6 +181,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
         }
         // SI ESPICHA EN MY PROFILE
         else if (id == R.id.nav_slideshow) {
+            showProgressDialog();
             rfn.getuser(new RequestCallback<User>() {
                 @Override
                 public void onSuccess(User response) {
@@ -155,11 +190,11 @@ public class PrincipalPageAmaru extends AppCompatActivity
                     datosExtra.putSerializable("userAmaru",response);
                     intento.putExtras(datosExtra);
                     startActivity(intento);
+                    dismissProgressDialog();
                 }
 
                 @Override
-                public void onFailed(NetworkException e) {
-
+                public void onFailed(NetworkException e) {dismissProgressDialog();
                 }
             },user.getUsername());
 
@@ -176,14 +211,11 @@ public class PrincipalPageAmaru extends AppCompatActivity
         } else if (id == R.id.categories) {
             Intent intento = new Intent(PrincipalPageAmaru.this, UserCategory.class);
             Bundle datosExtra = new Bundle();
-            datosExtra.putSerializable("ins", user);
+            datosExtra.putString("usuario", usuario);
             intento.putExtras(datosExtra);
             startActivity(intento);
-
-        } else if (id == R.id.nav_send) {
-            Toast.makeText(this, "nav_send", Toast.LENGTH_SHORT).show();
-
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -214,7 +246,7 @@ public class PrincipalPageAmaru extends AppCompatActivity
             public void onItemClick(AdapterView<?> parent, View view,
                                     final int position, long id) {
                 // TODO Auto-generated method stub
-                Log.d("presss",String.valueOf(+position));
+                showProgressDialog();
                 rfn.getGroupbyId(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
@@ -225,74 +257,17 @@ public class PrincipalPageAmaru extends AppCompatActivity
                         memoria.putSerializable("user",user);
                         grupo.putExtras(memoria);
                         startActivity(grupo);
+                        dismissProgressDialog();
                     }
 
                     @Override
                     public void onFailed(NetworkException e) {
-
+                        dismissProgressDialog();
                     }
                 },Integer.valueOf(ids[+position]));
-                /*
-
-
-                rfn.getUsers(new RequestCallback<List<User>>() {
-                    @Override
-                    public void onSuccess(List<User> response) {
-                        todos=response;
-
-                        rfn.getGroupbyId(new RequestCallback<Group>() {
-                            @Override
-                            public void onSuccess(Group response2) {
-                                Clase temp= clases.get(+position);
-                                usuarios= new ArrayList<User>();
-                                for (Clase cl: response2.getClases()){
-                                    if(temp.equals1(cl) ){
-                                        User uo= buscar(todos,cl.getUsuario());
-                                        usuarios.add(uo);
-                                    }
-                                }
-                                Intent intento=new Intent(PrincipalPageAmaru.this,AlmunosInscritos.class);
-                                Bundle datosExtra = new Bundle();
-                                datosExtra.putSerializable("usuarios",usuarios);
-                                intento.putExtras(datosExtra);
-                                startActivity(intento);
-
-                            }
-
-                            @Override
-                            public void onFailed(NetworkException e) {
-
-                            }
-                        },Integer.valueOf(ids[+position]));
-                    }
-
-                    @Override
-                    public void onFailed(NetworkException e) {
-
-                    }
-                });
-
-
-
-
-                */
-                //String Slecteditem= itemname[+position];
-                //Toast.makeText(getApplicationContext(), Slecteditem, Toast.LENGTH_SHORT).show();}
             }});
 
     }
 
 
-
-
-    public User buscar(List<User> todos,String username ){
-        User temp=null;
-        for (User y: todos){
-            if (y.getUsername().equals(username)){
-                temp=y;
-                break;
-            }
-        }
-        return temp;
-    }
 }

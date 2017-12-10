@@ -1,5 +1,6 @@
 package com.example.a2106088.amaru.Instructor;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import com.example.a2106088.amaru.R;
 import com.example.a2106088.amaru.entity.User;
+import com.example.a2106088.amaru.model.NetworkException;
+import com.example.a2106088.amaru.model.RequestCallback;
 import com.example.a2106088.amaru.model.RetrofitNetwork;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +33,9 @@ public class VerUsuario extends AppCompatActivity
     TextView amaruDescription;
     TextView amaruUserna;
     User u;
+    ProgressDialog progressDialog;
+    String usuario;
+    RetrofitNetwork rfn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +43,8 @@ public class VerUsuario extends AppCompatActivity
         setContentView(R.layout.activity_ver_usuario);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        rfn=new RetrofitNetwork();
+        progressDialog = new ProgressDialog( this );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -64,6 +63,7 @@ public class VerUsuario extends AppCompatActivity
         Intent anterior = getIntent();
         Bundle memoria = anterior.getExtras();
         u= (User) memoria.getSerializable("usuario");
+        usuario=u.getUsername();
         System.out.println(u.getUsername());
         amaruUserna.setText("Nombre: " + u.getNombre() + " " + u.getLastname());
         Picasso.with(this).load(u.getImage()).into(amaruimage);
@@ -72,6 +72,30 @@ public class VerUsuario extends AppCompatActivity
         amaruDescription.setText(u.getDescription());
     }
 
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -110,15 +134,80 @@ public class VerUsuario extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.createi) {
+            Intent intento = new Intent(VerUsuario.this, CrearGrupo.class);
+            Bundle datosExtra = new Bundle();
 
-        } else if (id == R.id.nav_slideshow) {
+            datosExtra.putString("user", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+        } else if (id == R.id.clasesi) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Bundle memoria = new Bundle();
+                    memoria.putSerializable("usuario",response);
+                    Intent ingreso = new Intent(VerUsuario.this, PrincipalPageInstructor.class);
+                    ingreso.putExtras(memoria);
+                    startActivity(ingreso);
+                    dismissProgressDialog();
+                }
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.groupsi) {
 
-        } else if (id == R.id.nav_send) {
+
+            Intent intento = new Intent(VerUsuario.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        } else if (id == R.id.profilei) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(VerUsuario.this, PerfilInstructor.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
+
+
+        } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(VerUsuario.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+
+            Intent intento = new Intent(VerUsuario.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor", usuario);
+            datosExtra.putString("quitar",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
         }
 

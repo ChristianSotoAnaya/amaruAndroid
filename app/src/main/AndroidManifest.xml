@@ -20,11 +20,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegistroActivity" />
-        <activity android:name=".Usuario.InicioActivity" />
-        <activity android:name=".Instructor.CrearGrupoActivity" />
-        <activity android:name=".Instructor.InicioActivityInstructor" />
-        <activity android:name=".Usuario.Grupo" />
-        <activity android:name=".Usuario.Comentario" />
         <activity
             android:name=".Usuario.PrincipalPageAmaru"
             android:label="@string/title_activity_prueba"
@@ -60,10 +55,6 @@
         <activity
             android:name=".Instructor.AlmunosInscritos"
             android:label="Inscritos"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Usuario.InicioAmaru"
-            android:label="@string/title_activity_inicio_amaru"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Usuario.Comprar"

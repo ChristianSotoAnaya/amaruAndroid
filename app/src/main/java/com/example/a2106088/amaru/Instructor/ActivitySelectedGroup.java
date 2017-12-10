@@ -4,6 +4,7 @@ package com.example.a2106088.amaru.Instructor;
  * Created by User on 09/12/2017.
  */
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,7 +47,7 @@ import com.squareup.picasso.Picasso;
 public class ActivitySelectedGroup extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
+    ProgressDialog progressDialog;
     Group grupo;
     TextView groupName;
     TextView groupInstructor;
@@ -64,21 +65,38 @@ public class ActivitySelectedGroup extends AppCompatActivity
 
     RetrofitNetwork rfn;
 
+
+    protected void showProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.show();
+            }
+        } );
+    }
+
+
+    protected void dismissProgressDialog()
+    {
+        runOnUiThread( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog.dismiss();
+            }
+        } );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_group);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        progressDialog = new ProgressDialog( this );
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -134,6 +152,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
                 Group temp = new Group();
                 temp.setRate(Double.parseDouble(String.valueOf(ratingBar.getRating())));
                 temp.setId(grupo.getId());
+                showProgressDialog();
                 rfn.editRateGroup(new RequestCallback<Group>() {
                     @Override
                     public void onSuccess(Group response) {
@@ -142,7 +161,7 @@ public class ActivitySelectedGroup extends AppCompatActivity
                         txtGroupCurrentRating.setText(String.valueOf(response.getRate()));
                         ratingBar.setEnabled(false);
                         txtRateNumber.setEnabled(false);
-
+                        dismissProgressDialog();
                         Handler h = new Handler(Looper.getMainLooper());
                         h.post(new Runnable() {
                             public void run() {
@@ -216,8 +235,25 @@ public class ActivitySelectedGroup extends AppCompatActivity
             label_lugar.setPadding(5, 5, 5, 5);
             tr_head.addView(label_lugar);// add the column to the table row here
 
+            TextView label_comentario = new TextView(this);// part3
+            String tmp = comentario.getContenido();
+            for (int i=1; i<comentario.getContenido().length();i++){
+                if (i%30 == 0){
+                    String part1 =tmp.substring(0,i);
+                    String part2 =tmp.substring(i,tmp.length());
+                    tmp=part1+"\n"+part2;
+                }
+
+            }
+            label_comentario.setText(tmp);
+            label_comentario.setPadding(5, 5, 5, 5); // set the padding (if required)
+            tr_head.addView(label_comentario); // add the column to the table row here
+
             TextView label_fecha = new TextView(this);    // part3
-            label_fecha.setText(comentario.getContenido());
+            Log.d("FECHA",comentario.getFecha());
+            String[] fecha = comentario.getFecha().split(" ");
+            String date = fecha[1]+" "+fecha[2]+" "+fecha[5];
+            label_fecha.setText(date);
             label_fecha.setPadding(5, 5, 5, 5); // set the padding (if required)
             tr_head.addView(label_fecha); // add the column to the table row here
 
@@ -270,24 +306,83 @@ public class ActivitySelectedGroup extends AppCompatActivity
             Intent intento = new Intent(ActivitySelectedGroup.this, CrearGrupo.class);
             Bundle datosExtra = new Bundle();
 
-            datosExtra.putSerializable("user", usuario);
+            datosExtra.putString("user", usuario);
             intento.putExtras(datosExtra);
             startActivity(intento);
         } else if (id == R.id.clasesi) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Bundle memoria = new Bundle();
+                    memoria.putSerializable("usuario",response);
+                    Intent ingreso = new Intent(ActivitySelectedGroup.this, PrincipalPageInstructor.class);
+                    ingreso.putExtras(memoria);
+                    startActivity(ingreso);
+                    dismissProgressDialog();
+                }
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
 
         } else if (id == R.id.groupsi) {
 
+
+            Intent intento = new Intent(ActivitySelectedGroup.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor",usuario );
+            datosExtra.putString("quitar", "");
+            intento.putExtras(datosExtra);
+            startActivity(intento);
+
+
         } else if (id == R.id.profilei) {
+            showProgressDialog();
+            rfn.getuser(new RequestCallback<User>() {
+                @Override
+                public void onSuccess(User response) {
+                    Intent intento = new Intent(ActivitySelectedGroup.this, PerfilInstructor.class);
+                    Bundle datosExtra = new Bundle();
+                    datosExtra.putSerializable("ins", response);
+                    intento.putExtras(datosExtra);
+                    startActivity(intento);
+                    dismissProgressDialog();
+                }
+
+                @Override
+                public void onFailed(NetworkException e) {
+                    dismissProgressDialog();
+                }
+            },usuario);
+
 
         } else if (id == R.id.categoriesi) {
+            Intent intento = new Intent(ActivitySelectedGroup.this, Categorias.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("usuario", usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
-        } else if (id == R.id.nav_send) {
+
+        }
+        //Mis grupos
+        else if (id == R.id.nav_send) {
+
+            Intent intento = new Intent(ActivitySelectedGroup.this, ActivityListaGrupos.class);
+            Bundle datosExtra = new Bundle();
+            datosExtra.putString("instructor", usuario);
+            datosExtra.putString("quitar",usuario);
+            intento.putExtras(datosExtra);
+            startActivity(intento);
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
 }

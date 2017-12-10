@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.a2106088.amaru.Usuario.Comprar">
+    android:background="@drawable/fondoinstr"
+    tools:context="com.example.a2106088.amaru.Usuario.Comprar"
+    android:weightSum="1">
 
 
     <TextView
@@ -19,21 +21,29 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="50dp"
+
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/textView25"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Clases Actuales" />
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:text="¡Con Los Tickets de Amaru puedes inscribirte a las clases que desees! \n Cada ticket representa una clase \n Selecciona el paquete de tu preferencia \n ¿Qué esperas?"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
         <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/table"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:stretchColumns="0,1,2">
+            android:stretchColumns="0,1,2"
+            android:layout_weight="0.70">
 
             <TableRow
                 android:layout_width="fill_parent"
@@ -244,7 +254,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="67dp"
         android:orientation="horizontal">
 
         <Button
@@ -252,6 +262,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Comprar"
+            style="@style/black_button"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:onClick="comprar"/>
 
         <Button
@@ -260,6 +273,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancelar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            style="@style/black_button"
             android:onClick="cancelarCompra"/>
     </LinearLayout>
 
